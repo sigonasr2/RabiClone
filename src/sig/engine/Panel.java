@@ -6,13 +6,17 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.image.ColorModel;
 import java.awt.image.MemoryImageSource;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.awt.image.BufferedImage;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import sig.JavaProjectTemplate;
+import sig.RabiClone;
 
 public class Panel extends JPanel implements Runnable {
 	JFrame window;
@@ -32,6 +36,7 @@ public class Panel extends JPanel implements Runnable {
     int frameCount=0;
 	long lastSecond=0;
 	int lastFrameCount=0;
+	Sprite nana_sprite;
 
     public Panel(JFrame f) {
         super(true);
@@ -54,6 +59,13 @@ public class Panel extends JPanel implements Runnable {
      * Call it after been visible and after resizes.
      */
     public void init(){        
+		BufferedImage nana;
+		try {
+			nana = ImageIO.read(new File("..","3x.png"));
+			nana_sprite = Get_Nana(nana);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
         cm = getCompatibleColorModel();
         int screenSize = width * height;
         if(pixel == null || pixel.length < screenSize){
@@ -80,7 +92,7 @@ public class Panel extends JPanel implements Runnable {
 		
 		
 		if (window!=null&&System.currentTimeMillis()-lastSecond>=1000) {
-			window.setTitle(JavaProjectTemplate.PROGRAM_NAME+" - FPS: "+(frameCount-lastFrameCount));
+			window.setTitle(RabiClone.PROGRAM_NAME+" - FPS: "+(frameCount-lastFrameCount));
 			lastFrameCount=frameCount;
 			lastSecond=System.currentTimeMillis();
 		}
@@ -99,49 +111,25 @@ public class Panel extends JPanel implements Runnable {
     * Do your draws in here !!
     * pixel is your canvas!
     */
+
+	
     public /* abstract */ void render(){
         int[] p = pixel; // this avoid crash when resizing
         //a=h/w
         
-        for (int x=0;x<width;x++) {
-        	for (int y=0;y<height;y++) {
-        		p[y*width+x]=(0<<16)+(0<<8)+0;
+		for (int y=0;y<height;y++) {
+			for (int x=0;x<width;x++) {
+        		p[y*width+x]=(0<<16)+(0<<8)+0;//RGB
         	}
         }
-        
-        x_offset+=1;
-        y_offset=50;
-        
-        FillPolygon(p,Color.WHITE,50,50,new Point[] {
-        		new Point(135,2),
-        		new Point(166,96),
-        		new Point(265,97),
-        		new Point(185,156),
-        		new Point(215,251),
-        		new Point(134,192),
-        		new Point(54,251),
-        		new Point(84,156),
-        		new Point(4,97),
-        		new Point(103,96),
-        });
-        FillPolygon(p,Color.BRIGHT_CYAN,x_offset,y_offset,new Point[] {
-            	new Point(28,29),
-            	new Point(78,103),
-            	new Point(120,31),
-            	new Point(123,221),
-            	new Point(30,218),
-            });
-        //FillRect(p,Color.BRIGHT_RED,200,200,600,64);
-		final Color testAlpha = new Color(150,0,0,128);
-        FillCircle(p,testAlpha,150,150,100);
-        FillOval(p,Color.BRIGHT_GREEN,300,150,100,50);
+		Draw_Nana(nana_sprite);
     }
     
     public void FillRect(int[] p,Color col,double x,double y,double w,double h) {
     	for (int xx=0;xx<w;xx++) {
         	for (int yy=0;yy<h;yy++) {
         		int index = ((int)y+yy)*width+(int)x+xx;
-        		p[index]=col.getColor();
+				Draw(p,index,col.getColor());
         	}	
     	}
     }
@@ -299,6 +287,27 @@ public class Panel extends JPanel implements Runnable {
 			int new_b=(int)(ratio*b+(1-ratio)*prev_b);
 			
 			canvas[index]=new_r+(new_g<<8)+(new_b<<16)+(col&0xFF000000);
+		}
+	}
+
+	public Sprite Get_Nana(BufferedImage b_image){
+		Sprite sprite_input = new Sprite();
+		sprite_input.height = b_image.getHeight();
+		sprite_input.width = b_image.getWidth();
+		sprite_input.bi_array = new int [b_image.getWidth()*b_image.getHeight()];
+		for(int x=0;x<b_image.getHeight();x++){
+			for(int y=0;y<b_image.getWidth();y++){
+				sprite_input.bi_array[y*b_image.getWidth()+x] = b_image.getRGB(x,y);
+			}	
+		}
+		return sprite_input;
+	}
+	public void Draw_Nana(Sprite sprite){
+		int[] p = pixel;
+		for(int x=0;x<sprite.height;x++){
+			for(int y=0;y<sprite.width;y++){
+				p[y*width+x] = sprite.bi_array[y*sprite.width+x];
+			}	
 		}
 	}
 
