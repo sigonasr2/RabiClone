@@ -25,10 +25,16 @@ public class RabiClone {
 		f.setVisible(true);
 
 		p.render();
+
+		long lastGameTime = System.nanoTime();
 		while (true) {
+			long timePassed = System.nanoTime()-lastGameTime;
+			lastGameTime=System.nanoTime();
+
 			if (KeyHeld(KeyEvent.VK_UP)) {
-				System.out.println("Up Held: "+UPCOUNT++);
+				System.out.println("Up Held: "+UPCOUNT+++" (+"+(float)(timePassed/1000000f)+"ms)");
 			}
+
 		}
 	}
 	private static Boolean KeyHeld(int key) {
