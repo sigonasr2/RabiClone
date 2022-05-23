@@ -7,8 +7,9 @@ import java.nio.file.Path;
 import javax.imageio.ImageIO;
 
 public enum Sprite{
-    
-    NANA(Path.of("..","3x.png"));
+
+    NANA(Path.of("..","3x.png")),
+    ;
 
 
 
