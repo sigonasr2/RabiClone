@@ -10,9 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.event.MouseInputListener;
 
 import sig.RabiClone;
 
@@ -34,11 +36,62 @@ public class Panel extends JPanel implements Runnable,ComponentListener {
 	boolean resizing=false;
 	long lastUpdate=System.nanoTime();
 	final long TARGET_FRAMETIME = 8333333l;
+	boolean mouseHeld=false;
+	java.awt.Point mousePos=new java.awt.Point(0,0);
 
     public Panel(JFrame f) {
         super(true);
 		this.window=f;
         thread = new Thread(this, "MyPanel Thread");
+
+		this.addMouseListener(new MouseInputListener(){
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		
+			@Override
+			public void mousePressed(MouseEvent e) {
+				mouseHeld=true;
+				mousePos=e.getPoint();
+				System.out.println(e.getX()+","+e.getY());
+				System.out.println(MouseData());
+			}
+		
+			private String MouseData() {
+				return new StringBuilder("Mouse Held: ").append(mouseHeld).append(" // ").append(mousePos).toString();
+			}
+		
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				mouseHeld=false;
+				mousePos=e.getPoint();
+				System.out.println(MouseData());
+			}
+		
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		
+			@Override
+			public void mouseExited(MouseEvent e) {
+			}
+		
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				mousePos=e.getPoint();
+				System.out.println(MouseData());
+			}
+		
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
     }
 
     /**

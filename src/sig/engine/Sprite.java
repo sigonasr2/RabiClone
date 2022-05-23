@@ -1,14 +1,14 @@
 package sig.engine;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
 
 import javax.imageio.ImageIO;
 
 public enum Sprite{
 
-    NANA(Path.of("..","3x.png")),
+    NANA(new File("..","3x.png")),
     ;
 
 
@@ -18,9 +18,9 @@ public enum Sprite{
     int width;
     int[] bi_array;
     
-    Sprite(Path filename){
+    Sprite(File filename){
         try {
-            BufferedImage img = ImageIO.read(filename.toFile());
+            BufferedImage img = ImageIO.read(filename);
             this.width=img.getWidth();
             this.height=img.getHeight();
             this.bi_array = new int[width*height];
