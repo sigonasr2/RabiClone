@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.awt.image.BufferedImage;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -18,11 +20,9 @@ import javax.swing.JPanel;
 
 import sig.RabiClone;
 
-public class Panel extends JPanel implements Runnable {
+public class Panel extends JPanel implements Runnable,ComponentListener {
 	JFrame window;
     public int pixel[];
-    public int width=1280;
-    public int height=720; 
     final int CIRCLE_PRECISION=32;
 	final int OUTLINE_COL=Color.BRIGHT_WHITE.getColor();
     private Thread thread;
@@ -37,11 +37,20 @@ public class Panel extends JPanel implements Runnable {
 	long lastSecond=0;
 	int lastFrameCount=0;
 	Sprite nana_sprite;
+	boolean resizing=false;
 
     public Panel(JFrame f) {
         super(true);
 		this.window=f;
         thread = new Thread(this, "MyPanel Thread");
+
+		BufferedImage nana;
+		try {
+			nana = ImageIO.read(new File("..","3x.png"));
+			nana_sprite = Get_Nana(nana);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
     }
 
     /**
@@ -59,22 +68,15 @@ public class Panel extends JPanel implements Runnable {
      * Call it after been visible and after resizes.
      */
     public void init(){        
-		BufferedImage nana;
-		try {
-			nana = ImageIO.read(new File("..","3x.png"));
-			nana_sprite = Get_Nana(nana);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
         cm = getCompatibleColorModel();
-        int screenSize = width * height;
+        int screenSize = getWidth() * getHeight();
         if(pixel == null || pixel.length < screenSize){
             pixel = new int[screenSize];
         }        
         if(thread.isInterrupted() || !thread.isAlive()){
             thread.start();
         }
-        mImageProducer =  new MemoryImageSource(width, height, cm, pixel,0, width);
+        mImageProducer =  new MemoryImageSource(getWidth(), getHeight(), cm, pixel,0, getWidth());
         mImageProducer.setAnimated(true);
         mImageProducer.setFullBufferUpdates(true);  
         imageBuffer = Toolkit.getDefaultToolkit().createImage(mImageProducer);        
@@ -114,12 +116,19 @@ public class Panel extends JPanel implements Runnable {
 
 	
     public /* abstract */ void render(){
+		if (resizing) {
+			pixel = new int[getWidth()*getHeight()];
+			resizing=false;
+			mImageProducer =  new MemoryImageSource(getWidth(), getHeight(), cm, pixel,0, getWidth());
+			imageBuffer = Toolkit.getDefaultToolkit().createImage(mImageProducer);        
+			System.out.println("Window resized.");
+		}
         int[] p = pixel; // this avoid crash when resizing
         //a=h/w
         
-		for (int y=0;y<height;y++) {
-			for (int x=0;x<width;x++) {
-        		p[y*width+x]=(0<<16)+(0<<8)+0;//RGB
+		for (int y=0;y<getHeight();y++) {
+			for (int x=0;x<getWidth();x++) {
+        		p[y*getWidth()+x]=(0<<16)+(0<<8)+0;//RGB
         	}
         }
 		Draw_Nana(nana_sprite);
@@ -128,7 +137,7 @@ public class Panel extends JPanel implements Runnable {
     public void FillRect(int[] p,Color col,double x,double y,double w,double h) {
     	for (int xx=0;xx<w;xx++) {
         	for (int yy=0;yy<h;yy++) {
-        		int index = ((int)y+yy)*width+(int)x+xx;
+        		int index = ((int)y+yy)*getWidth()+(int)x+xx;
 				Draw(p,index,col.getColor());
         	}	
     	}
@@ -201,7 +210,7 @@ public class Panel extends JPanel implements Runnable {
     			Edge e2 = active_edges.get(i+1);
 				//System.out.println("Drawing from "+((int)Math.round(e1.x_of_min_y))+" to "+e2.x_of_min_y+" on line "+scanLine);
     			for (int x=(int)Math.round(e1.x_of_min_y);x<=e2.x_of_min_y;x++) {
-    				int index = (scanLine+(int)y_offset)*width+x+(int)x_offset;
+    				int index = (scanLine+(int)y_offset)*getWidth()+x+(int)x_offset;
     				if (index<p.length&&index>=0) {
 						Draw(p,index,col.getColor());
 					}
@@ -306,7 +315,7 @@ public class Panel extends JPanel implements Runnable {
 		int[] p = pixel;
 		for(int x=0;x<sprite.height;x++){
 			for(int y=0;y<sprite.width;y++){
-				p[y*width+x] = sprite.bi_array[y*sprite.width+x];
+				p[y*getWidth()+x] = sprite.bi_array[y*sprite.width+x];
 			}	
 		}
 	}
@@ -319,5 +328,29 @@ public class Panel extends JPanel implements Runnable {
             //System.out.println("Repaint "+frameCount++);
             //try {Thread.sleep(1);} catch (InterruptedException e) {}
         }
+	}
+
+	@Override
+	public void componentHidden(ComponentEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void componentMoved(ComponentEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void componentResized(ComponentEvent e) {
+		//COMPONENT_RESIZED (8,564 948x508)
+		resizing=true;
+	}
+
+	@Override
+	public void componentShown(ComponentEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }

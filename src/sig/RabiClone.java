@@ -12,20 +12,15 @@ public class RabiClone {
 	public static void main(String[] args) {
 		JFrame f = new JFrame(PROGRAM_NAME);
 		Panel p = new Panel(f);
+		
 		p.init();
 		
 		f.add(p);
+		f.addComponentListener(p);
 		f.setSize(1280,720);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setVisible(true);
 		
 		p.render();
-		BufferedImage nana;
-		try {
-			nana = ImageIO.read(new File("..","3x.png"));
-			p.Draw_Nana(p.Get_Nana(nana));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 }
