@@ -31,8 +31,9 @@ public class Panel extends JPanel implements Runnable,ComponentListener {
     double y_offset=0;
     int frameCount=0;
 	long lastSecond=0;
-	int lastFrameCount=0;
 	boolean resizing=false;
+	long lastUpdate=System.nanoTime();
+	final long TARGET_FRAMETIME = 8333333l;
 
     public Panel(JFrame f) {
         super(true);
@@ -78,14 +79,6 @@ public class Panel extends JPanel implements Runnable,ComponentListener {
         mImageProducer.newPixels();  
         // draw it on panel          
         g.drawImage(this.imageBuffer, 0, 0, this);  
-		
-		
-		if (window!=null&&System.currentTimeMillis()-lastSecond>=1000) {
-			window.setTitle(RabiClone.PROGRAM_NAME+" - FPS: "+(frameCount-lastFrameCount));
-			lastFrameCount=frameCount;
-			lastSecond=System.currentTimeMillis();
-		}
-		frameCount++;
     }
     
     /**
@@ -305,8 +298,34 @@ public class Panel extends JPanel implements Runnable,ComponentListener {
             // request a JPanel re-drawing
             repaint();       
             //System.out.println("Repaint "+frameCount++);
-            //try {Thread.sleep(1);} catch (InterruptedException e) {}
+			waitForNextFrame();
         }
+	}
+
+	private void waitForNextFrame() {
+		long newTime = System.nanoTime();
+		if (newTime-lastUpdate<TARGET_FRAMETIME) {
+			long timeRemaining=TARGET_FRAMETIME-(newTime-lastUpdate);
+			long millis = timeRemaining/1000000l;
+			int nanos = (int)(timeRemaining-millis*1000000l);
+			//System.out.println(timeRemaining+"/"+millis+" Nanos:"+nanos);
+			try {
+				Thread.sleep(millis,nanos);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		lastUpdate=newTime;
+		updateFPSCounter();
+	}
+
+	private void updateFPSCounter() {
+		if (window!=null&&System.currentTimeMillis()-lastSecond>=1000) {
+			window.setTitle(RabiClone.PROGRAM_NAME+" - FPS: "+(frameCount));
+			frameCount=0;
+			lastSecond=System.currentTimeMillis();
+		}
+		frameCount++;
 	}
 
 	@Override
