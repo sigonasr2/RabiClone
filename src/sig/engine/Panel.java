@@ -7,18 +7,21 @@ import java.awt.Toolkit;
 import java.awt.image.ColorModel;
 import java.awt.image.MemoryImageSource;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.event.MouseInputListener;
+import java.awt.event.KeyListener;
 
 import sig.RabiClone;
 
-public class Panel extends JPanel implements Runnable,ComponentListener {
+public class Panel extends JPanel implements Runnable,ComponentListener,KeyListener {
 	JFrame window;
     public int pixel[];
     final int CIRCLE_PRECISION=32;
@@ -38,6 +41,7 @@ public class Panel extends JPanel implements Runnable,ComponentListener {
 	final long TARGET_FRAMETIME = 8333333l;
 	boolean mouseHeld=false;
 	java.awt.Point mousePos=new java.awt.Point(0,0);
+	public HashMap<Integer,Boolean> KEYS = new HashMap<>();
 
     public Panel(JFrame f) {
         super(true);
@@ -403,5 +407,23 @@ public class Panel extends JPanel implements Runnable,ComponentListener {
 	public void componentShown(ComponentEvent e) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		KEYS.put(e.getKeyCode(),true);
+		//System.out.println("Key List: "+KEYS);
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		KEYS.put(e.getKeyCode(),false);
+		//System.out.println("Key List: "+KEYS);
 	}
 }
