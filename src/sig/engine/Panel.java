@@ -19,6 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.event.MouseInputListener;
 import java.awt.event.KeyListener;
 
+import sig.DrawLoop;
 import sig.RabiClone;
 
 public class Panel extends JPanel implements Runnable,ComponentListener,KeyListener {
@@ -158,13 +159,7 @@ public class Panel extends JPanel implements Runnable,ComponentListener,KeyListe
 		resizeUpdate();
         int[] p = pixel; // this avoid crash when resizing
         //a=h/w
-        
-		for (int y=0;y<getHeight();y++) {
-			for (int x=0;x<getWidth();x++) {
-        		p[y*getWidth()+x]=(0<<16)+(0<<8)+0;//RGB
-        	}
-        }
-		Draw_Sprite(nanaX,nanaY,Sprite.NANA);
+		DrawLoop.drawGame(this);
     }
 
 	private void resizeUpdate() {
@@ -341,15 +336,6 @@ public class Panel extends JPanel implements Runnable,ComponentListener,KeyListe
 			int new_b=(int)(ratio*b+(1-ratio)*prev_b);
 			
 			canvas[index]=new_r+(new_g<<8)+(new_b<<16)+(col&0xFF000000);
-		}
-	}
-
-	public void Draw_Sprite(double x, double y, Sprite sprite){
-		int[] p = pixel;
-		for(int X=0;X<sprite.height;X++){
-			for(int Y=0;Y<sprite.width;Y++){
-				p[(Y+(int)y)*getWidth()+X+(int)x] = sprite.bi_array[Y*sprite.width+X];
-			}	
 		}
 	}
 
