@@ -40,6 +40,8 @@ public class Panel extends JPanel implements Runnable,ComponentListener,KeyListe
 	long lastUpdate=System.nanoTime();
 	final long TARGET_FRAMETIME = 8333333l;
 	boolean mouseHeld=false;
+	public double nanaX = 0;
+	public double nanaY = 0;
 	java.awt.Point mousePos=new java.awt.Point(0,0);
 	public HashMap<Integer,Boolean> KEYS = new HashMap<>();
 
@@ -114,7 +116,7 @@ public class Panel extends JPanel implements Runnable,ComponentListener,KeyListe
      */
     public void init(){        
         cm = getCompatibleColorModel();
-        int screenSize = getWidth() * getHeight();
+        int screenSize = getWidth()*getHeight();
         if(pixel == null || pixel.length < screenSize){
             pixel = new int[screenSize];
         }        
@@ -162,7 +164,7 @@ public class Panel extends JPanel implements Runnable,ComponentListener,KeyListe
         		p[y*getWidth()+x]=(0<<16)+(0<<8)+0;//RGB
         	}
         }
-		Draw_Sprite(Sprite.NANA);
+		Draw_Sprite(nanaX,nanaY,Sprite.NANA);
     }
 
 	private void resizeUpdate() {
@@ -170,6 +172,8 @@ public class Panel extends JPanel implements Runnable,ComponentListener,KeyListe
 			pixel = new int[getWidth()*getHeight()];
 			resizing=false;
 			mImageProducer =  new MemoryImageSource(getWidth(), getHeight(), cm, pixel,0, getWidth());
+			mImageProducer.setAnimated(true);
+			mImageProducer.setFullBufferUpdates(true);  
 			imageBuffer = Toolkit.getDefaultToolkit().createImage(mImageProducer);        
 			System.out.println("Window resized.");
 		}
@@ -340,11 +344,11 @@ public class Panel extends JPanel implements Runnable,ComponentListener,KeyListe
 		}
 	}
 
-	public void Draw_Sprite(Sprite sprite){
+	public void Draw_Sprite(double x, double y, Sprite sprite){
 		int[] p = pixel;
-		for(int x=0;x<sprite.height;x++){
-			for(int y=0;y<sprite.width;y++){
-				p[y*getWidth()+x] = sprite.bi_array[y*sprite.width+x];
+		for(int X=0;X<sprite.height;X++){
+			for(int Y=0;Y<sprite.width;Y++){
+				p[(Y+(int)y)*getWidth()+X+(int)x] = sprite.bi_array[Y*sprite.width+X];
 			}	
 		}
 	}
