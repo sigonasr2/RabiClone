@@ -11,6 +11,8 @@ public class Player extends Object{
     public Player(Panel panel) {
         super(panel);
         this.setSprite(Sprite.NANA);
+        setX(Math.random()*panel.getWidth());
+        setY(Math.random()*panel.getHeight());
     }
 
 

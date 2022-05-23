@@ -29,6 +29,38 @@ public enum Sprite{
             e.printStackTrace();
         }
         System.out.println("Loaded sprite for "+this+".");
+    }
+
+    public BufferedImage getImg() {
+        return img;
+    }
+
+    public void setImg(BufferedImage img) {
+        this.img = img;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int[] getBi_array() {
+        return bi_array;
+    }
+
+    public void setBi_array(int[] bi_array) {
+        this.bi_array = bi_array;
     };
 
 }

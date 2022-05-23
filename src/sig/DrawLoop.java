@@ -14,7 +14,10 @@ public class DrawLoop {
         		p[y*panel.getWidth()+x]=(0<<16)+(0<<8)+0;//RGB
         	}
         }
-		Draw_Sprite(panel.nanaX,panel.nanaY,Sprite.NANA);
+		
+		for (int i=0;i<RabiClone.OBJ.size();i++) {
+			RabiClone.OBJ.get(i).draw(p);
+		}
     }
 
 	public static void Draw_Sprite(double x, double y, Sprite sprite){

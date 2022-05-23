@@ -1,7 +1,6 @@
 package sig;
 
 import javax.swing.JFrame;
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +32,18 @@ public class RabiClone {
 		p.render();
 
 		OBJ.add(new Player(p));
+		OBJ.add(new Player(p));
+		OBJ.add(new Player(p));
+		OBJ.add(new Player(p));
+		OBJ.add(new Player(p));
+		OBJ.add(new Player(p));
+		OBJ.add(new Player(p));
+		OBJ.add(new Player(p));
+		OBJ.add(new Player(p));
+		OBJ.add(new Player(p));
+		OBJ.add(new Player(p));
+		OBJ.add(new Player(p));
+		OBJ.add(new Player(p));
 
 		long lastGameTime = System.nanoTime();
 		while (true) {
@@ -40,8 +51,11 @@ public class RabiClone {
 			lastGameTime=System.nanoTime();
 			double updateMult = timePassed/1000000000d;
 
-			for (Object o : OBJ) {
-				o.update(updateMult);
+			for (int i=0;i<OBJ.size();i++) {
+				OBJ.get(i).update(updateMult);
+				if (OBJ.get(i).isMarkedForDeletion()) {
+					OBJ.remove(i--);
+				}
 			}
 		}
 	}

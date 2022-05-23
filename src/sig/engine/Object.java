@@ -4,6 +4,15 @@ public abstract class Object implements GameEntity{
     double x,y;
     Sprite spr;
     Panel panel;
+    boolean markedForDeletion;
+
+    public boolean isMarkedForDeletion() {
+        return markedForDeletion;
+    }
+
+    public void setMarkedForDeletion(boolean markedForDeletion) {
+        this.markedForDeletion = markedForDeletion;
+    }
 
     protected Object(Panel panel) {
         this.panel=panel;
