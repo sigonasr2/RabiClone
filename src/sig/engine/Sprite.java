@@ -7,7 +7,11 @@ import java.nio.file.Path;
 import javax.imageio.ImageIO;
 
 public enum Sprite{
+    
     NANA(Path.of("..","3x.png"));
+
+
+
     BufferedImage img;
     int height;
     int width;
