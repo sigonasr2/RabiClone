@@ -3,7 +3,6 @@ package sig;
 import javax.swing.JFrame;
 
 import sig.engine.Panel;
-import sig.engine.Sprite;
 
 public class RabiClone {
 	public static final String PROGRAM_NAME="Sig's Java Project Template";
