@@ -9,7 +9,7 @@ public class RabiClone {
 	public static final String PROGRAM_NAME="Sig's Java Project Template";
 
 	public static int UPCOUNT=0;
-	public static Panel p
+	public static Panel p;
 	public static void main(String[] args) {
 
 		JFrame f = new JFrame(PROGRAM_NAME);
