@@ -4,6 +4,14 @@ public abstract class Object implements GameEntity{
     double x,y;
     Sprite spr;
     Panel panel;
+    public Panel getPanel() {
+        return panel;
+    }
+
+    public void setPanel(Panel panel) {
+        this.panel = panel;
+    }
+
     boolean markedForDeletion;
 
     public boolean isMarkedForDeletion() {

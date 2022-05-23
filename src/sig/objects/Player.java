@@ -18,8 +18,19 @@ public class Player extends Object{
 
     @Override
     public void update(double updateMult) {
-        if (KeyHeld(KeyEvent.VK_RIGHT)) {
-            setX(getX()+32*updateMult);
+        int right = KeyHeld(KeyEvent.VK_RIGHT)?1:0;
+        int left = KeyHeld(KeyEvent.VK_LEFT)?1:0;
+        int up = KeyHeld(KeyEvent.VK_UP)?1:0;
+        int down = KeyHeld(KeyEvent.VK_DOWN)?1:0;
+        if (right-left!=0) {
+            setX(getX()+(right-left)*32*updateMult);
+        }
+        if (up-down!=0) {
+            setY(getY()+(up-down)*32*updateMult);
+        }
+        if (getX()<-this.getSprite().getWidth()||getX()>getPanel().getWidth()||
+        getY()<-this.getSprite().getHeight()||getY()>getPanel().getHeight()) {
+            setMarkedForDeletion(true);
         }
     }
 

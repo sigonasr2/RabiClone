@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sig.engine.Panel;
-import sig.objects.Player;
 import sig.engine.Object;
 
 public class RabiClone {
@@ -30,20 +29,6 @@ public class RabiClone {
 		f.setVisible(true);
 
 		p.render();
-
-		OBJ.add(new Player(p));
-		OBJ.add(new Player(p));
-		OBJ.add(new Player(p));
-		OBJ.add(new Player(p));
-		OBJ.add(new Player(p));
-		OBJ.add(new Player(p));
-		OBJ.add(new Player(p));
-		OBJ.add(new Player(p));
-		OBJ.add(new Player(p));
-		OBJ.add(new Player(p));
-		OBJ.add(new Player(p));
-		OBJ.add(new Player(p));
-		OBJ.add(new Player(p));
 
 		long lastGameTime = System.nanoTime();
 		while (true) {
