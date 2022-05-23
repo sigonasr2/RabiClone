@@ -116,13 +116,7 @@ public class Panel extends JPanel implements Runnable,ComponentListener {
 
 	
     public /* abstract */ void render(){
-		if (resizing) {
-			pixel = new int[getWidth()*getHeight()];
-			resizing=false;
-			mImageProducer =  new MemoryImageSource(getWidth(), getHeight(), cm, pixel,0, getWidth());
-			imageBuffer = Toolkit.getDefaultToolkit().createImage(mImageProducer);        
-			System.out.println("Window resized.");
-		}
+		resizeUpdate();
         int[] p = pixel; // this avoid crash when resizing
         //a=h/w
         
@@ -133,6 +127,16 @@ public class Panel extends JPanel implements Runnable,ComponentListener {
         }
 		Draw_Nana(nana_sprite);
     }
+
+	private void resizeUpdate() {
+		if (resizing) {
+			pixel = new int[getWidth()*getHeight()];
+			resizing=false;
+			mImageProducer =  new MemoryImageSource(getWidth(), getHeight(), cm, pixel,0, getWidth());
+			imageBuffer = Toolkit.getDefaultToolkit().createImage(mImageProducer);        
+			System.out.println("Window resized.");
+		}
+	}
     
     public void FillRect(int[] p,Color col,double x,double y,double w,double h) {
     	for (int xx=0;xx<w;xx++) {
