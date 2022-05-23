@@ -6,15 +6,11 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.image.ColorModel;
 import java.awt.image.MemoryImageSource;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.awt.image.BufferedImage;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 
-import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -36,21 +32,12 @@ public class Panel extends JPanel implements Runnable,ComponentListener {
     int frameCount=0;
 	long lastSecond=0;
 	int lastFrameCount=0;
-	Sprite nana_sprite;
 	boolean resizing=false;
 
     public Panel(JFrame f) {
         super(true);
 		this.window=f;
         thread = new Thread(this, "MyPanel Thread");
-
-		BufferedImage nana;
-		try {
-			nana = ImageIO.read(new File("..","3x.png"));
-			nana_sprite = Get_Nana(nana);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
     }
 
     /**
@@ -125,7 +112,7 @@ public class Panel extends JPanel implements Runnable,ComponentListener {
         		p[y*getWidth()+x]=(0<<16)+(0<<8)+0;//RGB
         	}
         }
-		Draw_Nana(nana_sprite);
+		Draw_Sprite(Sprite.NANA);
     }
 
 	private void resizeUpdate() {
@@ -303,19 +290,7 @@ public class Panel extends JPanel implements Runnable,ComponentListener {
 		}
 	}
 
-	public Sprite Get_Nana(BufferedImage b_image){
-		Sprite sprite_input = new Sprite();
-		sprite_input.height = b_image.getHeight();
-		sprite_input.width = b_image.getWidth();
-		sprite_input.bi_array = new int [b_image.getWidth()*b_image.getHeight()];
-		for(int x=0;x<b_image.getHeight();x++){
-			for(int y=0;y<b_image.getWidth();y++){
-				sprite_input.bi_array[y*b_image.getWidth()+x] = b_image.getRGB(x,y);
-			}	
-		}
-		return sprite_input;
-	}
-	public void Draw_Nana(Sprite sprite){
+	public void Draw_Sprite(Sprite sprite){
 		int[] p = pixel;
 		for(int x=0;x<sprite.height;x++){
 			for(int y=0;y<sprite.width;y++){

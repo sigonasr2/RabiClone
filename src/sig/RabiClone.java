@@ -1,11 +1,9 @@
 package sig;
 
-import javax.imageio.ImageIO;
 import javax.swing.JFrame;
+
 import sig.engine.Panel;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import sig.engine.Sprite;
 
 public class RabiClone {
 	public static final String PROGRAM_NAME="Sig's Java Project Template";
@@ -20,7 +18,7 @@ public class RabiClone {
 		f.setSize(1280,720);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setVisible(true);
-		
+
 		p.render();
 	}
 }
