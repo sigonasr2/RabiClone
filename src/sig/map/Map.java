@@ -36,8 +36,8 @@ public class Map {
         try {
             int marker=0;
             DataOutputStream stream = new DataOutputStream(new FileOutputStream(map.getFile()));
-            while (marker<map.getMap().tiles.length) {
-                stream.writeChar(map.getMap().tiles[marker++]);
+            while (marker<map.map.tiles.length) {
+                stream.writeChar(map.map.tiles[marker++]);
             }
             stream.close();
         } catch (IOException e) {
@@ -46,7 +46,7 @@ public class Map {
     }
 
     public void ModifyTile(int x,int y,Tile t) {
-        tiles[y*MAP_WIDTH+x]=(char)(t.ordinal());
+        tiles[y*Map.MAP_WIDTH+x]=(char)(t.ordinal());
         //System.out.println("Tile "+(y*MAP_WIDTH+x)+" is now "+tiles[y*MAP_WIDTH+x]+".");
     }
 }

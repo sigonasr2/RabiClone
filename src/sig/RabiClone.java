@@ -47,13 +47,13 @@ public class RabiClone{
 		OBJ.add(new Player(p));
 
 		for (int i=0;i<12;i++) {
-			CURRENT_MAP.getMap().ModifyTile(0, i, Tile.WALL);
+			CURRENT_MAP.ModifyTile(0, i, Tile.WALL);
 		}
 		for (int i=0;i<36;i++) {
-			CURRENT_MAP.getMap().ModifyTile(i, 11, Tile.FLOOR);
+			CURRENT_MAP.ModifyTile(i, 11, Tile.FLOOR);
 		}
 		for (int i=0;i<10;i++) {
-			CURRENT_MAP.getMap().ModifyTile(i+5, 8, Tile.PLATFORM_LEDGE);
+			CURRENT_MAP.ModifyTile(i+5, 8, Tile.PLATFORM_LEDGE);
 		}
 		Map.SaveMap(CURRENT_MAP);
 

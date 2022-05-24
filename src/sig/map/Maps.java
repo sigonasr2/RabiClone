@@ -23,4 +23,9 @@ public enum Maps {
     public Map getMap() {
         return map;
     }
+
+    public void ModifyTile(int x,int y,Tile t) {
+        map.ModifyTile(x, y, t);
+        //System.out.println("Tile "+(y*MAP_WIDTH+x)+" is now "+tiles[y*MAP_WIDTH+x]+".");
+    }
 }
