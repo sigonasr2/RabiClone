@@ -44,7 +44,7 @@ public class RabiClone{
 		p.render();
 
 		for (int i=0;i<10;i++) {
-		OBJ.add(new Player(p));
+			OBJ.add(new Player(p));
 		}
 
 		long lastGameTime = System.nanoTime();

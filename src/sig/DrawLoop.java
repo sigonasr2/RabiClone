@@ -28,14 +28,19 @@ public class DrawLoop {
 				if (index<0||index>=p.length||p[index]==sprite.getBi_array()[Y*sprite.getWidth()+X]) {
 					continue;
 				} else {
-					Draw(p,index,sprite.getBi_array()[Y*sprite.getWidth()+X]);
+					Draw(p,index,sprite.getBi_array()[Y*sprite.getWidth()+X],true);
+					//Draw(p,index,sprite.getBi_array()[Y*sprite.getWidth()+X],false);
 				}
 			}	
 		}
 	}
 
-	public static void Draw(int[] canvas,int index, int col) {
-		int alpha = col>>>24;
+	public static void Draw(int[] canvas,int index, int col,boolean transparency) {
+		if (!transparency) {
+			canvas[index]=col;
+			return;
+		}
+ 		int alpha = col>>>24;
 		if (alpha==0) {
 			return;}
 		 else
