@@ -11,7 +11,7 @@ public class Player extends Object{
 
     public Player(Panel panel) {
         super(panel);
-        this.setSprite(Sprite.NANA);
+        this.setSprite(Sprite.NANA_SMALL);
         setX(Math.random()*RabiClone.BASE_WIDTH);
         setY(Math.random()*RabiClone.BASE_HEIGHT);
     }
@@ -27,7 +27,7 @@ public class Player extends Object{
             setX(getX()+(right-left)*32*updateMult);
         }
         if (up-down!=0) {
-            setY(getY()+(up-down)*32*updateMult);
+            setY(getY()+(down-up)*32*updateMult);
         }
     }
 

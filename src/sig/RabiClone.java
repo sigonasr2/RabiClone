@@ -22,6 +22,8 @@ public class RabiClone{
 
 	public static int BASE_WIDTH=512;
 	public static int BASE_HEIGHT=288;
+
+	public static Maps CURRENT_MAP = Maps.WORLD1;
 	public static void main(String[] args) {
 
 		RabiClone r = new RabiClone();
@@ -43,9 +45,7 @@ public class RabiClone{
 
 		p.render();
 
-		for (int i=0;i<10;i++) {
-			OBJ.add(new Player(p));
-		}
+		OBJ.add(new Player(p));
 
 		long lastGameTime = System.nanoTime();
 		while (true) {
