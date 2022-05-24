@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sig.engine.Panel;
+import sig.map.Maps;
 import sig.objects.Player;
 import sig.engine.Object;
 import java.awt.Toolkit;
@@ -25,8 +26,6 @@ public class RabiClone{
 
 	public static Maps CURRENT_MAP = Maps.WORLD1;
 	public static void main(String[] args) {
-
-		RabiClone r = new RabiClone();
 		f = new JFrame(PROGRAM_NAME);
 		f.setResizable(false);
 		f.setUndecorated(true);

@@ -25,3 +25,5 @@ The system will also use the SigScript updating system to keep files up-to-date.
             jar            Builds a runnable jar file using ${MAIN_CLASS} as an entry point and then runs the newly generated jar.
 ```
 Configuration is modified at the top of the script file while the command list includes all included modules inside of `scripts`.
+
+Mizue (みずえ) 水恵

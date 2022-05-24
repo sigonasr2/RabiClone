@@ -1,4 +1,4 @@
-package sig.engine;
+package sig.map;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -11,7 +11,11 @@ public class Map {
     //Maps contain 512x288 tiles, allowing for 16384x9216 pixels of action per map.
     //294912 bytes = 294KB of memory storage per map.
     //Since a screen normally fits 16x9 tiles, you get 32x32 (1024) screens of gameplay per world.
-    char[] tiles = new char[512*288];
+
+    final public static int MAP_WIDTH=512;
+    final public static int MAP_HEIGHT=288;
+
+    char[] tiles = new char[MAP_WIDTH*MAP_HEIGHT];
 
     public static Map LoadMap(File mapFile) {
         try {
@@ -40,5 +44,9 @@ public class Map {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void ModifyTile(int x,int y,Tile t) {
+        tiles[y*MAP_WIDTH+x]=(char)t.ordinal();
     }
 }

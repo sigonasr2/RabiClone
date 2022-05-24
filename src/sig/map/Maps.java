@@ -1,8 +1,6 @@
-package sig;
+package sig.map;
 
 import java.io.File;
-
-import sig.engine.Map;
 
 public enum Maps {
 
