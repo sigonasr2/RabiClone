@@ -9,8 +9,6 @@ import java.awt.image.MemoryImageSource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
@@ -22,7 +20,7 @@ import java.awt.event.KeyListener;
 import sig.DrawLoop;
 import sig.RabiClone;
 
-public class Panel extends JPanel implements Runnable,ComponentListener,KeyListener {
+public class Panel extends JPanel implements Runnable,KeyListener {
 	JFrame window;
     public int pixel[];
     final int CIRCLE_PRECISION=32;
@@ -117,14 +115,14 @@ public class Panel extends JPanel implements Runnable,ComponentListener,KeyListe
      */
     public void init(){        
         cm = getCompatibleColorModel();
-        int screenSize = getWidth()*getHeight();
+        int screenSize = RabiClone.BASE_WIDTH*RabiClone.BASE_HEIGHT;
         if(pixel == null || pixel.length < screenSize){
             pixel = new int[screenSize];
         }        
         if(thread.isInterrupted() || !thread.isAlive()){
             thread.start();
         }
-        mImageProducer =  new MemoryImageSource(getWidth(), getHeight(), cm, pixel,0, getWidth());
+        mImageProducer =  new MemoryImageSource(RabiClone.BASE_WIDTH, RabiClone.BASE_HEIGHT, cm, pixel,0, RabiClone.BASE_WIDTH);
         mImageProducer.setAnimated(true);
         mImageProducer.setFullBufferUpdates(true);  
         imageBuffer = Toolkit.getDefaultToolkit().createImage(mImageProducer);        
@@ -138,7 +136,7 @@ public class Panel extends JPanel implements Runnable,ComponentListener,KeyListe
         // ask ImageProducer to update image
         mImageProducer.newPixels();  
         // draw it on panel          
-        g.drawImage(this.imageBuffer, 0, 0, this);  
+		g.drawImage(this.imageBuffer,0,0,getWidth(),getHeight(),0,0,RabiClone.BASE_WIDTH,RabiClone.BASE_HEIGHT,this);
 		updateFPSCounter();
     }
     
@@ -157,23 +155,9 @@ public class Panel extends JPanel implements Runnable,ComponentListener,KeyListe
 
 	
     public /* abstract */ void render(){
-		resizeUpdate();
-        int[] p = pixel; // this avoid crash when resizing
         //a=h/w
 		DrawLoop.drawGame(this);
     }
-
-	private void resizeUpdate() {
-		if (resizing) {
-			pixel = new int[getWidth()*getHeight()];
-			resizing=false;
-			mImageProducer =  new MemoryImageSource(getWidth(), getHeight(), cm, pixel,0, getWidth());
-			mImageProducer.setAnimated(true);
-			mImageProducer.setFullBufferUpdates(true);  
-			imageBuffer = Toolkit.getDefaultToolkit().createImage(mImageProducer);        
-			System.out.println("Window resized.");
-		}
-	}
     
     public void FillRect(int[] p,Color col,double x,double y,double w,double h) {
     	for (int xx=0;xx<w;xx++) {
@@ -373,30 +357,6 @@ public class Panel extends JPanel implements Runnable,ComponentListener,KeyListe
 			lastSecond=System.currentTimeMillis();
 		}
 		frameCount++;
-	}
-
-	@Override
-	public void componentHidden(ComponentEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void componentMoved(ComponentEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void componentResized(ComponentEvent e) {
-		//COMPONENT_RESIZED (8,564 948x508)
-		resizing=true;
-	}
-
-	@Override
-	public void componentShown(ComponentEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

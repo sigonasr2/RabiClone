@@ -9,9 +9,9 @@ public class DrawLoop {
         DrawLoop.panel=panel;
         int[] p = panel.pixel;
         
-		for (int y=0;y<panel.getHeight();y++) {
-			for (int x=0;x<panel.getWidth();x++) {
-        		p[y*panel.getWidth()+x]=(0<<16)+(0<<8)+0;//RGB
+		for (int y=0;y<RabiClone.BASE_HEIGHT;y++) {
+			for (int x=0;x<RabiClone.BASE_WIDTH;x++) {
+        		p[y*RabiClone.BASE_WIDTH+x]=(0<<16)+(0<<8)+0;//RGB
         	}
         }
 		
@@ -24,8 +24,8 @@ public class DrawLoop {
 		int[] p = panel.pixel;
 		for(int X=0;X<sprite.getHeight();X++){
 			for(int Y=0;Y<sprite.getWidth();Y++){
-				int index = (Y+(int)y)*panel.getWidth()+X+(int)x;
-				if (index<0||index>=p.length) {
+				int index = (Y+(int)y)*RabiClone.BASE_WIDTH+X+(int)x;
+				if (index<0||index>=p.length||p[index]==sprite.getBi_array()[Y*sprite.getWidth()+X]) {
 					continue;
 				} else {
 					Draw(p,index,sprite.getBi_array()[Y*sprite.getWidth()+X]);

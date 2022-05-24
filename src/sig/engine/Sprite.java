@@ -9,6 +9,7 @@ import javax.imageio.ImageIO;
 public enum Sprite{
 
     NANA(new File("..","3x.png")),
+    NANA_SMALL(new File("..","1x.png")),
     ;
 
 

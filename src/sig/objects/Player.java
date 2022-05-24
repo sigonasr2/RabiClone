@@ -1,6 +1,7 @@
 package sig.objects;
 
 import sig.DrawLoop;
+import sig.RabiClone;
 import sig.engine.Object;
 import sig.engine.Panel;
 import sig.engine.Sprite;
@@ -11,8 +12,8 @@ public class Player extends Object{
     public Player(Panel panel) {
         super(panel);
         this.setSprite(Sprite.NANA);
-        setX(Math.random()*panel.getWidth());
-        setY(Math.random()*panel.getHeight());
+        setX(Math.random()*RabiClone.BASE_WIDTH);
+        setY(Math.random()*RabiClone.BASE_HEIGHT);
     }
 
 
@@ -27,10 +28,6 @@ public class Player extends Object{
         }
         if (up-down!=0) {
             setY(getY()+(up-down)*32*updateMult);
-        }
-        if (getX()<-this.getSprite().getWidth()||getX()>getPanel().getWidth()||
-        getY()<-this.getSprite().getHeight()||getY()>getPanel().getHeight()) {
-            setMarkedForDeletion(true);
         }
     }
 
