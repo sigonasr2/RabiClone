@@ -1,5 +1,7 @@
 package sig.engine;
 
+import sig.DrawLoop;
+
 public abstract class Object implements GameEntity{
     double x,y;
     Sprite spr;
@@ -43,6 +45,14 @@ public abstract class Object implements GameEntity{
     }
     public void setSprite(Sprite spr) {
         this.spr = spr;
+    }
+
+	protected void Draw_Sprite(double x, double y, Sprite sprite){
+        DrawLoop.Draw_Sprite(x,y,sprite);
+    }
+
+	protected void Draw_Sprite_Partial(double x, double y, double xOffset, double yOffset, double w, double h, Sprite sprite){
+        DrawLoop.Draw_Sprite_Partial(x,y,xOffset,yOffset,w,h,sprite);
     }
 
 	protected boolean KeyHeld(int key) {

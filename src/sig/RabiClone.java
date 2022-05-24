@@ -6,9 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sig.engine.Panel;
-import sig.map.Map;
 import sig.map.Maps;
-import sig.map.Tile;
+import sig.objects.LevelRenderer;
 import sig.objects.Player;
 import sig.engine.Object;
 import java.awt.Toolkit;
@@ -44,18 +43,8 @@ public class RabiClone{
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setVisible(true);
 
+		OBJ.add(new LevelRenderer(p));
 		OBJ.add(new Player(p));
-
-		for (int i=0;i<12;i++) {
-			CURRENT_MAP.ModifyTile(0, i, Tile.WALL);
-		}
-		for (int i=0;i<36;i++) {
-			CURRENT_MAP.ModifyTile(i, 11, Tile.FLOOR);
-		}
-		for (int i=0;i<10;i++) {
-			CURRENT_MAP.ModifyTile(i+5, 8, Tile.PLATFORM_LEDGE);
-		}
-		Map.SaveMap(CURRENT_MAP);
 
 		p.render();
 

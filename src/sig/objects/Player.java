@@ -1,6 +1,5 @@
 package sig.objects;
 
-import sig.DrawLoop;
 import sig.RabiClone;
 import sig.engine.Object;
 import sig.engine.Panel;
@@ -19,21 +18,11 @@ public class Player extends Object{
 
     @Override
     public void update(double updateMult) {
-        int right = KeyHeld(KeyEvent.VK_RIGHT)?1:0;
-        int left = KeyHeld(KeyEvent.VK_LEFT)?1:0;
-        int up = KeyHeld(KeyEvent.VK_UP)?1:0;
-        int down = KeyHeld(KeyEvent.VK_DOWN)?1:0;
-        if (right-left!=0) {
-            setX(getX()+(right-left)*32*updateMult);
-        }
-        if (up-down!=0) {
-            setY(getY()+(down-up)*32*updateMult);
-        }
     }
 
     @Override
     public void draw(int[] p) {
-        DrawLoop.Draw_Sprite(this.getX(), this.getY(), this.getSprite());
+        Draw_Sprite(this.getX(), this.getY(), this.getSprite());
     }
     
 }

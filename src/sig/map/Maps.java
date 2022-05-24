@@ -28,4 +28,13 @@ public enum Maps {
         map.ModifyTile(x, y, t);
         //System.out.println("Tile "+(y*MAP_WIDTH+x)+" is now "+tiles[y*MAP_WIDTH+x]+".");
     }
+
+    public Tile getTile(int x,int y) {
+        int index = y*Map.MAP_WIDTH+x;
+        if (index<0||index>=this.map.tiles.length) {
+            return Tile.VOID;
+        } else {
+            return Tile.values()[this.map.tiles[index]];
+        }
+    }
 }
