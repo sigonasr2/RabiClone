@@ -9,10 +9,15 @@ public enum Maps {
 
     final public static String MAPS_DIR = "maps";
     Map map;
+    File file;
     
     Maps(String filename) {
-        File map_loc = new File(new File("..",MAPS_DIR),filename);
-        this.map=Map.LoadMap(map_loc);
+        file=new File(new File("..",MAPS_DIR),filename);
+        this.map=Map.LoadMap(this);
+    }
+
+    public File getFile() {
+        return file;
     }
 
     public Map getMap() {

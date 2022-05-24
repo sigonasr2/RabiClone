@@ -1,6 +1,7 @@
 package sig.map;
 
 public enum Tile {
+    VOID(0,0,true), //File is populated by 0s by default. This represents the void.
     WALL(0,0),
     FLOOR(1,0),
     PLATFORM_LEDGE(2,0),

@@ -2,7 +2,6 @@ package sig.map;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -17,10 +16,10 @@ public class Map {
 
     char[] tiles = new char[MAP_WIDTH*MAP_HEIGHT];
 
-    public static Map LoadMap(File mapFile) {
+    public static Map LoadMap(Maps map) {
         try {
             Map newMap = new Map();
-            DataInputStream stream = new DataInputStream(new FileInputStream(mapFile));
+            DataInputStream stream = new DataInputStream(new FileInputStream(map.getFile()));
             int marker=0;
             while (stream.available()!=0) {
                 newMap.tiles[marker++]=stream.readChar();
@@ -33,12 +32,12 @@ public class Map {
         return null;
     }
 
-    public static void SaveMap(Map map, File mapFile) {
+    public static void SaveMap(Maps map) {
         try {
             int marker=0;
-            DataOutputStream stream = new DataOutputStream(new FileOutputStream(mapFile));
-            while (marker<map.tiles.length) {
-                stream.writeChar(map.tiles[marker++]);
+            DataOutputStream stream = new DataOutputStream(new FileOutputStream(map.getFile()));
+            while (marker<map.getMap().tiles.length) {
+                stream.writeChar(map.getMap().tiles[marker++]);
             }
             stream.close();
         } catch (IOException e) {
@@ -47,6 +46,7 @@ public class Map {
     }
 
     public void ModifyTile(int x,int y,Tile t) {
-        tiles[y*MAP_WIDTH+x]=(char)t.ordinal();
+        tiles[y*MAP_WIDTH+x]=(char)(t.ordinal());
+        //System.out.println("Tile "+(y*MAP_WIDTH+x)+" is now "+tiles[y*MAP_WIDTH+x]+".");
     }
 }
