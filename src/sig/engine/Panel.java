@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -19,6 +20,7 @@ import java.awt.event.KeyListener;
 
 import sig.DrawLoop;
 import sig.RabiClone;
+import sig.map.Tile;
 
 public class Panel extends JPanel implements Runnable,KeyListener {
 	JFrame window;
@@ -41,7 +43,8 @@ public class Panel extends JPanel implements Runnable,KeyListener {
 	boolean mouseHeld=false;
 	public double nanaX = 0;
 	public double nanaY = 0;
-	java.awt.Point mousePos=new java.awt.Point(0,0);
+	public Point mousePos=new Point(0,0);
+	public Point highlightedSquare = new Point(0,0);
 	public HashMap<Integer,Boolean> KEYS = new HashMap<>();
 
     public Panel(JFrame f) {
@@ -52,16 +55,14 @@ public class Panel extends JPanel implements Runnable,KeyListener {
 		this.addMouseListener(new MouseInputListener(){
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
 			}
 		
 			@Override
 			public void mousePressed(MouseEvent e) {
 				mouseHeld=true;
-				mousePos=e.getPoint();
-				System.out.println(e.getX()+","+e.getY());
-				System.out.println(MouseData());
+				mousePos.set(e.getX()/RabiClone.SIZE_MULTIPLIER,e.getY()/RabiClone.SIZE_MULTIPLIER);
+				//System.out.println(e.getX()+","+e.getY());
+				//System.out.println(MouseData());
 			}
 		
 			private String MouseData() {
@@ -71,14 +72,12 @@ public class Panel extends JPanel implements Runnable,KeyListener {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				mouseHeld=false;
-				mousePos=e.getPoint();
-				System.out.println(MouseData());
+				mousePos.set(e.getX()/RabiClone.SIZE_MULTIPLIER,e.getY()/RabiClone.SIZE_MULTIPLIER);
+				//System.out.println(MouseData());
 			}
 		
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
 			}
 		
 			@Override
@@ -87,17 +86,33 @@ public class Panel extends JPanel implements Runnable,KeyListener {
 		
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				mousePos=e.getPoint();
-				System.out.println(MouseData());
 			}
-		
+
 			@Override
 			public void mouseMoved(MouseEvent e) {
+			}
+		});
+		this.addMouseMotionListener(new MouseMotionListener(){
+
+			@Override
+			public void mouseDragged(MouseEvent e) {
 				// TODO Auto-generated method stub
 				
 			}
+
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				mousePos.set(e.getX()/RabiClone.SIZE_MULTIPLIER,e.getY()/RabiClone.SIZE_MULTIPLIER);
+				UpdateHighlightedSquare();
+			}
 		});
     }
+
+	private static void UpdateHighlightedSquare() {
+		RabiClone.p.highlightedSquare.setX((int)((RabiClone.level_renderer.getX()+RabiClone.MOUSE_POS.getX())/Tile.TILE_WIDTH));
+		RabiClone.p.highlightedSquare.setY((int)((RabiClone.level_renderer.getY()+RabiClone.MOUSE_POS.getY())/Tile.TILE_HEIGHT));
+		//System.out.println(RabiClone.p.highlightedSquare);
+	}
 
     /**
      * Get Best Color model available for current screen.

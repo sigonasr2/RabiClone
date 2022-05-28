@@ -25,6 +25,14 @@ public class Point {
 		this.y = y;
 	}
 
+	public void set(int x,int y) {
+		setX(x);setY(y);
+	}
+
+	public void update(int x,int y) {
+		set(x,y);
+	}
+
 	@Override
 	public String toString() {
 		return "Point(" + x + "," + y + ")";

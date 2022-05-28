@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sig.engine.Panel;
+import sig.engine.Point;
 import sig.map.Maps;
 import sig.objects.LevelRenderer;
 import sig.objects.Player;
@@ -24,6 +25,10 @@ public class RabiClone{
 
 	public static int BASE_WIDTH=512;
 	public static int BASE_HEIGHT=288;
+	public static int SIZE_MULTIPLIER=1;
+	public static Point MOUSE_POS;
+
+	public static LevelRenderer level_renderer;
 
 	public static Maps CURRENT_MAP = Maps.WORLD1;
 	public static void main(String[] args) {
@@ -34,6 +39,8 @@ public class RabiClone{
 		ChooseBestRatio();
 
 		p = new Panel(f);
+
+		MOUSE_POS=p.mousePos;
 		
 		p.init();
 		
@@ -43,7 +50,7 @@ public class RabiClone{
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setVisible(true);
 
-		OBJ.add(new LevelRenderer(p));
+		OBJ.add(level_renderer = new LevelRenderer(p));
 		OBJ.add(new Player(p));
 
 		p.render();
@@ -63,10 +70,9 @@ public class RabiClone{
 		}
 	}
 	private static void ChooseBestRatio() {
-		int multiplier=1;
-		while (f.getWidth()*(multiplier+1)<Toolkit.getDefaultToolkit().getScreenSize().getWidth()) {
-			multiplier++;
+		while (f.getWidth()*(SIZE_MULTIPLIER+1)<Toolkit.getDefaultToolkit().getScreenSize().getWidth()) {
+			SIZE_MULTIPLIER++;
 		}
-		f.setSize(f.getWidth()*multiplier,(int)((f.getWidth()*multiplier)/1.77777777778d));
+		f.setSize(f.getWidth()*SIZE_MULTIPLIER,(int)((f.getWidth()*SIZE_MULTIPLIER)/1.77777777778d));
 	}
 }

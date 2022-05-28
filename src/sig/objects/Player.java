@@ -4,7 +4,6 @@ import sig.RabiClone;
 import sig.engine.Object;
 import sig.engine.Panel;
 import sig.engine.Sprite;
-import java.awt.event.KeyEvent;
 
 public class Player extends Object{
 
