@@ -8,7 +8,7 @@ import sig.map.CollisionType;
 import sig.map.Tile;
 
 public class Player extends Object{
-    double y_acceleration = 15;
+    double y_acceleration = 9000;
     double x_acceleration = 0;
     double x_velocity = 0;
     double y_velocity = 5;
@@ -29,10 +29,10 @@ public class Player extends Object{
         for(int i=0;i<4;i++){
             double check_distance = (displacement/4)*(i+1);
             Tile checked_tile_top = RabiClone.CURRENT_MAP.getTile((int)getX()/Tile.TILE_WIDTH, (int)(getY()+check_distance)/Tile.TILE_HEIGHT);
-            Tile checked_tile_bottom = RabiClone.CURRENT_MAP.getTile((int)(getX()+getSprite().getWidth())/Tile.TILE_WIDTH, (int)(getY()+getSprite().getHeight()+check_distance)/Tile.TILE_HEIGHT);
+            Tile checked_tile_bottom = RabiClone.CURRENT_MAP.getTile((int)(getX()+getSprite().getWidth())/Tile.TILE_WIDTH, (int)(getY()+getSprite().getHeight()/2+check_distance)/Tile.TILE_HEIGHT);
             //System.out.println((int)getX()/Tile.TILE_WIDTH);
             if(checked_tile_bottom.getCollision()==CollisionType.BLOCK){
-                setY((getY()+check_distance)+getSprite().getHeight()/2);
+                setY((getY()+check_distance));
                 y_acceleration = 0;
                 y_velocity = 0;
                 is_collision=true;
