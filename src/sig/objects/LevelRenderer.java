@@ -4,12 +4,15 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 import sig.RabiClone;
+import sig.engine.MouseScrollValue;
 import sig.engine.Object;
 import sig.engine.Panel;
 import sig.engine.Sprite;
 import sig.map.Tile;
 
 public class LevelRenderer extends Object{
+
+    Tile selectedTile = Tile.WALL;
 
     public LevelRenderer(Panel panel) {
         super(panel);
@@ -34,9 +37,13 @@ public class LevelRenderer extends Object{
     }
 
     @Override
-    protected boolean MouseScrolled(int scrolled) {
-        //System.out.println("Scrolled");
-        return true;
+    protected void MouseScrolled(MouseScrollValue scrolled) {
+        int up = scrolled==MouseScrollValue.UP?1:0;
+        int down = scrolled==MouseScrollValue.DOWN?1:0;
+        int tempIndex = selectedTile.ordinal()+down-up;
+        int selectedIndex = tempIndex<0?Tile.values().length-Math.abs(tempIndex):tempIndex%Tile.values().length;
+        selectedTile = Tile.values()[selectedIndex];
+        //System.out.println(selectedTile);
     }
 
     @Override

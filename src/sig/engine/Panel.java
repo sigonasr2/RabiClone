@@ -107,7 +107,7 @@ public class Panel extends JPanel implements Runnable,KeyListener {
 			public void mouseWheelMoved(MouseWheelEvent e) {
 				for(int i=0; i<RabiClone.OBJ.size();i++){
 					Object current_obj = RabiClone.OBJ.get(i);
-					current_obj.MouseScrolled(e.getWheelRotation());
+					current_obj.MouseScrolled(MouseScrollValue.getValue(e.getWheelRotation()));
 				}
 			}
 		});

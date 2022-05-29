@@ -66,8 +66,11 @@ public abstract class Object implements GameEntity{
 		return panel.MOUSE.getOrDefault(mb,false);
 	}
 
-    protected boolean MouseScrolled(int scrolled) {
-        //-1 is UP, 1 is DOWN
-            return true;
+    /**
+     * 
+     * @param scrolled -1 is UP, 1 is DOWN
+     * @return
+     */
+    protected void MouseScrolled(MouseScrollValue scrolled) {
 	}
 }

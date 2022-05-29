@@ -18,6 +18,10 @@ public class DrawLoop {
 		for (int i=0;i<RabiClone.OBJ.size();i++) {
 			RabiClone.OBJ.get(i).draw(p);
 		}
+		
+		for (int i=0;i<RabiClone.OBJ.size();i++) {
+			RabiClone.OBJ.get(i).drawOverlay(p);
+		}
     }
 
 	public static void Draw_Sprite(double x, double y, Sprite sprite){
