@@ -10,8 +10,8 @@ public class Player extends Object{
     public Player(Panel panel) {
         super(panel);
         this.setSprite(Sprite.NANA_SMALL);
-        setX(Math.random()*RabiClone.BASE_WIDTH);
-        setY(Math.random()*RabiClone.BASE_HEIGHT);
+        setX(RabiClone.BASE_WIDTH/2-getSprite().getWidth()/2);
+        setY(RabiClone.BASE_HEIGHT*(2/3d)-getSprite().getHeight()/2);
     }
 
 
