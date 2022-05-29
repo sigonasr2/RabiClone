@@ -45,6 +45,7 @@ public class LevelRenderer extends Object{
             Map.SaveMap(RabiClone.CURRENT_MAP);
             System.out.println("Map saved");
         }
+        setY(RabiClone.player.getY());
     }
 
     @Override
