@@ -71,7 +71,6 @@ public abstract class Object implements GameEntity{
 	}
 
     /**
-     * 
      * @param scrolled -1 is UP, 1 is DOWN
      * @return
      */

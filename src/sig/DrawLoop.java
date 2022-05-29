@@ -67,7 +67,7 @@ public class DrawLoop {
 							} else
 							if (oldAlpha==255) {
 								Draw(p,index,(sprite.getBi_array()[Y*sprite.getWidth()+X]&0x00FFFFFF)|(alpha<<24),true);
-							}  {
+							} else {
 								Draw(p,index,(sprite.getBi_array()[Y*sprite.getWidth()+X]&0x00FFFFFF)|((int)((alpha/255d)*oldAlpha)<<24),true);
 							}
 						}

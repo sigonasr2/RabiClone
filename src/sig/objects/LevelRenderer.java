@@ -9,6 +9,7 @@ import sig.engine.Object;
 import sig.engine.Panel;
 import sig.engine.Sprite;
 import sig.map.Map;
+import sig.map.Maps;
 import sig.map.Tile;
 
 public class LevelRenderer extends Object{
@@ -35,6 +36,15 @@ public class LevelRenderer extends Object{
         boolean left_mb = MouseHeld(MouseEvent.BUTTON1);
         boolean middle_mb = MouseHeld(MouseEvent.BUTTON2);
         boolean right_mb = MouseHeld(MouseEvent.BUTTON3);
+
+        if(left_mb){
+            RabiClone.CURRENT_MAP.ModifyTile(RabiClone.p.highlightedSquare.getX(), RabiClone.p.highlightedSquare.getY(), selectedTile);
+        }
+        if(KeyHeld(KeyEvent.VK_CONTROL)&&KeyHeld(KeyEvent.VK_S)){
+            System.out.println("Saving map");
+            Map.SaveMap(RabiClone.CURRENT_MAP);
+            System.out.println("Map saved");
+        }
     }
 
     @Override
@@ -42,7 +52,7 @@ public class LevelRenderer extends Object{
         int up = scrolled==MouseScrollValue.UP?1:0;
         int down = scrolled==MouseScrollValue.DOWN?1:0;
         int tempIndex = selectedTile.ordinal()+down-up;
-        int selectedIndex = tempIndex<0?Tile.values().length-Math.abs(tempIndex):tempIndex%Tile.values().length;
+        int selectedIndex = tempIndex<0?Tile.values().length-1:tempIndex%Tile.values().length;
         selectedTile = Tile.values()[selectedIndex];
         System.out.println(selectedTile);
     }
