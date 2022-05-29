@@ -12,6 +12,8 @@ import java.util.List;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -40,12 +42,13 @@ public class Panel extends JPanel implements Runnable,KeyListener {
 	boolean resizing=false;
 	long lastUpdate=System.nanoTime();
 	final long TARGET_FRAMETIME = 8333333l;
-	boolean mouseHeld=false;
 	public double nanaX = 0;
 	public double nanaY = 0;
 	public Point mousePos=new Point(0,0);
+	public int button = 0;
 	public Point highlightedSquare = new Point(0,0);
 	public HashMap<Integer,Boolean> KEYS = new HashMap<>();
+	public HashMap<Integer,Boolean> MOUSE = new HashMap<>();
 
     public Panel(JFrame f) {
         super(true);
@@ -59,13 +62,14 @@ public class Panel extends JPanel implements Runnable,KeyListener {
 		
 			@Override
 			public void mousePressed(MouseEvent e) {
-				mouseHeld=true;
+				MOUSE.put(e.getButton(),true);
 				mousePos.set(e.getX()/RabiClone.SIZE_MULTIPLIER,e.getY()/RabiClone.SIZE_MULTIPLIER);
+				//System.out.println("Mouse List: "+MOUSE);
 			}
 		
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				mouseHeld=false;
+				MOUSE.put(e.getButton(),false);
 				mousePos.set(e.getX()/RabiClone.SIZE_MULTIPLIER,e.getY()/RabiClone.SIZE_MULTIPLIER);
 			}
 		
@@ -86,7 +90,6 @@ public class Panel extends JPanel implements Runnable,KeyListener {
 			}
 		});
 		this.addMouseMotionListener(new MouseMotionListener(){
-
 			@Override
 			public void mouseDragged(MouseEvent e) {
 				
@@ -96,6 +99,16 @@ public class Panel extends JPanel implements Runnable,KeyListener {
 			public void mouseMoved(MouseEvent e) {
 				mousePos.set(e.getX()/RabiClone.SIZE_MULTIPLIER,e.getY()/RabiClone.SIZE_MULTIPLIER);
 				UpdateHighlightedSquare();
+			}
+		});
+		this.addMouseWheelListener(new MouseWheelListener(){
+			//-1 is UP, 1 is DOWN
+			@Override
+			public void mouseWheelMoved(MouseWheelEvent e) {
+				for(int i=0; i<RabiClone.OBJ.size();i++){
+					Object current_obj = RabiClone.OBJ.get(i);
+					current_obj.MouseScrolled(e.getWheelRotation());
+				}
 			}
 		});
     }

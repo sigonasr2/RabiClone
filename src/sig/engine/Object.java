@@ -61,4 +61,13 @@ public abstract class Object implements GameEntity{
 	protected boolean KeyHeld(int key) {
 		return panel.KEYS.getOrDefault(key,false);
 	}
+
+    protected boolean MouseHeld(int mb) {
+		return panel.MOUSE.getOrDefault(mb,false);
+	}
+
+    protected boolean MouseScrolled(int scrolled) {
+        //-1 is UP, 1 is DOWN
+            return true;
+	}
 }
