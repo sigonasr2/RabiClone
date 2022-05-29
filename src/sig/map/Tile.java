@@ -6,6 +6,7 @@ public enum Tile {
     FLOOR(1,0),
     PLATFORM_LEDGE(2,0),
     INVISIBLE_WALL(0,0,true),
+    HIGHLIGHTED_TILE(3,0),
     ;
 
     final public static int TILE_WIDTH=32;

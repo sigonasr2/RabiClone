@@ -47,6 +47,9 @@ public abstract class Object implements GameEntity{
         this.spr = spr;
     }
 
+    public void drawOverlay(int[] p) {
+    }
+
 	protected void Draw_Sprite(double x, double y, Sprite sprite){
         DrawLoop.Draw_Sprite(x,y,sprite);
     }
