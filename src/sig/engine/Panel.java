@@ -61,19 +61,12 @@ public class Panel extends JPanel implements Runnable,KeyListener {
 			public void mousePressed(MouseEvent e) {
 				mouseHeld=true;
 				mousePos.set(e.getX()/RabiClone.SIZE_MULTIPLIER,e.getY()/RabiClone.SIZE_MULTIPLIER);
-				//System.out.println(e.getX()+","+e.getY());
-				//System.out.println(MouseData());
-			}
-		
-			private String MouseData() {
-				return new StringBuilder("Mouse Held: ").append(mouseHeld).append(" // ").append(mousePos).toString();
 			}
 		
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				mouseHeld=false;
 				mousePos.set(e.getX()/RabiClone.SIZE_MULTIPLIER,e.getY()/RabiClone.SIZE_MULTIPLIER);
-				//System.out.println(MouseData());
 			}
 		
 			@Override
@@ -96,7 +89,6 @@ public class Panel extends JPanel implements Runnable,KeyListener {
 
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				// TODO Auto-generated method stub
 				
 			}
 
