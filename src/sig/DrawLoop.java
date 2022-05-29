@@ -39,7 +39,38 @@ public class DrawLoop {
 					if (index<0||index>=p.length||p[index]==sprite.getBi_array()[Y*sprite.getWidth()+X]) {
 						continue;
 					} else {
-						Draw(p,index,sprite.getBi_array()[Y*sprite.getWidth()+X],true);
+						Draw(p,index,sprite.getBi_array()[Y*sprite.getWidth()+X],true);	
+						//Draw(p,index,sprite.getBi_array()[Y*sprite.getWidth()+X],false);
+					}
+				}
+			}	
+		}
+	}
+
+	public static void Draw_Sprite_Partial_Ext(double x, double y, double xOffset, double yOffset, double w, double h, Sprite sprite, int alpha){
+		int[] p = panel.pixel;
+		for(int X=(int)xOffset;X<(int)(w+xOffset);X++){
+			for(int Y=(int)yOffset;Y<(int)(h+yOffset);Y++){
+				if (X+x-xOffset<0||Y+y-yOffset<0||X-xOffset+x>=RabiClone.BASE_WIDTH||Y-yOffset+y>=RabiClone.BASE_HEIGHT) {
+					continue;
+				} else {
+					int index = (Y-(int)yOffset+(int)y)*RabiClone.BASE_WIDTH+X-(int)xOffset+(int)x;
+					if (index<0||index>=p.length||p[index]==sprite.getBi_array()[Y*sprite.getWidth()+X]) {
+						continue;
+					} else {
+						if (alpha==255) {
+							Draw(p,index,sprite.getBi_array()[Y*sprite.getWidth()+X],true);	
+						} else {
+							int oldAlpha = sprite.getBi_array()[Y*sprite.getWidth()+X]>>>24;
+							if (oldAlpha==0) {
+								Draw(p,index,sprite.getBi_array()[Y*sprite.getWidth()+X],true);
+							} else
+							if (oldAlpha==255) {
+								Draw(p,index,(sprite.getBi_array()[Y*sprite.getWidth()+X]&0x00FFFFFF)|(alpha<<24),true);
+							}  {
+								Draw(p,index,(sprite.getBi_array()[Y*sprite.getWidth()+X]&0x00FFFFFF)|((int)((alpha/255d)*oldAlpha)<<24),true);
+							}
+						}
 						//Draw(p,index,sprite.getBi_array()[Y*sprite.getWidth()+X],false);
 					}
 				}
