@@ -3,13 +3,15 @@ package sig.engine;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.awt.image.DataBufferByte;
 
 import javax.imageio.ImageIO;
 
 public enum Sprite{
 
     NANA(new File("..","3x.png")),
-    NANA_SMALL(new File("..","1x.png")),
+    NANA_SMALL(new File("..","1x.gif")),
     TILE_SHEET(new File("..","tiles.png")),
     ;
 
@@ -18,15 +20,14 @@ public enum Sprite{
     BufferedImage img;
     int height;
     int width;
-    int[] bi_array;
+    byte[] bi_array;
     
     Sprite(File filename){
         try {
             BufferedImage img = ImageIO.read(filename);
             this.width=img.getWidth();
             this.height=img.getHeight();
-            this.bi_array = new int[width*height];
-            img.getRGB(0,0,width,height,this.bi_array,0,width);
+            bi_array = ((DataBufferByte)(img.getRaster().getDataBuffer())).getData();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -57,11 +58,11 @@ public enum Sprite{
         this.width = width;
     }
 
-    public int[] getBi_array() {
+    public byte[] getBi_array() {
         return bi_array;
     }
 
-    public void setBi_array(int[] bi_array) {
+    public void setBi_array(byte[] bi_array) {
         this.bi_array = bi_array;
     };
 

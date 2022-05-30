@@ -47,7 +47,7 @@ public abstract class Object implements GameEntity{
         this.spr = spr;
     }
 
-    public void drawOverlay(int[] p) {
+    public void drawOverlay(byte[] p) {
     }
 
 	protected void Draw_Sprite(double x, double y, Sprite sprite){
@@ -58,7 +58,7 @@ public abstract class Object implements GameEntity{
         DrawLoop.Draw_Sprite_Partial(x,y,xOffset,yOffset,w,h,sprite);
     }
 
-	protected void Draw_Sprite_Partial_Ext(double x, double y, double xOffset, double yOffset, double w, double h, Sprite sprite, int alpha){
+	protected void Draw_Sprite_Partial_Ext(double x, double y, double xOffset, double yOffset, double w, double h, Sprite sprite, Alpha alpha){
         DrawLoop.Draw_Sprite_Partial_Ext(x,y,xOffset,yOffset,w,h,sprite,alpha);
     }
 

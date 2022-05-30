@@ -51,6 +51,40 @@ public class Panel extends JPanel implements Runnable,KeyListener {
 	public Point highlightedSquare = new Point(0,0);
 	public HashMap<Integer,Boolean> KEYS = new HashMap<>();
 	public HashMap<Integer,Boolean> MOUSE = new HashMap<>();
+	public static byte[] generalPalette = new byte[]{
+		(byte)0x5b,(byte)0xa6,(byte)0x75,
+		(byte)0x6b,(byte)0xc9,(byte)0x6c,
+		(byte)0xab,(byte)0xdd,(byte)0x64,
+		(byte)0xfc,(byte)0xef,(byte)0x8d,
+		(byte)0xff,(byte)0xb8,(byte)0x79,
+		(byte)0xea,(byte)0x62,(byte)0x62,
+		(byte)0xcc,(byte)0x42,(byte)0x5e,
+		(byte)0xa3,(byte)0x28,(byte)0x58,
+		(byte)0x75,(byte)0x17,(byte)0x56,
+		(byte)0x39,(byte)0x09,(byte)0x47,
+		(byte)0x61,(byte)0x18,(byte)0x51,
+		(byte)0x87,(byte)0x35,(byte)0x55,
+		(byte)0xa6,(byte)0x55,(byte)0x5f,
+		(byte)0xc9,(byte)0x73,(byte)0x73,
+		(byte)0xf2,(byte)0xae,(byte)0x99,
+		(byte)0xff,(byte)0xc3,(byte)0xf2,
+		(byte)0xee,(byte)0x8f,(byte)0xcb,
+		(byte)0xd4,(byte)0x6e,(byte)0xb3,
+		(byte)0x87,(byte)0x3e,(byte)0x84,
+		(byte)0x1f,(byte)0x10,(byte)0x2a,
+		(byte)0x4a,(byte)0x30,(byte)0x52,
+		(byte)0x7b,(byte)0x54,(byte)0x80,
+		(byte)0xa6,(byte)0x85,(byte)0x9f,
+		(byte)0xd9,(byte)0xbd,(byte)0xc8,
+		(byte)0xff,(byte)0xff,(byte)0xff,
+		(byte)0xae,(byte)0xe2,(byte)0xff,
+		(byte)0x8d,(byte)0xb7,(byte)0xff,
+		(byte)0x6d,(byte)0x80,(byte)0xfa,
+		(byte)0x84,(byte)0x65,(byte)0xec,
+		(byte)0x83,(byte)0x4d,(byte)0xc4,
+		(byte)0x7d,(byte)0x2d,(byte)0xa0,
+		(byte)0x4e,(byte)0x18,(byte)0x7c,
+	};
 
     public Panel(JFrame f) {
         super(true);
@@ -126,51 +160,17 @@ public class Panel extends JPanel implements Runnable,KeyListener {
      * @return color model
      */
     protected static ColorModel getCustomPalette(){   
-		char[] generalPalette = new char[]{
-			0x5b,0xa6,0x75,0xff,
-			0x6b,0xc9,0x6c,0xff,
-			0xab,0xdd,0x64,0xff,
-			0xfc,0xef,0x8d,0xff,
-			0xff,0xb8,0x79,0xff,
-			0xea,0x62,0x62,0xff,
-			0xcc,0x42,0x5e,0xff,
-			0xa3,0x28,0x58,0xff,
-			0x75,0x17,0x56,0xff,
-			0x39,0x09,0x47,0xff,
-			0x61,0x18,0x51,0xff,
-			0x87,0x35,0x55,0xff,
-			0xa6,0x55,0x5f,0xff,
-			0xc9,0x73,0x73,0xff,
-			0xf2,0xae,0x99,0xff,
-			0xff,0xc3,0xf2,0xff,
-			0xee,0x8f,0xcb,0xff,
-			0xd4,0x6e,0xb3,0xff,
-			0x87,0x3e,0x84,0xff,
-			0x1f,0x10,0x2a,0xff,
-			0x4a,0x30,0x52,0xff,
-			0x7b,0x54,0x80,0xff,
-			0xa6,0x85,0x9f,0xff,
-			0xd9,0xbd,0xc8,0xff,
-			0xff,0xff,0xff,0xff,
-			0xae,0xe2,0xff,0xff,
-			0x8d,0xb7,0xff,0xff,
-			0x6d,0x80,0xfa,0xff,
-			0x84,0x65,0xec,0xff,
-			0x83,0x4d,0xc4,0xff,
-			0x7d,0x2d,0xa0,0xff,
-			0x4e,0x18,0x7c,0xff,
-		};
-		byte[] finalPalette = new byte[32*3*8];
+		byte[] finalPalette = new byte[32*4*8];
 		for (int i=0;i<8;i++) {
 			for (int j=0;j<generalPalette.length;j+=4) {
 				finalPalette[(32*3*i)+j+0]=(byte)generalPalette[j+0];
 				finalPalette[(32*3*i)+j+1]=(byte)generalPalette[j+1];
 				finalPalette[(32*3*i)+j+2]=(byte)generalPalette[j+2];
-				finalPalette[(32*3*i)+j+3]=(byte)(generalPalette[j+3]-(i*(256/8)));
+				finalPalette[(32*3*i)+j+3]=(byte)(256-(i*(256/8)));
 			}
 		}
 		
-        IndexColorModel model = new IndexColorModel(8,32,finalPalette,0,true);
+        IndexColorModel model = new IndexColorModel(5,32,generalPalette,0,false);
         return model;
     }
 
@@ -223,11 +223,16 @@ public class Panel extends JPanel implements Runnable,KeyListener {
 		DrawLoop.drawGame(this);
     }
     
+	/**
+	 * @deprecated Until it implements the new indexed coloring mode, this is unusable.
+	 */
+	@Deprecated
     public void FillRect(int[] p,Color col,double x,double y,double w,double h) {
     	for (int xx=0;xx<w;xx++) {
         	for (int yy=0;yy<h;yy++) {
         		int index = ((int)y+yy)*getWidth()+(int)x+xx;
-				Draw(p,index,col.getColor());
+				//TODO Old Color System
+				//Draw(p,index,col.getColor());
         	}	
     	}
     }
@@ -265,6 +270,10 @@ public class Panel extends JPanel implements Runnable,KeyListener {
         FillPolygon(p,col,0,0,points);
     }
     
+	/**
+	 * @deprecated Until it implements the new indexed coloring mode, this is unusable.
+	 */
+	@Deprecated
     public void FillPolygon(int[] p,Color col,double x_offset,double y_offset,Point...points) {
     	Edge[] edges = new Edge[points.length];
     	List<Edge> edges_sorted = new ArrayList<Edge>();
@@ -301,7 +310,8 @@ public class Panel extends JPanel implements Runnable,KeyListener {
     			for (int x=(int)Math.round(e1.x_of_min_y);x<=e2.x_of_min_y;x++) {
     				int index = (scanLine+(int)y_offset)*getWidth()+x+(int)x_offset;
     				if (index<p.length&&index>=0) {
-						Draw(p,index,col.getColor());
+						//TODO Old color system.
+						//Draw(p,index,col.getColor());
 					}
     			}
     		}
@@ -363,29 +373,8 @@ public class Panel extends JPanel implements Runnable,KeyListener {
     	}
 	}
 
-	public void Draw(int[] canvas,int index, int col) {
-		int alpha = col>>>24;
-		if (alpha==0) {
-			return;}
-		 else
-		if (alpha==255) {
-			canvas[index]=col;
-		} else {
-			float ratio=alpha/255f;
-			int prev_col=canvas[index];
-			int prev_r=(prev_col&0xFF);
-			int prev_g=(prev_col&0xFF00)>>>8;
-			int prev_b=(prev_col&0xFF0000)>>>16;
-			int r=(col&0xFF);
-			int g=(col&0xFF00)>>>8;
-			int b=(col&0xFF0000)>>>16;
-
-			int new_r=(int)(ratio*r+(1-ratio)*prev_r);
-			int new_g=(int)(ratio*g+(1-ratio)*prev_g);
-			int new_b=(int)(ratio*b+(1-ratio)*prev_b);
-			
-			canvas[index]=new_r+(new_g<<8)+(new_b<<16)+(col&0xFF000000);
-		}
+	public void Draw(byte[] canvas,int index, byte col) {
+		canvas[index]=col;
 	}
 
 	@Override
@@ -425,7 +414,6 @@ public class Panel extends JPanel implements Runnable,KeyListener {
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
 		
 	}
 

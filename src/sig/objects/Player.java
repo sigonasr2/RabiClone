@@ -45,7 +45,7 @@ public class Player extends Object{
     }
 
     @Override
-    public void draw(int[] p) {
+    public void draw(byte[] p) {
         Draw_Sprite(RabiClone.BASE_WIDTH/2-getSprite().getWidth()/2,RabiClone.BASE_HEIGHT*(2/3d)-getSprite().getHeight()/2, this.getSprite());
     }
     

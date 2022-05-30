@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 import sig.RabiClone;
+import sig.engine.Alpha;
 import sig.engine.MouseScrollValue;
 import sig.engine.Object;
 import sig.engine.Panel;
@@ -59,7 +60,7 @@ public class LevelRenderer extends Object{
     }
 
     @Override
-    public void draw(int[] p) {
+    public void draw(byte[] p) {
         for (int y=(int)(this.getY()/Tile.TILE_HEIGHT);y<(int)(RabiClone.BASE_HEIGHT/Tile.TILE_HEIGHT+this.getY()/Tile.TILE_HEIGHT+1);y++) {
             if (y<0||y>Map.MAP_HEIGHT) {
                 continue;
@@ -73,7 +74,7 @@ public class LevelRenderer extends Object{
                     //System.out.println((x*Tile.TILE_WIDTH+(this.getX()%Tile.TILE_WIDTH) )+","+(y*Tile.TILE_HEIGHT+(this.getY()%Tile.TILE_HEIGHT)));
                 }
                 if (x==RabiClone.p.highlightedSquare.getX()&&y==RabiClone.p.highlightedSquare.getY()) {
-                    DrawTransparentTile(x*Tile.TILE_WIDTH-this.getX(),y*Tile.TILE_HEIGHT-this.getY(),selectedTile,64);
+                    DrawTransparentTile(x*Tile.TILE_WIDTH-this.getX(),y*Tile.TILE_HEIGHT-this.getY(),selectedTile,Alpha.ALPHA64);
                 }
             }
         }
@@ -83,7 +84,7 @@ public class LevelRenderer extends Object{
         Draw_Sprite_Partial(x,y, tile.getSpriteSheetX()*tile.getTileWidth(), tile.getSpriteSheetY()*tile.getTileHeight(), tile.getTileWidth(), tile.getTileHeight(), getSprite());
     }
 
-    private void DrawTransparentTile(double x, double y, Tile tile, int alpha) {
+    private void DrawTransparentTile(double x, double y, Tile tile, Alpha alpha) {
         Draw_Sprite_Partial_Ext(x,y, tile.getSpriteSheetX()*tile.getTileWidth(), tile.getSpriteSheetY()*tile.getTileHeight(), tile.getTileWidth(), tile.getTileHeight(), getSprite(), alpha);
     }
     

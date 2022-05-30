@@ -1,5 +1,6 @@
 package sig;
 
+import sig.engine.Alpha;
 import sig.engine.Panel;
 import sig.engine.Sprite;
 
@@ -11,7 +12,7 @@ public class DrawLoop {
         
 		for (int y=0;y<RabiClone.BASE_HEIGHT;y++) {
 			for (int x=0;x<RabiClone.BASE_WIDTH;x++) {
-        		p[y*RabiClone.BASE_WIDTH+x]=19;//RGB
+        		p[y*RabiClone.BASE_WIDTH+x]=0;//RGB
         	}
         }
 		
@@ -39,7 +40,7 @@ public class DrawLoop {
 					if (index<0||index>=p.length||p[index]==sprite.getBi_array()[Y*sprite.getWidth()+X]) {
 						continue;
 					} else {
-						Draw(p,index,sprite.getBi_array()[Y*sprite.getWidth()+X],true);	
+						Draw(p,index,sprite.getBi_array()[Y*sprite.getWidth()+X],Alpha.ALPHA0);	
 						//Draw(p,index,sprite.getBi_array()[Y*sprite.getWidth()+X],false);
 					}
 				}
@@ -47,8 +48,8 @@ public class DrawLoop {
 		}
 	}
 
-	public static void Draw_Sprite_Partial_Ext(double x, double y, double xOffset, double yOffset, double w, double h, Sprite sprite, int alpha){
-		int[] p = panel.pixel;
+	public static void Draw_Sprite_Partial_Ext(double x, double y, double xOffset, double yOffset, double w, double h, Sprite sprite, Alpha alpha){
+		byte[] p = panel.pixel;
 		for(int X=(int)xOffset;X<(int)(w+xOffset);X++){
 			for(int Y=(int)yOffset;Y<(int)(h+yOffset);Y++){
 				if (X+x-xOffset<0||Y+y-yOffset<0||X-xOffset+x>=RabiClone.BASE_WIDTH||Y-yOffset+y>=RabiClone.BASE_HEIGHT) {
@@ -58,52 +59,14 @@ public class DrawLoop {
 					if (index<0||index>=p.length||p[index]==sprite.getBi_array()[Y*sprite.getWidth()+X]) {
 						continue;
 					} else {
-						if (alpha==255) {
-							Draw(p,index,sprite.getBi_array()[Y*sprite.getWidth()+X],true);	
-						} else {
-							int oldAlpha = sprite.getBi_array()[Y*sprite.getWidth()+X]>>>24;
-							if (oldAlpha==0) {
-								Draw(p,index,sprite.getBi_array()[Y*sprite.getWidth()+X],true);
-							} else
-							if (oldAlpha==255) {
-								Draw(p,index,(sprite.getBi_array()[Y*sprite.getWidth()+X]&0x00FFFFFF)|(alpha<<24),true);
-							} else {
-								Draw(p,index,(sprite.getBi_array()[Y*sprite.getWidth()+X]&0x00FFFFFF)|((int)((alpha/255d)*oldAlpha)<<24),true);
-							}
-						}
-						//Draw(p,index,sprite.getBi_array()[Y*sprite.getWidth()+X],false);
+						Draw(p,index,sprite.getBi_array()[Y*sprite.getWidth()+X],alpha);	
 					}
 				}
 			}	
 		}
 	}
 
-	public static void Draw(int[] canvas,int index, int col,boolean transparency) {
-		if (!transparency) {
-			canvas[index]=col;
-			return;
-		}
- 		int alpha = col>>>24;
-		if (alpha==0) {
-			return;}
-		 else
-		if (alpha==255) {
-			canvas[index]=col;
-		} else {
-			float ratio=alpha/255f;
-			int prev_col=canvas[index];
-			int prev_r=(prev_col&0xFF);
-			int prev_g=(prev_col&0xFF00)>>>8;
-			int prev_b=(prev_col&0xFF0000)>>>16;
-			int r=(col&0xFF);
-			int g=(col&0xFF00)>>>8;
-			int b=(col&0xFF0000)>>>16;
-
-			int new_r=(int)(ratio*r+(1-ratio)*prev_r);
-			int new_g=(int)(ratio*g+(1-ratio)*prev_g);
-			int new_b=(int)(ratio*b+(1-ratio)*prev_b);
-			
-			canvas[index]=new_r+(new_g<<8)+(new_b<<16)+(col&0xFF000000);
-		}
+	public static void Draw(byte[] canvas,int index, byte col, Alpha alpha) {
+		canvas[index]=(byte)(((int)(col)&0xff)+(alpha.ordinal()*(32)));
 	}
 }
