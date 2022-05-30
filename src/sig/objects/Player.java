@@ -10,7 +10,7 @@ import sig.map.Tile;
 import java.awt.event.KeyEvent;
 
 public class Player extends Object{
-    double y_acceleration = 90;
+    double y_acceleration = 1;
     double y_acceleration_limit = 100;
     double x_acceleration = 0;
     double x_acceleration_limit = 100;
@@ -21,6 +21,8 @@ public class Player extends Object{
 
     double horizontal_drag = 2000;
     double horizontal_friction = 500;
+    double horizontal_air_drag = 100;
+    double horizontal_air_friction = 7;
 
     public Player(Panel panel) {
         super(panel);
@@ -45,7 +47,7 @@ public class Player extends Object{
                 ?Math.signum(y_velocity+y_acceleration*updateMult)*y_velocity_limit
                 :y_velocity+y_acceleration*updateMult;
         double displacement = y_velocity*updateMult;
-        boolean is_collision = false;
+        boolean groundCollision = false;
         for(int i=0;i<4;i++){
             double check_distance = (displacement/4)*(i+1);
             Tile checked_tile_top = RabiClone.CURRENT_MAP.getTile((int)getX()/Tile.TILE_WIDTH, (int)(getY()+check_distance)/Tile.TILE_HEIGHT);
@@ -56,29 +58,35 @@ public class Player extends Object{
                 setY((getY()+check_distance));
                 y_acceleration = 0;
                 y_velocity = 0;
-                is_collision=true;
+                groundCollision=true;
                 break;
             }
         }
-        if (!is_collision){
+        if (!groundCollision){
             this.setY(this.getY()+displacement);
+            handleKeyboardMovement(updateMult, right-left, horizontal_air_friction, horizontal_air_drag);
         } else {
-            if (right-left!=0) {
-                x_acceleration=horizontal_drag*updateMult*(right-left);
-            } else {
-                if (x_velocity!=0) {
-                    x_velocity=x_velocity>0
-                        ?x_velocity-horizontal_friction*updateMult>0
-                            ?x_velocity-horizontal_friction*updateMult
-                            :0
-                        :x_velocity+horizontal_friction*updateMult<0
-                            ?x_velocity+horizontal_friction*updateMult
-                            :0;
-                }
-                x_acceleration=0;
-            }
+            handleKeyboardMovement(updateMult, right-left, horizontal_friction, horizontal_drag);
         }
         this.setX(this.getX()+x_velocity*updateMult);
+    }
+
+
+    private void handleKeyboardMovement(double updateMult, int movement, double friction, double drag) {
+        if (movement!=0) {
+            x_acceleration=drag*(movement);
+        } else {
+            if (x_velocity!=0) {
+                x_velocity=x_velocity>0
+                    ?x_velocity-friction*updateMult>0
+                        ?x_velocity-friction*updateMult
+                        :0
+                    :x_velocity+friction*updateMult<0
+                        ?x_velocity+friction*updateMult
+                        :0;
+            }
+            x_acceleration=0;
+        }
     }
 
     @Override
