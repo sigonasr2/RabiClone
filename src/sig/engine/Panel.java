@@ -7,6 +7,7 @@ import java.awt.Toolkit;
 import java.awt.image.ColorModel;
 import java.awt.image.MemoryImageSource;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.awt.event.KeyEvent;
@@ -14,6 +15,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.awt.image.IndexColorModel;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -26,7 +28,7 @@ import sig.map.Tile;
 
 public class Panel extends JPanel implements Runnable,KeyListener {
 	JFrame window;
-    public int pixel[];
+    public byte pixel[];
     final int CIRCLE_PRECISION=32;
 	final int OUTLINE_COL=Color.BRIGHT_WHITE.getColor();
     private Thread thread;
@@ -123,21 +125,63 @@ public class Panel extends JPanel implements Runnable,KeyListener {
      * Get Best Color model available for current screen.
      * @return color model
      */
-    protected static ColorModel getCompatibleColorModel(){        
-        GraphicsConfiguration gfx_config = GraphicsEnvironment.
-                getLocalGraphicsEnvironment().getDefaultScreenDevice().
-                getDefaultConfiguration();        
-        return gfx_config.getColorModel();
+    protected static ColorModel getCustomPalette(){   
+		char[] generalPalette = new char[]{
+			0x5b,0xa6,0x75,0xff,
+			0x6b,0xc9,0x6c,0xff,
+			0xab,0xdd,0x64,0xff,
+			0xfc,0xef,0x8d,0xff,
+			0xff,0xb8,0x79,0xff,
+			0xea,0x62,0x62,0xff,
+			0xcc,0x42,0x5e,0xff,
+			0xa3,0x28,0x58,0xff,
+			0x75,0x17,0x56,0xff,
+			0x39,0x09,0x47,0xff,
+			0x61,0x18,0x51,0xff,
+			0x87,0x35,0x55,0xff,
+			0xa6,0x55,0x5f,0xff,
+			0xc9,0x73,0x73,0xff,
+			0xf2,0xae,0x99,0xff,
+			0xff,0xc3,0xf2,0xff,
+			0xee,0x8f,0xcb,0xff,
+			0xd4,0x6e,0xb3,0xff,
+			0x87,0x3e,0x84,0xff,
+			0x1f,0x10,0x2a,0xff,
+			0x4a,0x30,0x52,0xff,
+			0x7b,0x54,0x80,0xff,
+			0xa6,0x85,0x9f,0xff,
+			0xd9,0xbd,0xc8,0xff,
+			0xff,0xff,0xff,0xff,
+			0xae,0xe2,0xff,0xff,
+			0x8d,0xb7,0xff,0xff,
+			0x6d,0x80,0xfa,0xff,
+			0x84,0x65,0xec,0xff,
+			0x83,0x4d,0xc4,0xff,
+			0x7d,0x2d,0xa0,0xff,
+			0x4e,0x18,0x7c,0xff,
+		};
+		byte[] finalPalette = new byte[32*3*8];
+		for (int i=0;i<8;i++) {
+			for (int j=0;j<generalPalette.length;j+=4) {
+				finalPalette[(32*3*i)+j+0]=(byte)generalPalette[j+0];
+				finalPalette[(32*3*i)+j+1]=(byte)generalPalette[j+1];
+				finalPalette[(32*3*i)+j+2]=(byte)generalPalette[j+2];
+				finalPalette[(32*3*i)+j+3]=(byte)(generalPalette[j+3]-(i*(256/8)));
+			}
+		}
+		
+        IndexColorModel model = new IndexColorModel(8,32,finalPalette,0,true);
+        return model;
     }
 
     /**
      * Call it after been visible and after resizes.
      */
     public void init(){        
-        cm = getCompatibleColorModel();
+        cm = getCustomPalette();
         int screenSize = RabiClone.BASE_WIDTH*RabiClone.BASE_HEIGHT;
         if(pixel == null || pixel.length < screenSize){
-            pixel = new int[screenSize];
+            pixel = new byte[screenSize];
         }        
         if(thread.isInterrupted() || !thread.isAlive()){
             thread.start();

@@ -7,11 +7,11 @@ public class DrawLoop {
     public static Panel panel;
     public static void drawGame(Panel panel) {
         DrawLoop.panel=panel;
-        int[] p = panel.pixel;
+        byte[] p = panel.pixel;
         
 		for (int y=0;y<RabiClone.BASE_HEIGHT;y++) {
 			for (int x=0;x<RabiClone.BASE_WIDTH;x++) {
-        		p[y*RabiClone.BASE_WIDTH+x]=(16<<16)+(16<<8)+16;//RGB
+        		p[y*RabiClone.BASE_WIDTH+x]=19;//RGB
         	}
         }
 		
@@ -29,7 +29,7 @@ public class DrawLoop {
 	}
 
 	public static void Draw_Sprite_Partial(double x, double y, double xOffset, double yOffset, double w, double h, Sprite sprite){
-		int[] p = panel.pixel;
+		byte[] p = panel.pixel;
 		for(int X=(int)xOffset;X<(int)(w+xOffset);X++){
 			for(int Y=(int)yOffset;Y<(int)(h+yOffset);Y++){
 				if (X+x-xOffset<0||Y+y-yOffset<0||X-xOffset+x>=RabiClone.BASE_WIDTH||Y-yOffset+y>=RabiClone.BASE_HEIGHT) {
