@@ -27,6 +27,9 @@ public class Player extends Object{
     double horizontal_air_drag = 100;
     double horizontal_air_friction = 7;
 
+    int maxJumpCount=1;
+    int jumpCount=maxJumpCount;
+
     public Player(Panel panel) {
         super(panel);
         this.setSprite(Sprite.NANA_SMALL);
@@ -61,17 +64,18 @@ public class Player extends Object{
             }
             double check_distance_y = (displacement_y/4)*(i+1);
             double check_distance_x = (displacement_x/4)*(i+1);
-            Tile checked_tile_top_right = RabiClone.CURRENT_MAP.getTile((int)(getX()+getSprite().getWidth()/2-4+check_distance_x)/Tile.TILE_WIDTH, (int)(getY())/Tile.TILE_HEIGHT);
-            Tile checked_tile_top_left = RabiClone.CURRENT_MAP.getTile((int)(getX()-getSprite().getWidth()/2+4+check_distance_x)/Tile.TILE_WIDTH, (int)(getY())/Tile.TILE_HEIGHT);
-            Tile checked_tile_bottom_right = RabiClone.CURRENT_MAP.getTile((int)(getX()+getSprite().getWidth()/2)/Tile.TILE_WIDTH, (int)(getY()+getSprite().getHeight()/2+check_distance_y)/Tile.TILE_HEIGHT);
-            Tile checked_tile_bottom_left = RabiClone.CURRENT_MAP.getTile((int)(getX()-getSprite().getWidth()/2)/Tile.TILE_WIDTH, (int)(getY()+getSprite().getHeight()/2+check_distance_y)/Tile.TILE_HEIGHT);
+            Tile checked_tile_bottom_right = RabiClone.CURRENT_MAP.getTile((int)(getX()+getSprite().getWidth()/2-8)/Tile.TILE_WIDTH, (int)(getY()+getSprite().getHeight()/2+check_distance_y)/Tile.TILE_HEIGHT);
+            Tile checked_tile_bottom_left = RabiClone.CURRENT_MAP.getTile((int)(getX()-getSprite().getWidth()/2+8)/Tile.TILE_WIDTH, (int)(getY()+getSprite().getHeight()/2+check_distance_y)/Tile.TILE_HEIGHT);
             //System.out.println((int)getX()/Tile.TILE_WIDTH);
             if(!groundCollision&&checked_tile_bottom_right.getCollision()==CollisionType.BLOCK||checked_tile_bottom_left.getCollision()==CollisionType.BLOCK){
-                setY((getY()+check_distance_y));
+                setY((getY()-check_distance_y));
                 y_acceleration = 0;
                 y_velocity = 0;
                 groundCollision=true;
             }
+
+            Tile checked_tile_top_right = RabiClone.CURRENT_MAP.getTile((int)(getX()+getSprite().getWidth()/2-4+check_distance_x)/Tile.TILE_WIDTH, (int)(getY()+getSprite().getHeight()/2)/Tile.TILE_HEIGHT);
+            Tile checked_tile_top_left = RabiClone.CURRENT_MAP.getTile((int)(getX()-getSprite().getWidth()/2+4+check_distance_x)/Tile.TILE_WIDTH, (int)(getY()+getSprite().getHeight()/2)/Tile.TILE_HEIGHT);
             if(!sideCollision&&checked_tile_top_right.getCollision()==CollisionType.BLOCK||checked_tile_top_left.getCollision()==CollisionType.BLOCK){
                 //System.out.println(checked_tile_top_right.getCollision()+"//"+checked_tile_top_left.getCollision());
                 setX((getX()-check_distance_x));
