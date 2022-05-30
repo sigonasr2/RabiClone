@@ -144,6 +144,7 @@ public class Panel extends JPanel implements Runnable,KeyListener {
 				for(int i=0; i<RabiClone.OBJ.size();i++){
 					Object current_obj = RabiClone.OBJ.get(i);
 					current_obj.MouseScrolled(MouseScrollValue.getValue(e.getWheelRotation()));
+					//System.out.println(Panel.col);
 				}
 			}
 		});
@@ -162,15 +163,18 @@ public class Panel extends JPanel implements Runnable,KeyListener {
     protected static ColorModel getCustomPalette(){   
 		byte[] finalPalette = new byte[32*4*8];
 		for (int i=0;i<8;i++) {
+			int k=0;
 			for (int j=0;j<generalPalette.length;j+=3) {
-				finalPalette[(32*3*i)+j+0]=(byte)generalPalette[j+0];
-				finalPalette[(32*3*i)+j+1]=(byte)generalPalette[j+1];
-				finalPalette[(32*3*i)+j+2]=(byte)generalPalette[j+2];
-				finalPalette[(32*3*i)+j+3]=(byte)(256-(i*(256/8)));
+				finalPalette[(32*4*i)+k+0]=(byte)generalPalette[j+0];
+				finalPalette[(32*4*i)+k+1]=(byte)generalPalette[j+1];
+				finalPalette[(32*4*i)+k+2]=(byte)generalPalette[j+2];
+				finalPalette[(32*4*i)+k+3]=(byte)(255-(i*(256/8)));
+				//System.out.println("Color "+(k/4)+": "+finalPalette[(32*4*i)+k+0]+"/"+finalPalette[(32*4*i)+k+1]+"/"+finalPalette[(32*4*i)+k+2]+"/"+finalPalette[(32*4*i)+k+3]);
+				k+=4;
 			}
 		}
 		
-        IndexColorModel model = new IndexColorModel(8,256,finalPalette,0,true);
+        IndexColorModel model = new IndexColorModel(8,256,finalPalette,0,true,32);
         return model;
     }
 

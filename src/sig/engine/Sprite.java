@@ -12,7 +12,7 @@ public enum Sprite{
 
     NANA(new File("..","3x.png")),
     NANA_SMALL(new File("..","1x.gif")),
-    TILE_SHEET(new File("..","tiles.png")),
+    TILE_SHEET(new File("..","tiles.gif")),
     ;
 
 
