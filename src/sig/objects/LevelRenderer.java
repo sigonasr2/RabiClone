@@ -28,12 +28,12 @@ public class LevelRenderer extends Object{
         int left = KeyHeld(KeyEvent.VK_LEFT)||KeyHeld(KeyEvent.VK_A)?1:0;
         int up = KeyHeld(KeyEvent.VK_UP)||KeyHeld(KeyEvent.VK_W)?1:0;
         int down = KeyHeld(KeyEvent.VK_DOWN)||KeyHeld(KeyEvent.VK_S)?1:0;
-        if (right-left!=0) {
+        /*if (right-left!=0) {
             setX(getX()+(right-left)*512*updateMult);
         }
         if (up-down!=0) {
             setY(getY()+(down-up)*512*updateMult);
-        }
+        }*/
         boolean left_mb = MouseHeld(MouseEvent.BUTTON1);
         boolean middle_mb = MouseHeld(MouseEvent.BUTTON2);
         boolean right_mb = MouseHeld(MouseEvent.BUTTON3);
@@ -46,6 +46,7 @@ public class LevelRenderer extends Object{
             Map.SaveMap(RabiClone.CURRENT_MAP);
             System.out.println("Map saved");
         }
+        setX(RabiClone.player.getX()-RabiClone.BASE_WIDTH/2);
         setY(RabiClone.player.getY()-RabiClone.BASE_HEIGHT*(2/3d));
     }
 
