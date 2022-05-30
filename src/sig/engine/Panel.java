@@ -162,7 +162,7 @@ public class Panel extends JPanel implements Runnable,KeyListener {
     protected static ColorModel getCustomPalette(){   
 		byte[] finalPalette = new byte[32*4*8];
 		for (int i=0;i<8;i++) {
-			for (int j=0;j<generalPalette.length;j+=4) {
+			for (int j=0;j<generalPalette.length;j+=3) {
 				finalPalette[(32*3*i)+j+0]=(byte)generalPalette[j+0];
 				finalPalette[(32*3*i)+j+1]=(byte)generalPalette[j+1];
 				finalPalette[(32*3*i)+j+2]=(byte)generalPalette[j+2];
@@ -170,7 +170,7 @@ public class Panel extends JPanel implements Runnable,KeyListener {
 			}
 		}
 		
-        IndexColorModel model = new IndexColorModel(5,32,generalPalette,0,false);
+        IndexColorModel model = new IndexColorModel(8,256,finalPalette,0,true);
         return model;
     }
 
