@@ -10,22 +10,24 @@ import sig.map.Tile;
 import java.awt.event.KeyEvent;
 
 public class Player extends Object{
-    final double GRAVITY = 90;
-    final double NORMAL_FRICTION = 500;
+    final double GRAVITY = 890;
+    final double NORMAL_FRICTION = 6400;
 
     double y_acceleration = GRAVITY;
     double y_acceleration_limit = 100;
     double x_acceleration = 0;
     double x_acceleration_limit = 100;
     double x_velocity = 0;
-    double x_velocity_limit = 128;
+    double x_velocity_limit = 164;
     double y_velocity = 5;
-    double y_velocity_limit = 192;
+    double y_velocity_limit = 400;
 
     double horizontal_drag = 2000;
     double horizontal_friction = NORMAL_FRICTION;
-    double horizontal_air_drag = 100;
-    double horizontal_air_friction = 7;
+    double horizontal_air_drag = 600;
+    double horizontal_air_friction = 20;
+
+    double jump_velocity = -400;
 
     int maxJumpCount=1;
     int jumpCount=maxJumpCount;
@@ -64,10 +66,10 @@ public class Player extends Object{
             }
             double check_distance_y = (displacement_y/4)*(i+1);
             double check_distance_x = (displacement_x/4)*(i+1);
-            Tile checked_tile_bottom_right = RabiClone.CURRENT_MAP.getTile((int)(getX()+getSprite().getWidth()/2-8)/Tile.TILE_WIDTH, (int)(getY()+getSprite().getHeight()/2+check_distance_y)/Tile.TILE_HEIGHT);
-            Tile checked_tile_bottom_left = RabiClone.CURRENT_MAP.getTile((int)(getX()-getSprite().getWidth()/2+8)/Tile.TILE_WIDTH, (int)(getY()+getSprite().getHeight()/2+check_distance_y)/Tile.TILE_HEIGHT);
+            Tile checked_tile_bottom_right = RabiClone.CURRENT_MAP.getTile((int)(getX()+getSprite().getWidth()/2-4)/Tile.TILE_WIDTH, (int)(getY()+getSprite().getHeight()/2+check_distance_y)/Tile.TILE_HEIGHT);
+            Tile checked_tile_bottom_left = RabiClone.CURRENT_MAP.getTile((int)(getX()-getSprite().getWidth()/2+4)/Tile.TILE_WIDTH, (int)(getY()+getSprite().getHeight()/2+check_distance_y)/Tile.TILE_HEIGHT);
             //System.out.println((int)getX()/Tile.TILE_WIDTH);
-            if(!groundCollision&&checked_tile_bottom_right.getCollision()==CollisionType.BLOCK||checked_tile_bottom_left.getCollision()==CollisionType.BLOCK){
+            if(checked_tile_bottom_right.getCollision()==CollisionType.BLOCK||checked_tile_bottom_left.getCollision()==CollisionType.BLOCK){
                 setY((getY()-check_distance_y));
                 y_acceleration = 0;
                 y_velocity = 0;
@@ -76,9 +78,13 @@ public class Player extends Object{
 
             Tile checked_tile_top_right = RabiClone.CURRENT_MAP.getTile((int)(getX()+getSprite().getWidth()/2-4+check_distance_x)/Tile.TILE_WIDTH, (int)(getY()+getSprite().getHeight()/2)/Tile.TILE_HEIGHT);
             Tile checked_tile_top_left = RabiClone.CURRENT_MAP.getTile((int)(getX()-getSprite().getWidth()/2+4+check_distance_x)/Tile.TILE_WIDTH, (int)(getY()+getSprite().getHeight()/2)/Tile.TILE_HEIGHT);
-            if(!sideCollision&&checked_tile_top_right.getCollision()==CollisionType.BLOCK||checked_tile_top_left.getCollision()==CollisionType.BLOCK){
+            if(checked_tile_top_right.getCollision()==CollisionType.BLOCK||checked_tile_top_left.getCollision()==CollisionType.BLOCK){
                 //System.out.println(checked_tile_top_right.getCollision()+"//"+checked_tile_top_left.getCollision());
-                setX((getX()-check_distance_x));
+                if (checked_tile_top_right.getCollision()==CollisionType.BLOCK) {
+                    setX(((int)(getX()-getSprite().getWidth()/2)/Tile.TILE_WIDTH)*Tile.TILE_WIDTH+Tile.TILE_WIDTH/2+3+check_distance_x);
+                } else {
+                    setX(((int)(getX()+getSprite().getWidth())/Tile.TILE_WIDTH)*Tile.TILE_WIDTH-Tile.TILE_WIDTH/2-3+check_distance_x);
+                }
                 x_acceleration = 0;
                 x_velocity = 0;
                 sideCollision=true;
@@ -92,6 +98,12 @@ public class Player extends Object{
                 this.setX(this.getX()+displacement_x);
             }
         } else {
+            jumpCount=maxJumpCount;
+            if (KeyHeld(KeyEvent.VK_SPACE)&&jumpCount>0) {
+                jumpCount--;
+                y_velocity = jump_velocity;
+                //System.out.println("Jump");
+            }
             if (!sideCollision) {
                 handleKeyboardMovement(updateMult, right-left, horizontal_friction, horizontal_drag);
                 this.setX(this.getX()+displacement_x);
