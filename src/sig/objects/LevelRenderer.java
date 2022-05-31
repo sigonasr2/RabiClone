@@ -10,7 +10,6 @@ import sig.engine.Object;
 import sig.engine.Panel;
 import sig.engine.Sprite;
 import sig.map.Map;
-import sig.map.Maps;
 import sig.map.Tile;
 
 public class LevelRenderer extends Object{
