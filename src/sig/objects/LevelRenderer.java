@@ -1,11 +1,7 @@
 package sig.objects;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-
 import sig.RabiClone;
 import sig.engine.Alpha;
-import sig.engine.MouseScrollValue;
 import sig.engine.Object;
 import sig.engine.Panel;
 import sig.engine.Sprite;
