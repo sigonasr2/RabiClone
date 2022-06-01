@@ -64,9 +64,6 @@ public enum Sprite{
             } else {
                 bi_array = ((DataBufferByte)(img.getRaster().getDataBuffer())).getData();
             }
-            if (this.ordinal()==3) {
-                System.out.println(Arrays.toString(bi_array));
-            }
         } catch (IOException e) {
             e.printStackTrace();
         }
