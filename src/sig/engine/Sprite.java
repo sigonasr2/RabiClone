@@ -9,9 +9,9 @@ import javax.imageio.ImageIO;
 
 public enum Sprite{
 
-    NANA(new File("..","3x.png")),
-    NANA_SMALL(new File("..","1x.gif")),
-    TILE_SHEET(new File("..","tiles.gif")),
+    NANA(new File(new File("..","sprites"),"3x.png")),
+    NANA_SMALL(new File(new File("..","sprites"),"1x.gif")),
+    TILE_SHEET(new File(new File("..","sprites"),"tiles.gif")),
     ;
 
 

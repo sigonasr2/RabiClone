@@ -27,3 +27,4 @@ The system will also use the SigScript updating system to keep files up-to-date.
 Configuration is modified at the top of the script file while the command list includes all included modules inside of `scripts`.
 
 Mizue (みずえ) 水恵
+Turn off inline hints: (F1, search "Preferences: Open Settings (JSON)) "editor.inlayHints.enabled": false
