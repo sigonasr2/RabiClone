@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 import sig.RabiClone;
+import sig.engine.Alpha;
 import sig.engine.MouseScrollValue;
 import sig.engine.Panel;
 import sig.engine.Sprite;
@@ -58,5 +59,12 @@ public class EditorRenderer extends LevelRenderer{
     public void draw(byte[] p) {
         super.draw(p);
         Draw_Sprite(16, 16, Sprite.MAP_TILE_INFO);
+    }
+
+    @Override
+    protected void drawMapTileForEditorMode(int x, int y) {
+        if (x==RabiClone.p.highlightedSquare.getX()&&y==RabiClone.p.highlightedSquare.getY()) {
+            DrawTransparentTile(x*Tile.TILE_WIDTH-this.getX(),y*Tile.TILE_HEIGHT-this.getY(),selectedTile,Alpha.ALPHA160);
+        }
     }    
 }

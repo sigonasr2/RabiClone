@@ -3,17 +3,16 @@ package sig.engine;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.awt.image.DataBufferByte;
 
 import javax.imageio.ImageIO;
 
 public enum Sprite{
 
-    NANA(new File(new File("..","sprites"),"3x.png")),
+    //NANA(new File(new File("..","sprites"),"3x.png")),
     NANA_SMALL(new File(new File("..","sprites"),"1x.gif")),
     TILE_SHEET(new File(new File("..","sprites"),"tiles.gif")),
-    MAP_TILE_INFO(new File(new File("..","sprites"),"maptileinfo-1.png.png")),
+    MAP_TILE_INFO(new File(new File("..","sprites"),"maptileinfo.gif")),
     ;
 
 

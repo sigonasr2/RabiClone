@@ -10,8 +10,6 @@ import sig.map.Tile;
 
 public class LevelRenderer extends Object{
 
-    Tile selectedTile = Tile.WALL;
-
     public LevelRenderer(Panel panel) {
         super(panel);
         this.setSprite(Sprite.TILE_SHEET);
@@ -35,16 +33,14 @@ public class LevelRenderer extends Object{
                     DrawTile(x*Tile.TILE_WIDTH-this.getX(),y*Tile.TILE_HEIGHT-this.getY(),RabiClone.CURRENT_MAP.getTile(x,y));
                     //System.out.println((x*Tile.TILE_WIDTH+(this.getX()%Tile.TILE_WIDTH) )+","+(y*Tile.TILE_HEIGHT+(this.getY()%Tile.TILE_HEIGHT)));
                 }
-                if (this instanceof EditorRenderer) {
-                    if (x==RabiClone.p.highlightedSquare.getX()&&y==RabiClone.p.highlightedSquare.getY()) {
-                        DrawTransparentTile(x*Tile.TILE_WIDTH-this.getX(),y*Tile.TILE_HEIGHT-this.getY(),selectedTile,Alpha.ALPHA160);
-                    }
-                }
+                drawMapTileForEditorMode(x,y);
             }
         }
         Draw_Object(RabiClone.player);
         Draw_Object(RabiClone.player2);
     }
+
+    protected void drawMapTileForEditorMode(int x, int y) {}
 
     /**
      * Draws an object where its sprite is centered among its position and drawn relative to the camera position.
@@ -58,7 +54,7 @@ public class LevelRenderer extends Object{
         Draw_Sprite_Partial(x,y, tile.getSpriteSheetX()*tile.getTileWidth(), tile.getSpriteSheetY()*tile.getTileHeight(), tile.getTileWidth(), tile.getTileHeight(), getSprite());
     }
 
-    private void DrawTransparentTile(double x, double y, Tile tile, Alpha alpha) {
+    protected void DrawTransparentTile(double x, double y, Tile tile, Alpha alpha) {
         Draw_Sprite_Partial_Ext(x,y, tile.getSpriteSheetX()*tile.getTileWidth(), tile.getSpriteSheetY()*tile.getTileHeight(), tile.getTileWidth(), tile.getTileHeight(), getSprite(), alpha);
     }
     
