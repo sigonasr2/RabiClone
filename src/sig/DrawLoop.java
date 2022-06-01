@@ -1,6 +1,7 @@
 package sig;
 
 import sig.engine.Alpha;
+import sig.engine.PaletteColor;
 import sig.engine.Panel;
 import sig.engine.Sprite;
 
@@ -49,6 +50,10 @@ public class DrawLoop {
 	}
 
 	public static void Draw_Sprite_Partial_Ext(double x, double y, double xOffset, double yOffset, double w, double h, Sprite sprite, Alpha alpha){
+		Draw_Sprite_Partial_Ext(x, y, xOffset, yOffset, w, h, sprite, alpha, PaletteColor.NORMAL);
+	}
+
+	public static void Draw_Sprite_Partial_Ext(double x, double y, double xOffset, double yOffset, double w, double h, Sprite sprite, Alpha alpha, PaletteColor col){
 		byte[] p = panel.pixel;
 		for(int X=(int)xOffset;X<(int)(w+xOffset);X++){
 			for(int Y=(int)yOffset;Y<(int)(h+yOffset);Y++){
@@ -59,7 +64,7 @@ public class DrawLoop {
 					if (index<0||index>=p.length||sprite.getBi_array()[Y*sprite.getWidth()+X]==32||p[index]==sprite.getBi_array()[Y*sprite.getWidth()+X]) {
 						continue;
 					} else {
-						Draw(p,index,sprite.getBi_array()[Y*sprite.getWidth()+X],alpha);	
+						Draw(p,index,col==PaletteColor.NORMAL?sprite.getBi_array()[Y*sprite.getWidth()+X]:(byte)col.ordinal(),alpha);	
 					}
 				}
 			}	

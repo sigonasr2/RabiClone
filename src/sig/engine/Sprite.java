@@ -13,6 +13,7 @@ public enum Sprite{
     NANA_SMALL(new File(new File("..","sprites"),"1x.gif")),
     TILE_SHEET(new File(new File("..","sprites"),"tiles.gif")),
     MAP_TILE_INFO(new File(new File("..","sprites"),"maptileinfo.gif")),
+    PROFONT(new File(new File("..","sprites"),"Profont.gif")),
     ;
 
 
