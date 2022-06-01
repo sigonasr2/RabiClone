@@ -29,7 +29,7 @@ public class RabiClone{
 	public static Point MOUSE_POS;
 
 	public static LevelRenderer level_renderer;
-	public static Player player;
+	public static Player player,player2;
 
 	public static Maps CURRENT_MAP = Maps.WORLD1;
 	public static void main(String[] args) {
@@ -53,6 +53,8 @@ public class RabiClone{
 
 		OBJ.add(level_renderer = new LevelRenderer(p));
 		OBJ.add(player = new Player(p));
+		OBJ.add(player2 = new Player(p));
+		player2.setX(64);
 
 		p.render();
 

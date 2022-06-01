@@ -71,6 +71,9 @@ public class Player extends Object{
             //System.out.println((int)getX()/Tile.TILE_WIDTH);
             if(checked_tile_bottom_right.getCollision()==CollisionType.BLOCK||checked_tile_bottom_left.getCollision()==CollisionType.BLOCK){
                 setY((getY()-check_distance_y));
+                if (y_velocity>0) {
+                    jumpCount=maxJumpCount;
+                }
                 y_acceleration = 0;
                 y_velocity = 0;
                 groundCollision=true;
@@ -98,7 +101,6 @@ public class Player extends Object{
                 this.setX(this.getX()+displacement_x);
             }
         } else {
-            jumpCount=maxJumpCount;
             if (KeyHeld(KeyEvent.VK_SPACE)&&jumpCount>0) {
                 jumpCount--;
                 y_velocity = jump_velocity;
@@ -130,8 +132,6 @@ public class Player extends Object{
     }
 
     @Override
-    public void draw(byte[] p) {
-        Draw_Sprite(RabiClone.BASE_WIDTH/2-getSprite().getWidth()/2,RabiClone.BASE_HEIGHT*(2/3d)-getSprite().getHeight()/2, this.getSprite());
-    }
+    public void draw(byte[] p) {}
     
 }
