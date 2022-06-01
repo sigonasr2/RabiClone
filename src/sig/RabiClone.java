@@ -60,7 +60,7 @@ public class RabiClone{
 		while (true) {
 			long timePassed = System.nanoTime()-lastGameTime;
 			lastGameTime=System.nanoTime();
-			double updateMult = timePassed/1000000000d;
+			double updateMult = Math.min(1/60d,timePassed/1000000000d);
 
 			for (int i=0;i<OBJ.size();i++) {
 				OBJ.get(i).update(updateMult);
