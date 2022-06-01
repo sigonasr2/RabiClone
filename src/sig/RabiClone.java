@@ -35,11 +35,11 @@ public class RabiClone{
 
 	public static Maps CURRENT_MAP = Maps.WORLD1;
 	public static void main(String[] args) {
-		f = new JFrame(PROGRAM_NAME);
+		/*f = new JFrame(PROGRAM_NAME);
 		f.setResizable(false);
 		f.setUndecorated(true);
 		f.setSize(BASE_WIDTH,BASE_HEIGHT); //1024x576 (64x64)
-		ChooseBestRatio();
+		ChooseBestRatio();*/
 
 		p = new Panel(f);
 
@@ -47,11 +47,11 @@ public class RabiClone{
 		
 		p.init();
 		
-		f.add(p);
+		/*f.add(p);
 		f.addKeyListener(p);
 		f.setLocation((int)((Toolkit.getDefaultToolkit().getScreenSize().getWidth()-f.getWidth())/2), (int)((Toolkit.getDefaultToolkit().getScreenSize().getHeight()-f.getHeight())/2));
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		f.setVisible(true);
+		f.setVisible(true);*/
 
 		OBJ.add(level_renderer = new LevelRenderer(p));
 		OBJ.add(player = new Player(p));
