@@ -1,6 +1,7 @@
 package sig;
 
 import sig.engine.Alpha;
+import sig.engine.Font;
 import sig.engine.PaletteColor;
 import sig.engine.Panel;
 import sig.engine.Sprite;
@@ -25,6 +26,27 @@ public class DrawLoop {
 			RabiClone.OBJ.get(i).drawOverlay(p);
 		}
     }
+
+	public static void Draw_Text(double x, double y, StringBuilder s, Font f) {
+		Draw_Text_Ext(x,y,s,f,Alpha.ALPHA0,PaletteColor.NORMAL);
+	}
+
+	public static void Draw_Text_Ext(double x, double y, StringBuilder s, Font f, Alpha alpha, PaletteColor col) {
+		String finalS = s.toString();
+		int charCount=0;
+		int yOffset=0;
+		int xOffset=0;
+		for (int i=0;i<finalS.length();i++) {
+			if (finalS.charAt(i)=='\n') {
+				xOffset+=(charCount+1)*f.getGlyphWidth();
+				yOffset+=f.getGlyphHeight();
+				charCount=0;
+			} else {
+				Draw_Sprite_Partial_Ext(x+i*f.getGlyphWidth()-xOffset, y+yOffset, f.getCharInfo(finalS.charAt(i)).getX(), f.getCharInfo(finalS.charAt(i)).getY(), f.getCharInfo(finalS.charAt(i)).getWidth(), f.getCharInfo(finalS.charAt(i)).getHeight(), f.getSprite(),alpha,col);
+				charCount++;
+			}
+		}
+	}
 
 	public static void Draw_Sprite(double x, double y, Sprite sprite){
 		Draw_Sprite_Partial(x,y,0,0,sprite.getWidth(),sprite.getHeight(),sprite);

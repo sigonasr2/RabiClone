@@ -5,6 +5,7 @@ import java.awt.event.MouseEvent;
 
 import sig.RabiClone;
 import sig.engine.Alpha;
+import sig.engine.Font;
 import sig.engine.MouseScrollValue;
 import sig.engine.PaletteColor;
 import sig.engine.Panel;
@@ -15,6 +16,10 @@ import sig.map.Tile;
 public class EditorRenderer extends LevelRenderer{
 
     Tile selectedTile = Tile.WALL;
+
+    final StringBuilder tempText = new StringBuilder("Hello World!\n\n  Test newlines!\nTest\nTest2\nTest3");
+    int frameCount=0;
+    StringBuilder frameCheck = new StringBuilder("I am blue! Frame:").append(frameCount);
 
     public EditorRenderer(Panel panel) {
         super(panel);
@@ -59,7 +64,8 @@ public class EditorRenderer extends LevelRenderer{
     @Override
     public void draw(byte[] p) {
         super.draw(p);
-        Draw_Sprite_Partial_Ext(16, 16, 0, 0, 96, 96, Sprite.PROFONT, Alpha.ALPHA0, PaletteColor.SKY_BLUE);
+        Draw_Text(32,16,tempText,Font.PROFONT_12);
+        Draw_Text_Ext(104,137,new StringBuilder("I am blue! Frame:").append(frameCount++),Font.PROFONT_12,Alpha.ALPHA0,PaletteColor.SLATE_BLUE);
     }
 
     @Override

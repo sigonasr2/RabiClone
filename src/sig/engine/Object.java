@@ -54,6 +54,14 @@ public abstract class Object implements GameEntity{
         DrawLoop.Draw_Sprite(x,y,sprite);
     }
 
+	protected void Draw_Text(double x, double y, StringBuilder string, Font font){
+        DrawLoop.Draw_Text(x,y,string,font);
+    }
+
+	protected void Draw_Text_Ext(double x, double y, StringBuilder string, Font font, Alpha alpha, PaletteColor col){
+        DrawLoop.Draw_Text_Ext(x,y,string,font,alpha,col);
+    }
+
 	protected void Draw_Sprite_Partial(double x, double y, double xOffset, double yOffset, double w, double h, Sprite sprite){
         DrawLoop.Draw_Sprite_Partial(x,y,xOffset,yOffset,w,h,sprite);
     }
