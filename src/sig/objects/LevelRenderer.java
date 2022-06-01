@@ -19,44 +19,11 @@ public class LevelRenderer extends Object{
     public LevelRenderer(Panel panel) {
         super(panel);
         this.setSprite(Sprite.TILE_SHEET);
-        setY(Tile.TILE_HEIGHT*6);
+        setY(Tile.TILE_HEIGHT*0);
     }
 
    @Override 
-    public void update(double updateMult) {
-        int right = KeyHeld(KeyEvent.VK_RIGHT)||KeyHeld(KeyEvent.VK_D)?1:0;
-        int left = KeyHeld(KeyEvent.VK_LEFT)||KeyHeld(KeyEvent.VK_A)?1:0;
-        int up = KeyHeld(KeyEvent.VK_UP)||KeyHeld(KeyEvent.VK_W)?1:0;
-        int down = KeyHeld(KeyEvent.VK_DOWN)||KeyHeld(KeyEvent.VK_S)?1:0;
-        /*if (right-left!=0) {
-            setX(getX()+(right-left)*512*updateMult);
-        }
-        if (up-down!=0) {
-            setY(getY()+(down-up)*512*updateMult);
-        }*/
-        boolean left_mb = MouseHeld(MouseEvent.BUTTON1);
-        boolean middle_mb = MouseHeld(MouseEvent.BUTTON2);
-        boolean right_mb = MouseHeld(MouseEvent.BUTTON3);
-
-        if(left_mb){
-            RabiClone.CURRENT_MAP.ModifyTile(RabiClone.p.highlightedSquare.getX(), RabiClone.p.highlightedSquare.getY(), selectedTile);
-        }
-        if(KeyHeld(KeyEvent.VK_CONTROL)&&KeyHeld(KeyEvent.VK_S)){
-            System.out.println("Saving map");
-            Map.SaveMap(RabiClone.CURRENT_MAP);
-            System.out.println("Map saved");
-        }
-    }
-
-    @Override
-    protected void MouseScrolled(MouseScrollValue scrolled) {
-        int up = scrolled==MouseScrollValue.UP?1:0;
-        int down = scrolled==MouseScrollValue.DOWN?1:0;
-        int tempIndex = selectedTile.ordinal()+down-up;
-        int selectedIndex = tempIndex<0?Tile.values().length-1:tempIndex%Tile.values().length;
-        selectedTile = Tile.values()[selectedIndex];
-        System.out.println(selectedTile);
-    }
+    public void update(double updateMult) {}
 
     @Override
     public void draw(byte[] p) {
@@ -72,8 +39,10 @@ public class LevelRenderer extends Object{
                     DrawTile(x*Tile.TILE_WIDTH-this.getX(),y*Tile.TILE_HEIGHT-this.getY(),RabiClone.CURRENT_MAP.getTile(x,y));
                     //System.out.println((x*Tile.TILE_WIDTH+(this.getX()%Tile.TILE_WIDTH) )+","+(y*Tile.TILE_HEIGHT+(this.getY()%Tile.TILE_HEIGHT)));
                 }
-                if (x==RabiClone.p.highlightedSquare.getX()&&y==RabiClone.p.highlightedSquare.getY()) {
-                    DrawTransparentTile(x*Tile.TILE_WIDTH-this.getX(),y*Tile.TILE_HEIGHT-this.getY(),selectedTile,Alpha.ALPHA64);
+                if (this instanceof EditorRenderer) {
+                    if (x==RabiClone.p.highlightedSquare.getX()&&y==RabiClone.p.highlightedSquare.getY()) {
+                        DrawTransparentTile(x*Tile.TILE_WIDTH-this.getX(),y*Tile.TILE_HEIGHT-this.getY(),selectedTile,Alpha.ALPHA160);
+                    }
                 }
             }
         }
