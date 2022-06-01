@@ -6,6 +6,7 @@ import java.awt.event.MouseEvent;
 import sig.RabiClone;
 import sig.engine.MouseScrollValue;
 import sig.engine.Panel;
+import sig.engine.Sprite;
 import sig.map.Map;
 import sig.map.Tile;
 
@@ -56,5 +57,6 @@ public class EditorRenderer extends LevelRenderer{
     @Override
     public void draw(byte[] p) {
         super.draw(p);
+        Draw_Sprite(16, 16, Sprite.MAP_TILE_INFO);
     }    
 }
