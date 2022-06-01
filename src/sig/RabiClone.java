@@ -8,10 +8,12 @@ import java.util.List;
 import sig.engine.Panel;
 import sig.engine.Point;
 import sig.map.Maps;
+import sig.objects.EditorRenderer;
 import sig.objects.LevelRenderer;
 import sig.objects.Player;
 import sig.engine.Object;
 import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
 
 public class RabiClone{
 	public static final String PROGRAM_NAME="Sig's Java Project Template";
@@ -63,6 +65,19 @@ public class RabiClone{
 			long timePassed = System.nanoTime()-lastGameTime;
 			lastGameTime=System.nanoTime();
 			double updateMult = Math.min(1/60d,timePassed/1000000000d);
+
+			if (p.KEYS.getOrDefault(KeyEvent.VK_F1,false)) {
+				if (level_renderer instanceof EditorRenderer) {
+					OBJ.remove(level_renderer);
+					OBJ.add(level_renderer=new LevelRenderer(p));
+				}
+			}
+			if (p.KEYS.getOrDefault(KeyEvent.VK_F2,false)) {
+				if (!(level_renderer instanceof EditorRenderer)) {
+					OBJ.remove(level_renderer);
+					OBJ.add(level_renderer=new EditorRenderer(p));
+				}
+			}
 
 			for (int i=0;i<OBJ.size();i++) {
 				OBJ.get(i).update(updateMult);
