@@ -24,6 +24,8 @@ public class EditorRenderer extends LevelRenderer{
 
     public EditorRenderer(Panel panel) {
         super(panel);
+        setX(3.5*Tile.TILE_WIDTH);
+        setY(3.5*Tile.TILE_HEIGHT);
         AddMessage(PaletteColor.YELLOW_GREEN,"Level editing mode",PaletteColor.NORMAL," started.");
     }
 
