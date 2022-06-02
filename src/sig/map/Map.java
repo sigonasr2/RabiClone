@@ -73,18 +73,14 @@ public class Map {
         return null;
     }
 
-    public static void SaveMap(Maps map) {
-        try {
-            DataOutputStream stream = new DataOutputStream(new FileOutputStream(map.getFile()));
-            saveCharData(stream,map.map.tiles);
-            saveByteData(stream,map.map.views);
-            saveByteData(stream,map.map.backgrounds);
-            saveByteData(stream,map.map.colors);
-            saveByteData(stream,map.map.types);
-            stream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public static void SaveMap(Maps map) throws IOException {
+        DataOutputStream stream = new DataOutputStream(new FileOutputStream(map.getFile()));
+        saveCharData(stream,map.map.tiles);
+        saveByteData(stream,map.map.views);
+        saveByteData(stream,map.map.backgrounds);
+        saveByteData(stream,map.map.colors);
+        saveByteData(stream,map.map.types);
+        stream.close();
     }
 
     private static void saveCharData(DataOutputStream stream, char[] a) throws IOException {

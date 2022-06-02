@@ -2,6 +2,7 @@ package sig.objects;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 
 import sig.RabiClone;
 import sig.engine.Alpha;
@@ -17,12 +18,21 @@ public class EditorRenderer extends LevelRenderer{
 
     Tile selectedTile = Tile.WALL;
 
-    final StringBuilder tempText = new StringBuilder("Hello World!\n\n  Test newlines!\nTest\nTest2\nTest3");
-    int frameCount=0;
-    StringBuilder frameCheck = new StringBuilder("I am blue! Frame:").append(frameCount);
+    StringBuilder messageLog = new StringBuilder();
+    final static long MESSAGE_TIME = 5000;
+    long last_message_log = System.currentTimeMillis();
 
     public EditorRenderer(Panel panel) {
         super(panel);
+        AddMessage("Level editing mode started.");
+    }
+
+    private void AddMessage(String...s) {
+        messageLog.append('\n');
+        for (int i=0;i<s.length;i++) {
+            messageLog.append(s[i]);
+        }
+        last_message_log = System.currentTimeMillis();
     }
 
    @Override 
@@ -45,9 +55,24 @@ public class EditorRenderer extends LevelRenderer{
             RabiClone.CURRENT_MAP.ModifyTile(RabiClone.p.highlightedSquare.getX(), RabiClone.p.highlightedSquare.getY(), selectedTile);
         }
         if(KeyHeld(KeyEvent.VK_CONTROL)&&KeyHeld(KeyEvent.VK_S)){
-            System.out.println("Saving map");
-            Map.SaveMap(RabiClone.CURRENT_MAP);
-            System.out.println("Map saved");
+            AddMessage("Saving map...");
+            try {
+                Map.SaveMap(RabiClone.CURRENT_MAP);
+                AddMessage(RabiClone.CURRENT_MAP.toString()," has been saved successfully.");
+            } catch (IOException e) {
+                e.printStackTrace();
+                AddMessage("Map failed to save: ",e.getLocalizedMessage());
+            }
+        }
+        updateMessageLog();
+    }
+
+    private void updateMessageLog() {
+        if (messageLog.length()>0) {
+            if (System.currentTimeMillis()-last_message_log>MESSAGE_TIME) {
+                last_message_log=System.currentTimeMillis();
+                messageLog.replace(messageLog.indexOf("\n"), messageLog.indexOf("\n",messageLog.indexOf("\n")), "");
+            }
         }
     }
 
@@ -64,8 +89,7 @@ public class EditorRenderer extends LevelRenderer{
     @Override
     public void draw(byte[] p) {
         super.draw(p);
-        Draw_Text(32,16,tempText,Font.PROFONT_12);
-        Draw_Text_Ext(104,137,new StringBuilder("I am blue! Frame:").append(frameCount++),Font.PROFONT_12,Alpha.ALPHA0,PaletteColor.SLATE_BLUE);
+        Draw_Text(4,0,messageLog,Font.PROFONT_12);
     }
 
     @Override
