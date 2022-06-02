@@ -103,7 +103,7 @@ public class EditorRenderer extends LevelRenderer{
             double tileY = y*Tile.TILE_HEIGHT-this.getY();
             DrawTransparentTile(tileX,tileY,selectedTile,Alpha.ALPHA160);
             Draw_Text(tileX+2,tileY-Font.PROFONT_12.getGlyphHeight()-2,new StringBuilder(selectedTile.toString()),Font.PROFONT_12);
-            Draw_Text_Ext(tileX+2,tileY+Tile.TILE_HEIGHT+2,new StringBuilder(selectedTile.toString()),Font.PROFONT_12,Alpha.ALPHA0,PaletteColor.CRIMSON);
+            Draw_Text_Ext(tileX+2,tileY+Tile.TILE_HEIGHT+2,new StringBuilder(RabiClone.CURRENT_MAP.getTile(x,y).toString()),Font.PROFONT_12,Alpha.ALPHA0,PaletteColor.CRIMSON);
         }
     }    
 }
