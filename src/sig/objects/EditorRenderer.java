@@ -88,7 +88,6 @@ public class EditorRenderer extends LevelRenderer{
         int tempIndex = selectedTile.ordinal()+down-up;
         int selectedIndex = tempIndex<0?Tile.values().length-1:tempIndex%Tile.values().length;
         selectedTile = Tile.values()[selectedIndex];
-        System.out.println(selectedTile);
     }
 
     @Override
@@ -101,6 +100,8 @@ public class EditorRenderer extends LevelRenderer{
     protected void drawMapTileForEditorMode(int x, int y) {
         if (x==RabiClone.p.highlightedSquare.getX()&&y==RabiClone.p.highlightedSquare.getY()) {
             DrawTransparentTile(x*Tile.TILE_WIDTH-this.getX(),y*Tile.TILE_HEIGHT-this.getY(),selectedTile,Alpha.ALPHA160);
+            Draw_Text(x*Tile.TILE_WIDTH-this.getX()+2,y*Tile.TILE_HEIGHT-this.getY()-Font.PROFONT_12.getGlyphHeight()-2,new StringBuilder(selectedTile.toString()),Font.PROFONT_12);
+            Draw_Text_Ext(x*Tile.TILE_WIDTH-this.getX()+2,y*Tile.TILE_HEIGHT-this.getY()+Tile.TILE_HEIGHT+2,new StringBuilder(selectedTile.toString()),Font.PROFONT_12,Alpha.ALPHA0,PaletteColor.CRIMSON);
         }
     }    
 }
