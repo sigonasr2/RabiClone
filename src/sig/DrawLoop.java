@@ -38,7 +38,7 @@ public class DrawLoop {
 		int charCount=0;
 		int yOffset=0;
 		int xOffset=0;
-		PaletteColor currentCol = PaletteColor.NORMAL;
+		PaletteColor currentCol = col;
 		for (int i=0;i<finalS.length();i++) {
 			if (finalS.charAt(i)=='\u001a'&&i<finalS.length()-1) {
 				byte nextCol=Byte.parseByte(finalS.substring(i+1, finalS.indexOf(' ',i+1)));
