@@ -40,7 +40,7 @@ public class DrawLoop {
 		int xOffset=0;
 		PaletteColor currentCol = PaletteColor.NORMAL;
 		for (int i=0;i<finalS.length();i++) {
-			if (finalS.charAt(i)=='%'&&i<finalS.length()-1) {
+			if (finalS.charAt(i)=='\u001a'&&i<finalS.length()-1) {
 				byte nextCol=Byte.parseByte(finalS.substring(i+1, finalS.indexOf(' ',i+1)));
 				if (nextCol>=PaletteColor.values().length||nextCol<0) {
 					throw new ArrayIndexOutOfBoundsException("Chosen color %"+nextCol+" is not in range (Min:0, Max: "+(PaletteColor.values().length-1)+")");
