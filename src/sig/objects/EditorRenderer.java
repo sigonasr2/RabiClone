@@ -104,7 +104,39 @@ public class EditorRenderer extends LevelRenderer{
                 drawMapTileForEditorMode(x,y);
             }
         }
+        for (int y=(int)(this.getY()/Tile.TILE_HEIGHT);y<(int)(RabiClone.BASE_HEIGHT/Tile.TILE_HEIGHT+this.getY()/Tile.TILE_HEIGHT+1);y++) {
+            if (y<0||y>Map.MAP_HEIGHT) {
+                continue;
+            }
+            for (int x=(int)(0+this.getX()/Tile.TILE_WIDTH);x<(int)(RabiClone.BASE_WIDTH/Tile.TILE_WIDTH+this.getX()/Tile.TILE_WIDTH+1);x++) {
+                if (x<0||x>Map.MAP_WIDTH) {
+                    continue;
+                }
+                drawTileGrid(p,x,y);
+            }
+        }
         Draw_Text(4,0,messageLog,Font.PROFONT_12);
+    }
+
+    private void drawTileGrid(byte[] p, int x, int y) {
+        if (x%Tile.TILE_SCREEN_COUNT_X==0) {
+            for (int yy=0;yy<Tile.TILE_HEIGHT;yy++) {
+                int index=(y*Tile.TILE_HEIGHT+yy)*Map.MAP_WIDTH+x*Tile.TILE_WIDTH;
+                if (index<0||index>=p.length) {
+                    return;
+                }
+                Draw(p,index,PaletteColor.BLACK,Alpha.ALPHA0);
+            }
+        }
+        if (y%Tile.TILE_SCREEN_COUNT_Y==0) {
+            for (int xx=0;xx<Tile.TILE_HEIGHT;xx++) {
+                int index=y*Tile.TILE_HEIGHT*Map.MAP_WIDTH+(x*Tile.TILE_WIDTH+xx);
+                if (index<0||index>=p.length) {
+                    return;
+                }
+                Draw(p,index,PaletteColor.BLACK,Alpha.ALPHA0);
+            }
+        }
     }
 
     @Override

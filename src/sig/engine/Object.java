@@ -50,6 +50,10 @@ public abstract class Object implements GameEntity{
     public void drawOverlay(byte[] p) {
     }
 
+    protected void Draw(byte[] canvas, int index, PaletteColor col, Alpha alpha) {
+        DrawLoop.Draw(canvas, index, (byte)col.ordinal(), alpha);
+    }
+
 	protected void Draw_Sprite(double x, double y, Sprite sprite){
         DrawLoop.Draw_Sprite(x,y,sprite);
     }

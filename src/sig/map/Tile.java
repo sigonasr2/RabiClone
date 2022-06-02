@@ -13,8 +13,8 @@ public enum Tile {
 
     final public static int TILE_WIDTH=32;
     final public static int TILE_HEIGHT=32;
-    final public static int TILE_SCREEN_COUNT_X=RabiClone.BASE_WIDTH/TILE_WIDTH;
-    final public static int TILE_SCREEN_COUNT_Y=RabiClone.BASE_HEIGHT/TILE_HEIGHT;
+    final public static int TILE_SCREEN_COUNT_X=Map.MAP_WIDTH/TILE_WIDTH;
+    final public static int TILE_SCREEN_COUNT_Y=Map.MAP_HEIGHT/TILE_HEIGHT;
 
     int spriteSheetX,spriteSheetY;
     boolean invisible;
