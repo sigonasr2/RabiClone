@@ -1,5 +1,7 @@
 package sig.map;
 
+import sig.RabiClone;
+
 public enum Tile {
     VOID(0,0,true,CollisionType.NONE), //File is populated by 0s by default. This represents the void.
     WALL(0,0,CollisionType.BLOCK),
@@ -11,6 +13,8 @@ public enum Tile {
 
     final public static int TILE_WIDTH=32;
     final public static int TILE_HEIGHT=32;
+    final public static int TILE_SCREEN_COUNT_X=RabiClone.BASE_WIDTH/TILE_WIDTH;
+    final public static int TILE_SCREEN_COUNT_Y=RabiClone.BASE_HEIGHT/TILE_HEIGHT;
 
     int spriteSheetX,spriteSheetY;
     boolean invisible;

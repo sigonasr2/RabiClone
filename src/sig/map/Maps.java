@@ -37,4 +37,22 @@ public enum Maps {
             return Tile.values()[this.map.tiles[index]];
         }
     }
+
+    public View getView(int x,int y) {
+        int index = (y/Tile.TILE_SCREEN_COUNT_Y)*(Map.MAP_WIDTH/Tile.TILE_WIDTH)+x/Tile.TILE_SCREEN_COUNT_X;
+        if (index<0||index>=this.map.views.length) {
+            return View.DIRECT_FOLLOW;
+        } else {
+            return View.values()[this.map.views[index]];
+        }
+    }
+
+    public Type getType(int x,int y) {
+        int index = (y/Tile.TILE_SCREEN_COUNT_Y)*(Map.MAP_WIDTH/Tile.TILE_WIDTH)+x/Tile.TILE_SCREEN_COUNT_X;
+        if (index<0||index>=this.map.types.length) {
+            return Type.NONE;
+        } else {
+            return Type.values()[this.map.types[index]];
+        }
+    }
 }
