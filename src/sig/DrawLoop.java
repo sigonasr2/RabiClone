@@ -1,5 +1,7 @@
 package sig;
 
+import java.util.regex.Pattern;
+
 import sig.engine.Alpha;
 import sig.engine.Font;
 import sig.engine.PaletteColor;
@@ -36,13 +38,23 @@ public class DrawLoop {
 		int charCount=0;
 		int yOffset=0;
 		int xOffset=0;
+		PaletteColor currentCol = PaletteColor.NORMAL;
 		for (int i=0;i<finalS.length();i++) {
+			if (finalS.charAt(i)=='%'&&i<finalS.length()-1) {
+				byte nextCol=Byte.parseByte(finalS.substring(i+1, finalS.indexOf(' ',i+1)));
+				if (nextCol>=PaletteColor.values().length||nextCol<0) {
+					throw new ArrayIndexOutOfBoundsException("Chosen color %"+nextCol+" is not in range (Min:0, Max: "+(PaletteColor.values().length-1)+")");
+				} else {
+					currentCol=PaletteColor.values()[nextCol];
+				}
+				finalS=finalS.replaceFirst(Pattern.quote("%"+nextCol+" "),"");
+			} else
 			if (finalS.charAt(i)=='\n') {
 				xOffset+=(charCount+1)*f.getGlyphWidth();
 				yOffset+=f.getGlyphHeight();
 				charCount=0;
 			} else {
-				Draw_Sprite_Partial_Ext(x+i*f.getGlyphWidth()-xOffset, y+yOffset, f.getCharInfo(finalS.charAt(i)).getX(), f.getCharInfo(finalS.charAt(i)).getY(), f.getCharInfo(finalS.charAt(i)).getWidth(), f.getCharInfo(finalS.charAt(i)).getHeight(), f.getSprite(),alpha,col);
+				Draw_Sprite_Partial_Ext(x+i*f.getGlyphWidth()-xOffset, y+yOffset, f.getCharInfo(finalS.charAt(i)).getX(), f.getCharInfo(finalS.charAt(i)).getY(), f.getCharInfo(finalS.charAt(i)).getWidth(), f.getCharInfo(finalS.charAt(i)).getHeight(), f.getSprite(),alpha,currentCol);
 				charCount++;
 			}
 		}

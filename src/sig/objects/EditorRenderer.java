@@ -24,13 +24,17 @@ public class EditorRenderer extends LevelRenderer{
 
     public EditorRenderer(Panel panel) {
         super(panel);
-        AddMessage("Level editing mode started.");
+        AddMessage(PaletteColor.YELLOW_GREEN,"Level editing mode",PaletteColor.NORMAL," started.");
     }
 
-    private void AddMessage(String...s) {
+    private void AddMessage(Object...s) {
         messageLog.append('\n');
         for (int i=0;i<s.length;i++) {
-            messageLog.append(s[i]);
+            if (s[i] instanceof String) {
+                messageLog.append((String)s[i]);
+            } else if (s[i] instanceof PaletteColor) {
+                messageLog.append((PaletteColor)s[i]);
+            }
         }
         last_message_log = System.currentTimeMillis();
     }

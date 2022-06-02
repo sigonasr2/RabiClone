@@ -34,4 +34,11 @@ public enum PaletteColor {
     GRAPE,
     MIDNIGHT_BLUE,
     NORMAL;
+
+    @Override
+    public String toString() {
+        return "%"+ordinal()+" ";
+    }
+
+    
 }
