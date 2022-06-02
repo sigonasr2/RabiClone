@@ -47,7 +47,6 @@ public class DrawLoop {
 				} else {
 					currentCol=PaletteColor.values()[nextCol];
 				}
-				int oldLength = finalS.length();
 				finalS=finalS.replaceFirst(Pattern.quote(Character.valueOf((char)26)+Byte.toString(nextCol)+" "),"");
 				i--;
 			} else
