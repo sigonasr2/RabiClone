@@ -123,7 +123,7 @@ public class EditorRenderer extends LevelRenderer{
     private void drawTileGrid(byte[] p, int x, int y) {
         if (x%Tile.TILE_SCREEN_COUNT_X==0) {
             for (int yy=0;yy<Tile.TILE_HEIGHT;yy++) {
-                int index=(y*Tile.TILE_HEIGHT+yy)*Map.MAP_WIDTH+x*Tile.TILE_WIDTH;
+                int index=(int)(y*Tile.TILE_HEIGHT+yy-getY())*Map.MAP_WIDTH+(int)(x*Tile.TILE_WIDTH-getX());
                 if (index<0||index>=p.length) {
                     return;
                 }
@@ -132,7 +132,7 @@ public class EditorRenderer extends LevelRenderer{
         }
         if (y%Tile.TILE_SCREEN_COUNT_Y==0) {
             for (int xx=0;xx<Tile.TILE_HEIGHT;xx++) {
-                int index=y*Tile.TILE_HEIGHT*Map.MAP_WIDTH+(x*Tile.TILE_WIDTH+xx);
+                int index=(int)(y*Tile.TILE_HEIGHT-getY())*Map.MAP_WIDTH+(int)(x*Tile.TILE_WIDTH-getX()+xx);
                 if (index<0||index>=p.length) {
                     return;
                 }
