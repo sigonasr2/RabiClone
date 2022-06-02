@@ -123,18 +123,22 @@ public class EditorRenderer extends LevelRenderer{
     private void drawTileGrid(byte[] p, int x, int y) {
         if (x%Tile.TILE_SCREEN_COUNT_X==0) {
             for (int yy=0;yy<Tile.TILE_HEIGHT;yy++) {
-                int index=(int)(y*Tile.TILE_HEIGHT+yy-getY())*Map.MAP_WIDTH+(int)(x*Tile.TILE_WIDTH-getX());
+                int ypos=(int)(y*Tile.TILE_HEIGHT-getY()+yy);
+                int xpos=(int)(x*Tile.TILE_WIDTH-getX());
+                int index=ypos*Map.MAP_WIDTH+xpos;
                 if (index<0||index>=p.length) {
-                    return;
+                    continue;
                 }
                 Draw(p,index,PaletteColor.BLACK,Alpha.ALPHA0);
             }
         }
         if (y%Tile.TILE_SCREEN_COUNT_Y==0) {
             for (int xx=0;xx<Tile.TILE_HEIGHT;xx++) {
-                int index=(int)(y*Tile.TILE_HEIGHT-getY())*Map.MAP_WIDTH+(int)(x*Tile.TILE_WIDTH-getX()+xx);
-                if (index<0||index>=p.length) {
-                    return;
+                int ypos=(int)(y*Tile.TILE_HEIGHT-getY());
+                int xpos=(int)(x*Tile.TILE_WIDTH-getX()+xx);
+                int index=ypos*Map.MAP_WIDTH+xpos;
+                if (xpos<0||xpos>=Map.MAP_WIDTH||ypos<0||ypos>=Map.MAP_HEIGHT||index<0||index>=p.length) {
+                    continue;
                 }
                 Draw(p,index,PaletteColor.BLACK,Alpha.ALPHA0);
             }
