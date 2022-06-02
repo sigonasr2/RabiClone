@@ -37,7 +37,7 @@ public enum PaletteColor {
 
     @Override
     public String toString() {
-        return "\u001a"+ordinal()+" ";
+        return Character.valueOf((char)26)+Integer.toString(ordinal())+" ";
     }
 
     
