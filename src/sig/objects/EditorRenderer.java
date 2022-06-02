@@ -93,6 +93,17 @@ public class EditorRenderer extends LevelRenderer{
     @Override
     public void draw(byte[] p) {
         super.draw(p);
+        for (int y=(int)(this.getY()/Tile.TILE_HEIGHT);y<(int)(RabiClone.BASE_HEIGHT/Tile.TILE_HEIGHT+this.getY()/Tile.TILE_HEIGHT+1);y++) {
+            if (y<0||y>Map.MAP_HEIGHT) {
+                continue;
+            }
+            for (int x=(int)(0+this.getX()/Tile.TILE_WIDTH);x<(int)(RabiClone.BASE_WIDTH/Tile.TILE_WIDTH+this.getX()/Tile.TILE_WIDTH+1);x++) {
+                if (x<0||x>Map.MAP_WIDTH) {
+                    continue;
+                }
+                drawMapTileForEditorMode(x,y);
+            }
+        }
         Draw_Text(4,0,messageLog,Font.PROFONT_12);
     }
 

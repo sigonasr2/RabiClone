@@ -33,7 +33,6 @@ public class LevelRenderer extends Object{
                     DrawTile(x*Tile.TILE_WIDTH-this.getX(),y*Tile.TILE_HEIGHT-this.getY(),RabiClone.CURRENT_MAP.getTile(x,y));
                     //System.out.println((x*Tile.TILE_WIDTH+(this.getX()%Tile.TILE_WIDTH) )+","+(y*Tile.TILE_HEIGHT+(this.getY()%Tile.TILE_HEIGHT)));
                 }
-                drawMapTileForEditorMode(x,y);
             }
         }
         Draw_Object(RabiClone.player);
