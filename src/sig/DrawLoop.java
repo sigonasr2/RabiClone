@@ -47,7 +47,7 @@ public class DrawLoop {
 				} else {
 					currentCol=PaletteColor.values()[nextCol];
 				}
-				finalS=finalS.replaceFirst(Pattern.quote("%"+nextCol+" "),"");
+				finalS=finalS.replaceFirst(Pattern.quote("\u001a"+nextCol+" "),"");
 			} else
 			if (finalS.charAt(i)=='\n') {
 				xOffset+=(charCount+1)*f.getGlyphWidth();
