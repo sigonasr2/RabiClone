@@ -65,7 +65,7 @@ public class EditorRenderer extends LevelRenderer{
                 AddMessage(RabiClone.CURRENT_MAP.toString()," has been saved successfully.");
             } catch (IOException e) {
                 e.printStackTrace();
-                AddMessage("Map failed to save: ",e.getLocalizedMessage());
+                AddMessage(PaletteColor.RED,"Map failed to save: ",e.getLocalizedMessage());
             }
         }
         updateMessageLog();
