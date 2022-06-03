@@ -39,6 +39,15 @@ public class LevelRenderer extends Object{
         }
     }
 
+    @Override
+    public void drawBackground(byte[] p) {
+        for (int y=0;y<RabiClone.BASE_HEIGHT;y++) {
+            for (int x=0;x<RabiClone.BASE_WIDTH;x++) {
+                
+            }
+        }
+    }
+
     protected void drawMapTileForEditorMode(int x, int y) {}
 
     /**

@@ -21,6 +21,10 @@ public class DrawLoop {
         }
 		
 		for (int i=0;i<RabiClone.OBJ.size();i++) {
+			RabiClone.OBJ.get(i).drawBackground(p);
+		}
+		
+		for (int i=0;i<RabiClone.OBJ.size();i++) {
 			RabiClone.OBJ.get(i).draw(p);
 		}
 		

@@ -47,6 +47,9 @@ public abstract class Object implements GameEntity{
         this.spr = spr;
     }
 
+    public void drawBackground(byte[] p) {
+    }
+
     public void drawOverlay(byte[] p) {
     }
 
