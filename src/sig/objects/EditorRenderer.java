@@ -121,6 +121,15 @@ public class EditorRenderer extends LevelRenderer{
     }
 
     private void drawTileGrid(byte[] p, int x, int y) {
+        if (x%Tile.TILE_SCREEN_COUNT_X==0&&y%Tile.TILE_SCREEN_COUNT_Y==0) {
+            int xpos=(int)(x*Tile.TILE_WIDTH-getX());
+            int ypos=(int)(y*Tile.TILE_HEIGHT-getY());
+            int index=ypos*Map.MAP_WIDTH+xpos;
+            Draw_Text(xpos+2,ypos+2,
+                new StringBuilder("View:").append(PaletteColor.EMERALD).append(RabiClone.CURRENT_MAP.getView(x,y).ordinal())
+                .append(PaletteColor.NORMAL).append("\nType:").append(PaletteColor.MIDNIGHT_BLUE).append(RabiClone.CURRENT_MAP.getType(x,y).ordinal())
+            ,Font.PROFONT_12);
+        }
         if (x%Tile.TILE_SCREEN_COUNT_X==0) {
             for (int yy=0;yy<Tile.TILE_HEIGHT;yy++) {
                 int ypos=(int)(y*Tile.TILE_HEIGHT-getY()+yy);
@@ -152,8 +161,6 @@ public class EditorRenderer extends LevelRenderer{
             double tileY = y*Tile.TILE_HEIGHT-this.getY();
             DrawTransparentTile(tileX,tileY,selectedTile,Alpha.ALPHA160);
             Draw_Text(tileX+2,tileY-Font.PROFONT_12.getGlyphHeight()-2,new StringBuilder(selectedTile.toString()),Font.PROFONT_12);
-            Draw_Text(tileX+2,tileY+2,new StringBuilder("View:").append(PaletteColor.EMERALD).append(RabiClone.CURRENT_MAP.getView(x,y).ordinal()),Font.PROFONT_12);
-            Draw_Text(tileX+2,tileY+Font.PROFONT_12.getGlyphHeight()+2,new StringBuilder("Type:").append(PaletteColor.MIDNIGHT_BLUE).append(RabiClone.CURRENT_MAP.getType(x,y).ordinal()),Font.PROFONT_12);
             Draw_Text_Ext(tileX+2,tileY+Tile.TILE_HEIGHT+2,new StringBuilder(RabiClone.CURRENT_MAP.getTile(x,y).toString()),Font.PROFONT_12,Alpha.ALPHA0,PaletteColor.CRIMSON);
         }
     }    

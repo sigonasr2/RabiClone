@@ -35,8 +35,9 @@ public class LevelRenderer extends Object{
                 }
             }
         }
-        Draw_Object(RabiClone.player);
-        Draw_Object(RabiClone.player2);
+        if (RabiClone.player!=null) {
+            Draw_Object(RabiClone.player);
+        }
     }
 
     protected void drawMapTileForEditorMode(int x, int y) {}

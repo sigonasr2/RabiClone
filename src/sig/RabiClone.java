@@ -31,7 +31,7 @@ public class RabiClone{
 	public static Point MOUSE_POS;
 
 	public static LevelRenderer level_renderer;
-	public static Player player,player2;
+	public static Player player;
 
 	public static Maps CURRENT_MAP = Maps.WORLD1;
 	public static void main(String[] args) {
@@ -54,9 +54,7 @@ public class RabiClone{
 		f.setVisible(true);
 
 		OBJ.add(level_renderer = new LevelRenderer(p));
-		OBJ.add(player = new Player(p));
-		OBJ.add(player2 = new Player(p));
-		player2.setX(64);
+		StartGame();
 
 		p.render();
 
@@ -70,11 +68,13 @@ public class RabiClone{
 				if (level_renderer instanceof EditorRenderer) {
 					OBJ.remove(level_renderer);
 					OBJ.add(level_renderer=new LevelRenderer(p));
+					StartGame();
 				}
 			}
 			if (p.KEYS.getOrDefault(KeyEvent.VK_F2,false)) {
 				if (!(level_renderer instanceof EditorRenderer)) {
-					OBJ.remove(level_renderer);
+					OBJ.clear();
+					ResetGame();
 					OBJ.add(level_renderer=new EditorRenderer(p));
 				}
 			}
@@ -87,6 +87,15 @@ public class RabiClone{
 			}
 		}
 	}
+
+	private static void ResetGame() {
+		player=null;
+	}
+
+	private static void StartGame() {
+		OBJ.add(player = new Player(p));
+	}
+
 	private static void ChooseBestRatio() {
 		while (f.getWidth()*(SIZE_MULTIPLIER+1)<Toolkit.getDefaultToolkit().getScreenSize().getWidth()) {
 			SIZE_MULTIPLIER++;
