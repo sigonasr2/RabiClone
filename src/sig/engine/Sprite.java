@@ -7,14 +7,13 @@ import java.awt.image.DataBufferByte;
 
 import javax.imageio.ImageIO;
 
-public enum Sprite{
+public class Sprite{
 
     //NANA(new File(new File("..","sprites"),"3x.png")),
-    NANA_SMALL(new File(new File("..","sprites"),"1x.gif")),
-    TILE_SHEET(new File(new File("..","sprites"),"tiles.gif")),
-    MAP_TILE_INFO(new File(new File("..","sprites"),"maptileinfo.gif")),
-    PROFONT(new File(new File("..","sprites"),"Profont.gif")),
-    ;
+    public static Sprite NANA_SMALL = new Sprite(new File(new File("..","sprites"),"1x.gif"));
+    public static Sprite TILE_SHEET = new Sprite(new File(new File("..","sprites"),"tiles.gif"));
+    public static Sprite MAP_TILE_INFO = new Sprite(new File(new File("..","sprites"),"maptileinfo.gif"));
+    public static Sprite PROFONT = new Sprite(new File(new File("..","sprites"),"Profont.gif"));
 
 
 
@@ -67,7 +66,7 @@ public enum Sprite{
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("Loaded sprite for "+this+".");
+        System.out.println("Loaded sprite for "+filename+".");
     }
 
     public BufferedImage getImg() {
