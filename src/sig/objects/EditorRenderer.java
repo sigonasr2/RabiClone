@@ -65,7 +65,9 @@ public class EditorRenderer extends LevelRenderer{
         boolean right_mb = MouseHeld(MouseEvent.BUTTON3);
 
         if(left_mb){
-            RabiClone.CURRENT_MAP.ModifyTile(RabiClone.p.highlightedSquare.getX(), RabiClone.p.highlightedSquare.getY(), selectedTile);
+            int tileX = (int)(RabiClone.MOUSE_POS.getX()+getX())/Tile.TILE_WIDTH;
+            int tileY = (int)(RabiClone.MOUSE_POS.getY()+getY())/Tile.TILE_HEIGHT;
+            RabiClone.CURRENT_MAP.ModifyTile(tileX, tileY, selectedTile);
         }
         if(KeyHeld(KeyEvent.VK_CONTROL)&&KeyHeld(KeyEvent.VK_S)){
             AddMessage("Saving map...");
@@ -133,9 +135,9 @@ public class EditorRenderer extends LevelRenderer{
             int xpos=(int)(x*Tile.TILE_WIDTH-getX());
             int ypos=(int)(y*Tile.TILE_HEIGHT-getY());
             Draw_Text(xpos+2,ypos+2,
-                new StringBuilder("View:").append(PaletteColor.EMERALD).append(RabiClone.CURRENT_MAP.getView(x,y).ordinal())
-                .append(PaletteColor.NORMAL).append("\nType:").append(PaletteColor.MIDNIGHT_BLUE).append(RabiClone.CURRENT_MAP.getType(x,y).ordinal())
-                .append(PaletteColor.NORMAL).append("\nBackground:").append(PaletteColor.GRAPE).append(RabiClone.CURRENT_MAP.getBackground(x,y).ordinal())
+                new StringBuilder("View:").append(PaletteColor.EMERALD).append(RabiClone.CURRENT_MAP.getView(x,y))
+                .append(PaletteColor.NORMAL).append("\nType:").append(PaletteColor.MIDNIGHT_BLUE).append(RabiClone.CURRENT_MAP.getType(x,y))
+                .append(PaletteColor.NORMAL).append("\nBackground:").append(PaletteColor.GRAPE).append(RabiClone.CURRENT_MAP.getBackground(x,y))
             ,Font.PROFONT_12);
         }
         if (x%Tile.TILE_SCREEN_COUNT_X==0) {
@@ -164,7 +166,9 @@ public class EditorRenderer extends LevelRenderer{
 
     @Override
     protected void drawMapTileForEditorMode(int x, int y) {
-        if (x==RabiClone.p.highlightedSquare.getX()&&y==RabiClone.p.highlightedSquare.getY()) {
+        int tilerX = (int)(RabiClone.MOUSE_POS.getX()+getX())/Tile.TILE_WIDTH;
+        int tilerY = (int)(RabiClone.MOUSE_POS.getY()+getY())/Tile.TILE_HEIGHT;
+        if (x==tilerX&&y==tilerY) {
             double tileX = x*Tile.TILE_WIDTH-this.getX();
             double tileY = y*Tile.TILE_HEIGHT-this.getY();
             DrawTransparentTile(tileX,tileY,selectedTile,Alpha.ALPHA160);
@@ -175,17 +179,17 @@ public class EditorRenderer extends LevelRenderer{
 
     @Override
     protected void KeyPressed(int key) {
-        int screenX = (int)(RabiClone.MOUSE_POS.getX()+getX())/Tile.TILE_WIDTH;
-        int screenY = (int)(RabiClone.MOUSE_POS.getY()+getY())/Tile.TILE_HEIGHT;
+        int tileX = (int)(RabiClone.MOUSE_POS.getX()+getX())/Tile.TILE_WIDTH;
+        int tileY = (int)(RabiClone.MOUSE_POS.getY()+getY())/Tile.TILE_HEIGHT;
         switch (key) {
             case KeyEvent.VK_F3:{
-                RabiClone.CURRENT_MAP.setView(screenX,screenY,View.values()[(RabiClone.CURRENT_MAP.getView(screenX, screenY).ordinal()+1)%View.values().length]);
+                RabiClone.CURRENT_MAP.setView(tileX,tileY,View.values()[(RabiClone.CURRENT_MAP.getView(tileX, tileY).ordinal()+1)%View.values().length]);
             }break;
             case KeyEvent.VK_F4:{
-                RabiClone.CURRENT_MAP.setType(screenX,screenY,Type.values()[(RabiClone.CURRENT_MAP.getType(screenX, screenY).ordinal()+1)%Type.values().length]);
+                RabiClone.CURRENT_MAP.setType(tileX,tileY,Type.values()[(RabiClone.CURRENT_MAP.getType(tileX, tileY).ordinal()+1)%Type.values().length]);
             }break;
             case KeyEvent.VK_F5:{
-                RabiClone.CURRENT_MAP.setBackground(screenX,screenY,Background.values()[(RabiClone.CURRENT_MAP.getBackground(screenX, screenY).ordinal()+1)%Background.values().length]);
+                RabiClone.CURRENT_MAP.setBackground(tileX,tileY,Background.values()[(RabiClone.CURRENT_MAP.getBackground(tileX, tileY).ordinal()+1)%Background.values().length]);
             }break;
         }
     }    

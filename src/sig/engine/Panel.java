@@ -21,7 +21,6 @@ import java.awt.event.KeyListener;
 
 import sig.DrawLoop;
 import sig.RabiClone;
-import sig.map.Tile;
 
 public class Panel extends JPanel implements Runnable,KeyListener {
 	JFrame window;
@@ -45,7 +44,6 @@ public class Panel extends JPanel implements Runnable,KeyListener {
 	public double nanaY = 0;
 	public Point mousePos=new Point(0,0);
 	public int button = 0;
-	public Point highlightedSquare = new Point(0,0);
 	public HashMap<Integer,Boolean> KEYS = new HashMap<>();
 	public HashMap<Integer,Boolean> MOUSE = new HashMap<>();
 	public static byte[] generalPalette = new byte[]{
@@ -125,13 +123,12 @@ public class Panel extends JPanel implements Runnable,KeyListener {
 		this.addMouseMotionListener(new MouseMotionListener(){
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				
+				mousePos.set(e.getX()/RabiClone.SIZE_MULTIPLIER,e.getY()/RabiClone.SIZE_MULTIPLIER);
 			}
 
 			@Override
 			public void mouseMoved(MouseEvent e) {
 				mousePos.set(e.getX()/RabiClone.SIZE_MULTIPLIER,e.getY()/RabiClone.SIZE_MULTIPLIER);
-				UpdateHighlightedSquare();
 			}
 		});
 		this.addMouseWheelListener(new MouseWheelListener(){
@@ -146,12 +143,6 @@ public class Panel extends JPanel implements Runnable,KeyListener {
 			}
 		});
     }
-
-	private static void UpdateHighlightedSquare() {
-		RabiClone.p.highlightedSquare.setX((int)((RabiClone.level_renderer.getX()+RabiClone.MOUSE_POS.getX())/Tile.TILE_WIDTH));
-		RabiClone.p.highlightedSquare.setY((int)((RabiClone.level_renderer.getY()+RabiClone.MOUSE_POS.getY())/Tile.TILE_HEIGHT));
-		//System.out.println(RabiClone.p.highlightedSquare);
-	}
 
     /**
      * Get Best Color model available for current screen.
