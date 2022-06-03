@@ -46,7 +46,7 @@ public class LevelRenderer extends Object{
      * @param object
      */
     protected void Draw_Object(Object object) {
-        super.Draw_Sprite(Math.round(object.getX()-this.getX()-object.getSprite().getWidth()/2), Math.round(object.getY()-this.getY()-object.getSprite().getHeight()/2), object.getSprite());
+        super.Draw_Sprite(object.getX()-this.getX()-object.getSprite().getWidth()/2, Math.round(object.getY()-this.getY()-object.getSprite().getHeight()/2), object.getSprite());
     }
 
     private void DrawTile(double x, double y, Tile tile) {

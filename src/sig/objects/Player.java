@@ -5,6 +5,7 @@ import sig.engine.Object;
 import sig.engine.Panel;
 import sig.engine.Sprite;
 import sig.map.CollisionType;
+import sig.map.Map;
 import sig.map.Tile;
 import sig.map.View;
 
@@ -33,6 +34,9 @@ public class Player extends Object{
     int maxJumpCount=1;
     int jumpCount=maxJumpCount;
 
+    final double viewBoundaryX=RabiClone.BASE_WIDTH/3;
+    final double viewBoundaryY=RabiClone.BASE_HEIGHT/3;
+
     public Player(Panel panel) {
         super(panel);
         this.setSprite(Sprite.NANA_SMALL);
@@ -55,8 +59,20 @@ public class Player extends Object{
                 RabiClone.level_renderer.setY(getY()-RabiClone.BASE_HEIGHT/2);
                 break;
             case FIXED:
+                RabiClone.level_renderer.setX((tileX/Tile.TILE_SCREEN_COUNT_X)*Map.MAP_WIDTH);
+                RabiClone.level_renderer.setY((tileY/Tile.TILE_SCREEN_COUNT_Y)*Map.MAP_HEIGHT);
                 break;
             case LIGHT_FOLLOW:
+                if (getX()-RabiClone.level_renderer.getX()<viewBoundaryX) {
+                    RabiClone.level_renderer.setX(getX()-viewBoundaryX);
+                } else if (getX()-RabiClone.level_renderer.getX()>RabiClone.BASE_WIDTH-viewBoundaryX) {
+                    RabiClone.level_renderer.setX(getX()-(RabiClone.BASE_WIDTH-viewBoundaryX));
+                }
+                if (getY()-RabiClone.level_renderer.getY()<viewBoundaryY) {
+                    RabiClone.level_renderer.setY(getY()-viewBoundaryY);
+                } else if (getY()-RabiClone.level_renderer.getY()>RabiClone.BASE_HEIGHT-viewBoundaryY) {
+                    RabiClone.level_renderer.setY(getY()-(RabiClone.BASE_HEIGHT-viewBoundaryY));
+                }
                 break;
             case LIGHT_HORIZONTAL_FOLLOW:
                 break;
