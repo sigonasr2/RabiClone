@@ -62,7 +62,7 @@ public class Player extends Object{
             lastCameraView=currentView;
             newX=(tileX/Tile.TILE_SCREEN_COUNT_X)*Map.MAP_WIDTH;
             newY=(tileY/Tile.TILE_SCREEN_COUNT_Y)*Map.MAP_HEIGHT;
-        }
+        } else
         switch (currentView) {
             case LIGHT_FOLLOW:
                 if (getX()-RabiClone.level_renderer.getX()<viewBoundaryX) {
