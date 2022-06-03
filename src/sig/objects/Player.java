@@ -48,8 +48,11 @@ public class Player extends Object{
     @Override
     public void update(double updateMult) {
         handleMovementPhysics(updateMult);
+        handleCameraRoomMovement();
+    }
 
-        
+
+    private void handleCameraRoomMovement() {
         int tileX = (int)(getX())/Tile.TILE_WIDTH;
         int tileY = (int)(getY())/Tile.TILE_HEIGHT;
         View currentView = RabiClone.CURRENT_MAP.getView(tileX, tileY);
@@ -75,12 +78,21 @@ public class Player extends Object{
                 }
                 break;
             case LIGHT_HORIZONTAL_FOLLOW:
+                if (getX()-RabiClone.level_renderer.getX()<viewBoundaryX) {
+                    RabiClone.level_renderer.setX(getX()-viewBoundaryX);
+                } else if (getX()-RabiClone.level_renderer.getX()>RabiClone.BASE_WIDTH-viewBoundaryX) {
+                    RabiClone.level_renderer.setX(getX()-(RabiClone.BASE_WIDTH-viewBoundaryX));
+                }
+                RabiClone.level_renderer.setY((tileY/Tile.TILE_SCREEN_COUNT_Y)*Map.MAP_HEIGHT);
                 break;
             case LIGHT_VERTICAL_FOLLOW:
+                RabiClone.level_renderer.setX((tileX/Tile.TILE_SCREEN_COUNT_X)*Map.MAP_WIDTH);
+                if (getY()-RabiClone.level_renderer.getY()<viewBoundaryY) {
+                    RabiClone.level_renderer.setY(getY()-viewBoundaryY);
+                } else if (getY()-RabiClone.level_renderer.getY()>RabiClone.BASE_HEIGHT-viewBoundaryY) {
+                    RabiClone.level_renderer.setY(getY()-(RabiClone.BASE_HEIGHT-viewBoundaryY));
+                }
                 break;
-            default:
-                break;
-            
         }
     }
 
