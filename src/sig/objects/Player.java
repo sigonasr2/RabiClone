@@ -133,8 +133,8 @@ public class Player extends Object{
                 }
                 break;
         }
-        RabiClone.level_renderer.setX(newX);
-        RabiClone.level_renderer.setY(newY);
+        RabiClone.level_renderer.setX(newX<0?0:newX);
+        RabiClone.level_renderer.setY(newY<0?0:newY);
     }
 
 

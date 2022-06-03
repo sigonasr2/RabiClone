@@ -5,6 +5,7 @@ import sig.engine.Alpha;
 import sig.engine.Object;
 import sig.engine.Panel;
 import sig.engine.Sprite;
+import sig.map.Background;
 import sig.map.Map;
 import sig.map.Tile;
 
@@ -41,9 +42,15 @@ public class LevelRenderer extends Object{
 
     @Override
     public void drawBackground(byte[] p) {
+        int screenX = (int)(getX())/Tile.TILE_WIDTH;
+        int screenY = (int)(getY())/Tile.TILE_HEIGHT;
+        Background targetBackground = RabiClone.CURRENT_MAP.getBackground(screenX, screenY);
         for (int y=0;y<RabiClone.BASE_HEIGHT;y++) {
             for (int x=0;x<RabiClone.BASE_WIDTH;x++) {
-                
+                int index = y*RabiClone.BASE_WIDTH+x;
+                p[index] = targetBackground.getPixels()[
+                    ((y+(int)(getY()*targetBackground.getScrollSpeed()))%targetBackground.getHeight())*targetBackground.getWidth()+((x+(int)(getX()*targetBackground.getScrollSpeed()))%targetBackground.getWidth())
+                ];
             }
         }
     }

@@ -73,7 +73,7 @@ public enum Maps {
     public Background getBackground(int x,int y) {
         int index = (y/Tile.TILE_SCREEN_COUNT_Y)*(Map.MAP_WIDTH/Tile.TILE_WIDTH)+x/Tile.TILE_SCREEN_COUNT_X;
         if (index<0||index>=this.map.backgrounds.length) {
-            return Background.DEFAULT;
+            return Background.BACKGROUND1;
         } else {
             return Background.values()[this.map.backgrounds[index]];
         }

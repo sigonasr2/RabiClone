@@ -14,6 +14,9 @@ public class Sprite{
     public static Sprite TILE_SHEET = new Sprite(new File(new File("..","sprites"),"tiles.gif"));
     public static Sprite MAP_TILE_INFO = new Sprite(new File(new File("..","sprites"),"maptileinfo.gif"));
     public static Sprite PROFONT = new Sprite(new File(new File("..","sprites"),"Profont.gif"));
+    public static Sprite BACKGROUND1 = new Sprite(new File(new File("..","backgrounds"),"back1.gif"));
+    public static Sprite BACKGROUND2 = new Sprite(new File(new File("..","backgrounds"),"back2.gif"));
+    public static Sprite BACKGROUND3 = new Sprite(new File(new File("..","backgrounds"),"back3.gif"));
 
 
 
