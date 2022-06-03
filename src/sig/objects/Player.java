@@ -27,7 +27,7 @@ public class Player extends Object{
     double horizontal_drag = 2000;
     double horizontal_friction = NORMAL_FRICTION;
     double horizontal_air_drag = 600;
-    double horizontal_air_friction = 20;
+    double horizontal_air_friction = 180;
 
     double jump_velocity = -400;
 
