@@ -11,8 +11,11 @@ import sig.engine.MouseScrollValue;
 import sig.engine.PaletteColor;
 import sig.engine.Panel;
 import sig.engine.Sprite;
+import sig.map.Background;
 import sig.map.Map;
 import sig.map.Tile;
+import sig.map.View;
+import sig.map.Type;
 
 public class EditorRenderer extends LevelRenderer{
 
@@ -21,6 +24,10 @@ public class EditorRenderer extends LevelRenderer{
     StringBuilder messageLog = new StringBuilder();
     final static long MESSAGE_TIME = 5000;
     long last_message_log = System.currentTimeMillis();
+
+    final static StringBuilder HELP_TEXT = new StringBuilder("(F3) Toggle Camera  (F4) Toggle Map Type  (F5) Toggle Background");
+
+    final static char CAMERA_SPD = 512;
 
     public EditorRenderer(Panel panel) {
         super(panel);
@@ -47,12 +54,12 @@ public class EditorRenderer extends LevelRenderer{
         int left = KeyHeld(KeyEvent.VK_LEFT)||KeyHeld(KeyEvent.VK_A)?1:0;
         int up = KeyHeld(KeyEvent.VK_UP)||KeyHeld(KeyEvent.VK_W)?1:0;
         int down = KeyHeld(KeyEvent.VK_DOWN)||KeyHeld(KeyEvent.VK_S)?1:0;
-        /*if (right-left!=0) {
-            setX(getX()+(right-left)*512*updateMult);
+        if (right-left!=0) {
+            setX(getX()+(right-left)*CAMERA_SPD*updateMult);
         }
         if (up-down!=0) {
-            setY(getY()+(down-up)*512*updateMult);
-        }*/
+            setY(getY()+(down-up)*CAMERA_SPD*updateMult);
+        }
         boolean left_mb = MouseHeld(MouseEvent.BUTTON1);
         boolean middle_mb = MouseHeld(MouseEvent.BUTTON2);
         boolean right_mb = MouseHeld(MouseEvent.BUTTON3);
@@ -118,16 +125,17 @@ public class EditorRenderer extends LevelRenderer{
             }
         }
         Draw_Text(4,0,messageLog,Font.PROFONT_12);
+        Draw_Text(4,RabiClone.BASE_HEIGHT-Font.PROFONT_12.getGlyphHeight()-4,HELP_TEXT,Font.PROFONT_12);
     }
 
     private void drawTileGrid(byte[] p, int x, int y) {
         if (x%Tile.TILE_SCREEN_COUNT_X==0&&y%Tile.TILE_SCREEN_COUNT_Y==0) {
             int xpos=(int)(x*Tile.TILE_WIDTH-getX());
             int ypos=(int)(y*Tile.TILE_HEIGHT-getY());
-            int index=ypos*Map.MAP_WIDTH+xpos;
             Draw_Text(xpos+2,ypos+2,
                 new StringBuilder("View:").append(PaletteColor.EMERALD).append(RabiClone.CURRENT_MAP.getView(x,y).ordinal())
                 .append(PaletteColor.NORMAL).append("\nType:").append(PaletteColor.MIDNIGHT_BLUE).append(RabiClone.CURRENT_MAP.getType(x,y).ordinal())
+                .append(PaletteColor.NORMAL).append("\nBackground:").append(PaletteColor.GRAPE).append(RabiClone.CURRENT_MAP.getBackground(x,y).ordinal())
             ,Font.PROFONT_12);
         }
         if (x%Tile.TILE_SCREEN_COUNT_X==0) {
@@ -162,6 +170,23 @@ public class EditorRenderer extends LevelRenderer{
             DrawTransparentTile(tileX,tileY,selectedTile,Alpha.ALPHA160);
             Draw_Text(tileX+2,tileY-Font.PROFONT_12.getGlyphHeight()-2,new StringBuilder(selectedTile.toString()),Font.PROFONT_12);
             Draw_Text_Ext(tileX+2,tileY+Tile.TILE_HEIGHT+2,new StringBuilder(RabiClone.CURRENT_MAP.getTile(x,y).toString()),Font.PROFONT_12,Alpha.ALPHA0,PaletteColor.CRIMSON);
+        }
+    }
+
+    @Override
+    protected void KeyPressed(int key) {
+        int screenX = (int)(RabiClone.MOUSE_POS.getX()+getX())/Tile.TILE_WIDTH;
+        int screenY = (int)(RabiClone.MOUSE_POS.getY()+getY())/Tile.TILE_HEIGHT;
+        switch (key) {
+            case KeyEvent.VK_F3:{
+                RabiClone.CURRENT_MAP.setView(screenX,screenY,View.values()[(RabiClone.CURRENT_MAP.getView(screenX, screenY).ordinal()+1)%View.values().length]);
+            }break;
+            case KeyEvent.VK_F4:{
+                RabiClone.CURRENT_MAP.setType(screenX,screenY,Type.values()[(RabiClone.CURRENT_MAP.getType(screenX, screenY).ordinal()+1)%Type.values().length]);
+            }break;
+            case KeyEvent.VK_F5:{
+                RabiClone.CURRENT_MAP.setBackground(screenX,screenY,Background.values()[(RabiClone.CURRENT_MAP.getBackground(screenX, screenY).ordinal()+1)%Background.values().length]);
+            }break;
         }
     }    
 }

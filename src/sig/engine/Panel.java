@@ -421,12 +421,18 @@ public class Panel extends JPanel implements Runnable,KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		KEYS.put(e.getKeyCode(),true);
+		for (int i=0;i<RabiClone.OBJ.size();i++) {
+			RabiClone.OBJ.get(i).KeyPressed(e.getKeyCode());
+		}
 		//System.out.println("Key List: "+KEYS);
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
 		KEYS.put(e.getKeyCode(),false);
+		for (int i=0;i<RabiClone.OBJ.size();i++) {
+			RabiClone.OBJ.get(i).KeyReleased(e.getKeyCode());
+		}
 		//System.out.println("Key List: "+KEYS);
 	}
 }

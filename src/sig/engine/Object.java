@@ -82,6 +82,12 @@ public abstract class Object implements GameEntity{
 		return panel.KEYS.getOrDefault(key,false);
 	}
 
+	protected void KeyPressed(int key) {
+	}
+
+	protected void KeyReleased(int key) {
+	}
+
     protected boolean MouseHeld(int mb) {
 		return panel.MOUSE.getOrDefault(mb,false);
 	}
