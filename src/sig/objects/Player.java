@@ -6,6 +6,7 @@ import sig.engine.Panel;
 import sig.engine.Sprite;
 import sig.map.CollisionType;
 import sig.map.Tile;
+import sig.map.View;
 
 import java.awt.event.KeyEvent;
 
@@ -42,9 +43,35 @@ public class Player extends Object{
 
     @Override
     public void update(double updateMult) {
+        handleMovementPhysics(updateMult);
+
+        
+        int tileX = (int)(getX())/Tile.TILE_WIDTH;
+        int tileY = (int)(getY())/Tile.TILE_HEIGHT;
+        View currentView = RabiClone.CURRENT_MAP.getView(tileX, tileY);
+        switch (currentView) {
+            case DIRECT_FOLLOW:
+                RabiClone.level_renderer.setX(getX()-RabiClone.BASE_WIDTH/2);
+                RabiClone.level_renderer.setY(getY()-RabiClone.BASE_HEIGHT/2);
+                break;
+            case FIXED:
+                break;
+            case LIGHT_FOLLOW:
+                break;
+            case LIGHT_HORIZONTAL_FOLLOW:
+                break;
+            case LIGHT_VERTICAL_FOLLOW:
+                break;
+            default:
+                break;
+            
+        }
+    }
+
+
+    private void handleMovementPhysics(double updateMult) {
         int right = KeyHeld(KeyEvent.VK_RIGHT)?1:0;
         int left = KeyHeld(KeyEvent.VK_LEFT)?1:0;
-
 
         x_velocity = 
             Math.abs(x_velocity+x_acceleration*updateMult)>x_velocity_limit
