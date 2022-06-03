@@ -29,3 +29,8 @@ Configuration is modified at the top of the script file while the command list i
 Mizue (みずえ) 水恵
 Turn off inline hints: (F1, search "Preferences: Open Settings (JSON)) "editor.inlayHints.enabled": false
 Profont: 7x14 per tile.
+
+Animated Sprites
+Collectibles
+Combat Systems
+Storyboarding / Event Systems
