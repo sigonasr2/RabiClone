@@ -41,7 +41,7 @@ public enum Maps {
     public View getView(int x,int y) {
         int index = (y/Tile.TILE_SCREEN_COUNT_Y)*(Map.MAP_WIDTH/Tile.TILE_WIDTH)+x/Tile.TILE_SCREEN_COUNT_X;
         if (index<0||index>=this.map.views.length) {
-            return View.DIRECT_FOLLOW;
+            return View.FIXED;
         } else {
             return View.values()[this.map.views[index]];
         }

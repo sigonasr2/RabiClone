@@ -1,7 +1,6 @@
 package sig.map;
 
 public enum View {
-    DIRECT_FOLLOW, //Follows the player directly.
     LIGHT_FOLLOW, 
         //  Follows the player loosely, but makes sure there's 
         //  still a border between the edge of the screen and the player.

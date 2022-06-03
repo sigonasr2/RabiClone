@@ -36,6 +36,7 @@ public class Player extends Object{
 
     final double viewBoundaryX=RabiClone.BASE_WIDTH/3;
     final double viewBoundaryY=RabiClone.BASE_HEIGHT/3;
+    View lastCameraView = View.FIXED;
 
     public Player(Panel panel) {
         super(panel);
@@ -55,45 +56,85 @@ public class Player extends Object{
     private void handleCameraRoomMovement() {
         int tileX = (int)(getX())/Tile.TILE_WIDTH;
         int tileY = (int)(getY())/Tile.TILE_HEIGHT;
+        double newX=RabiClone.level_renderer.getX(),newY=RabiClone.level_renderer.getY(); //By default we use a fixed view.
         View currentView = RabiClone.CURRENT_MAP.getView(tileX, tileY);
+        if (currentView!=lastCameraView) {
+            lastCameraView=currentView;
+            newX=(tileX/Tile.TILE_SCREEN_COUNT_X)*Map.MAP_WIDTH;
+            newY=(tileY/Tile.TILE_SCREEN_COUNT_Y)*Map.MAP_HEIGHT;
+        }
         switch (currentView) {
-            case DIRECT_FOLLOW:
-                RabiClone.level_renderer.setX(getX()-RabiClone.BASE_WIDTH/2);
-                RabiClone.level_renderer.setY(getY()-RabiClone.BASE_HEIGHT/2);
-                break;
-            case FIXED:
-                RabiClone.level_renderer.setX((tileX/Tile.TILE_SCREEN_COUNT_X)*Map.MAP_WIDTH);
-                RabiClone.level_renderer.setY((tileY/Tile.TILE_SCREEN_COUNT_Y)*Map.MAP_HEIGHT);
-                break;
             case LIGHT_FOLLOW:
                 if (getX()-RabiClone.level_renderer.getX()<viewBoundaryX) {
-                    RabiClone.level_renderer.setX(getX()-viewBoundaryX);
+                    newX=getX()-viewBoundaryX;
+                    int newTileX = (int)(newX)/Tile.TILE_WIDTH;
+                    View newView = RabiClone.CURRENT_MAP.getView(newTileX, tileY);
+                    if (newView!=currentView) {
+                        newX=(tileX/Tile.TILE_SCREEN_COUNT_X)*Map.MAP_WIDTH;
+                    }
                 } else if (getX()-RabiClone.level_renderer.getX()>RabiClone.BASE_WIDTH-viewBoundaryX) {
-                    RabiClone.level_renderer.setX(getX()-(RabiClone.BASE_WIDTH-viewBoundaryX));
+                    newX=getX()-(RabiClone.BASE_WIDTH-viewBoundaryX);
+                    int newTileX = (int)(getX()+viewBoundaryX)/Tile.TILE_WIDTH;
+                    View newView = RabiClone.CURRENT_MAP.getView(newTileX, tileY);
+                    if (newView!=currentView) {
+                        newX=(tileX/Tile.TILE_SCREEN_COUNT_X)*Map.MAP_WIDTH;
+                    }
                 }
                 if (getY()-RabiClone.level_renderer.getY()<viewBoundaryY) {
-                    RabiClone.level_renderer.setY(getY()-viewBoundaryY);
+                    newY=getY()-viewBoundaryY;
+                    int newTileY = (int)(getY()-viewBoundaryY)/Tile.TILE_HEIGHT;
+                    View newView = RabiClone.CURRENT_MAP.getView(tileX, newTileY);
+                    if (newView!=currentView) {
+                        newY=(tileY/Tile.TILE_SCREEN_COUNT_Y)*Map.MAP_HEIGHT;
+                    }
                 } else if (getY()-RabiClone.level_renderer.getY()>RabiClone.BASE_HEIGHT-viewBoundaryY) {
-                    RabiClone.level_renderer.setY(getY()-(RabiClone.BASE_HEIGHT-viewBoundaryY));
+                    newY=getY()-(RabiClone.BASE_HEIGHT-viewBoundaryY);
+                    int newTileY = (int)(getY()+viewBoundaryY)/Tile.TILE_HEIGHT;
+                    View newView = RabiClone.CURRENT_MAP.getView(tileX, newTileY);
+                    if (newView!=currentView) {
+                        newY=(tileY/Tile.TILE_SCREEN_COUNT_Y)*Map.MAP_HEIGHT;
+                    }
                 }
                 break;
             case LIGHT_HORIZONTAL_FOLLOW:
                 if (getX()-RabiClone.level_renderer.getX()<viewBoundaryX) {
-                    RabiClone.level_renderer.setX(getX()-viewBoundaryX);
+                    newX=getX()-viewBoundaryX;
+                    int newTileX = (int)(newX)/Tile.TILE_WIDTH;
+                    View newView = RabiClone.CURRENT_MAP.getView(newTileX, tileY);
+                    if (newView!=currentView) {
+                        newX=(tileX/Tile.TILE_SCREEN_COUNT_X)*Map.MAP_WIDTH;
+                    }
                 } else if (getX()-RabiClone.level_renderer.getX()>RabiClone.BASE_WIDTH-viewBoundaryX) {
-                    RabiClone.level_renderer.setX(getX()-(RabiClone.BASE_WIDTH-viewBoundaryX));
+                    newX=getX()-(RabiClone.BASE_WIDTH-viewBoundaryX);
+                    int newTileX = (int)(getX()+viewBoundaryX)/Tile.TILE_WIDTH;
+                    View newView = RabiClone.CURRENT_MAP.getView(newTileX, tileY);
+                    if (newView!=currentView) {
+                        newX=(tileX/Tile.TILE_SCREEN_COUNT_X)*Map.MAP_WIDTH;
+                    }
                 }
-                RabiClone.level_renderer.setY((tileY/Tile.TILE_SCREEN_COUNT_Y)*Map.MAP_HEIGHT);
+                newY=(tileY/Tile.TILE_SCREEN_COUNT_Y)*Map.MAP_HEIGHT;
                 break;
             case LIGHT_VERTICAL_FOLLOW:
-                RabiClone.level_renderer.setX((tileX/Tile.TILE_SCREEN_COUNT_X)*Map.MAP_WIDTH);
+                newX=(tileX/Tile.TILE_SCREEN_COUNT_X)*Map.MAP_WIDTH;
                 if (getY()-RabiClone.level_renderer.getY()<viewBoundaryY) {
-                    RabiClone.level_renderer.setY(getY()-viewBoundaryY);
+                    newY=getY()-viewBoundaryY;
+                    int newTileY = (int)(getY()-viewBoundaryY)/Tile.TILE_HEIGHT;
+                    View newView = RabiClone.CURRENT_MAP.getView(tileX, newTileY);
+                    if (newView!=currentView) {
+                        newY=(tileY/Tile.TILE_SCREEN_COUNT_Y)*Map.MAP_HEIGHT;
+                    }
                 } else if (getY()-RabiClone.level_renderer.getY()>RabiClone.BASE_HEIGHT-viewBoundaryY) {
-                    RabiClone.level_renderer.setY(getY()-(RabiClone.BASE_HEIGHT-viewBoundaryY));
+                    newY=getY()-(RabiClone.BASE_HEIGHT-viewBoundaryY);
+                    int newTileY = (int)(getY()+viewBoundaryY)/Tile.TILE_HEIGHT;
+                    View newView = RabiClone.CURRENT_MAP.getView(tileX, newTileY);
+                    if (newView!=currentView) {
+                        newY=(tileY/Tile.TILE_SCREEN_COUNT_Y)*Map.MAP_HEIGHT;
+                    }
                 }
                 break;
         }
+        RabiClone.level_renderer.setX(newX);
+        RabiClone.level_renderer.setY(newY);
     }
 
 
