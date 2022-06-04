@@ -41,5 +41,13 @@ public class Rectangle {
     public void setHeight(int h) {
         this.h = h;
     }
+
+    @Override
+    public String toString() {
+        return new StringBuilder("Rectangle(x=").append(x).append(",")
+            .append("y=").append(y).append(",")
+            .append("w=").append(w).append(",")
+            .append("h=").append(h).append(")").toString();
+    }
     
 }

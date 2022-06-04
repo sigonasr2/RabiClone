@@ -9,6 +9,7 @@ import sig.engine.Panel;
 import sig.engine.Point;
 import sig.map.Maps;
 import sig.objects.EditorRenderer;
+import sig.objects.Erinoah;
 import sig.objects.LevelRenderer;
 import sig.objects.Player;
 import sig.engine.Object;
@@ -94,6 +95,7 @@ public class RabiClone{
 
 	private static void StartGame() {
 		OBJ.add(player = new Player(p));
+		OBJ.add(new Erinoah(p));
 	}
 
 	private static void ChooseBestRatio() {

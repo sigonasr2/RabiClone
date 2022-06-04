@@ -66,7 +66,7 @@ public class LevelRenderer extends Object{
     }
 
     private void DrawTile(double x, double y, Tile tile) {
-        Draw_Sprite_Partial(x,y, tile.getSpriteSheetX()*tile.getTileWidth(), tile.getSpriteSheetY()*tile.getTileHeight(), tile.getTileWidth(), tile.getTileHeight(), getSprite());
+        Draw_Sprite_Partial(x,y, tile.getSpriteSheetX()*tile.getTileWidth(), tile.getSpriteSheetY()*tile.getTileHeight(), tile.getTileWidth(), tile.getTileHeight(), getSprite(), 0);
     }
 
     protected void DrawTransparentTile(double x, double y, Tile tile, Alpha alpha) {

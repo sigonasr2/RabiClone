@@ -3,9 +3,11 @@ package sig;
 import java.util.regex.Pattern;
 
 import sig.engine.Alpha;
+import sig.engine.AnimatedSprite;
 import sig.engine.Font;
 import sig.engine.PaletteColor;
 import sig.engine.Panel;
+import sig.engine.Rectangle;
 import sig.engine.Sprite;
 
 public class DrawLoop {
@@ -59,17 +61,22 @@ public class DrawLoop {
 				yOffset+=f.getGlyphHeight();
 				charCount=0;
 			} else {
-				Draw_Sprite_Partial_Ext(x+i*f.getGlyphWidth()-xOffset, y+yOffset, f.getCharInfo(finalS.charAt(i)).getX(), f.getCharInfo(finalS.charAt(i)).getY(), f.getCharInfo(finalS.charAt(i)).getWidth(), f.getCharInfo(finalS.charAt(i)).getHeight(), f.getSprite(),alpha,currentCol);
+				Draw_Sprite_Partial_Ext(x+i*f.getGlyphWidth()-xOffset, y+yOffset, f.getCharInfo(finalS.charAt(i)).getX(), f.getCharInfo(finalS.charAt(i)).getY(), f.getCharInfo(finalS.charAt(i)).getWidth(), f.getCharInfo(finalS.charAt(i)).getHeight(), f.getSprite(), 0,alpha,currentCol);
 				charCount++;
 			}
 		}
 	}
 
 	public static void Draw_Sprite(double x, double y, Sprite sprite){
-		Draw_Sprite_Partial(x,y,0,0,sprite.getWidth(),sprite.getHeight(),sprite);
+		Draw_Sprite_Partial(x,y,0,0,sprite.getWidth(),sprite.getHeight(),sprite,0);
 	}
 
-	public static void Draw_Sprite_Partial(double x, double y, double xOffset, double yOffset, double w, double h, Sprite sprite){
+	public static void Draw_Animated_Sprite(double x, double y, AnimatedSprite sprite, double frameIndex){
+		Rectangle frameRectangle=sprite.getFrame((int)frameIndex);
+		Draw_Sprite_Partial(x,y,frameRectangle.getX(),frameRectangle.getY(),frameRectangle.getWidth(),frameRectangle.getHeight(),sprite,frameIndex);
+	}
+
+	public static void Draw_Sprite_Partial(double x, double y, double xOffset, double yOffset, double w, double h, Sprite sprite, double frame_index){
 		byte[] p = panel.pixel;
 		for(int X=(int)xOffset;X<(int)(w+xOffset);X++){
 			for(int Y=(int)yOffset;Y<(int)(h+yOffset);Y++){
@@ -81,7 +88,6 @@ public class DrawLoop {
 						continue;
 					} else {
 						Draw(p,index,sprite.getBi_array()[Y*sprite.getWidth()+X],Alpha.ALPHA0);	
-						//Draw(p,index,sprite.getBi_array()[Y*sprite.getWidth()+X],false);
 					}
 				}
 			}	
@@ -89,10 +95,15 @@ public class DrawLoop {
 	}
 
 	public static void Draw_Sprite_Partial_Ext(double x, double y, double xOffset, double yOffset, double w, double h, Sprite sprite, Alpha alpha){
-		Draw_Sprite_Partial_Ext(x, y, xOffset, yOffset, w, h, sprite, alpha, PaletteColor.NORMAL);
+		Draw_Sprite_Partial_Ext(x, y, xOffset, yOffset, w, h, sprite, 0, alpha, PaletteColor.NORMAL);
 	}
 
-	public static void Draw_Sprite_Partial_Ext(double x, double y, double xOffset, double yOffset, double w, double h, Sprite sprite, Alpha alpha, PaletteColor col){
+	public static void Draw_Animated_Sprite_Partial_Ext(double x, double y, double xOffset, double yOffset, double w, double h, AnimatedSprite sprite, double frameIndex, Alpha alpha){
+		Rectangle frameRectangle=sprite.getFrame((int)frameIndex);
+		Draw_Sprite_Partial_Ext(x, y, frameRectangle.getX(), frameRectangle.getY(), frameRectangle.getWidth(), frameRectangle.getHeight(), sprite, 0, alpha, PaletteColor.NORMAL);
+	}
+
+	public static void Draw_Sprite_Partial_Ext(double x, double y, double xOffset, double yOffset, double w, double h, Sprite sprite, double frame_index, Alpha alpha, PaletteColor col){
 		byte[] p = panel.pixel;
 		for(int X=(int)xOffset;X<(int)(w+xOffset);X++){
 			for(int Y=(int)yOffset;Y<(int)(h+yOffset);Y++){

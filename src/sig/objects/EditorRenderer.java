@@ -55,10 +55,10 @@ public class EditorRenderer extends LevelRenderer{
         int up = KeyHeld(KeyEvent.VK_UP)||KeyHeld(KeyEvent.VK_W)?1:0;
         int down = KeyHeld(KeyEvent.VK_DOWN)||KeyHeld(KeyEvent.VK_S)?1:0;
         if (right-left!=0) {
-            setX(getX()+(right-left)*CAMERA_SPD*updateMult);
+            setX(Math.max(0,getX()+(right-left)*CAMERA_SPD*updateMult));
         }
         if (up-down!=0) {
-            setY(getY()+(down-up)*CAMERA_SPD*updateMult);
+            setY(Math.max(0,getY()+(down-up)*CAMERA_SPD*updateMult));
         }
         boolean left_mb = MouseHeld(MouseEvent.BUTTON1);
         boolean middle_mb = MouseHeld(MouseEvent.BUTTON2);
