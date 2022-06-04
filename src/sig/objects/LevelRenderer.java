@@ -2,6 +2,7 @@ package sig.objects;
 
 import sig.RabiClone;
 import sig.engine.Alpha;
+import sig.engine.AnimatedObject;
 import sig.engine.Object;
 import sig.engine.Panel;
 import sig.engine.Sprite;
@@ -36,7 +37,7 @@ public class LevelRenderer extends Object{
             }
         }
         if (RabiClone.player!=null) {
-            Draw_Object(RabiClone.player);
+            Draw_Animated_Object(RabiClone.player);
         }
     }
 
@@ -63,6 +64,10 @@ public class LevelRenderer extends Object{
      */
     protected void Draw_Object(Object object) {
         super.Draw_Sprite(object.getX()-this.getX()-object.getSprite().getWidth()/2, Math.round(object.getY()-this.getY()-object.getSprite().getHeight()/2), object.getSprite());
+    }
+
+    protected void Draw_Animated_Object(AnimatedObject object) {
+        super.Draw_Animated_Sprite(object.getX()-this.getX()-object.getAnimatedSpr().getWidth()/2, Math.round(object.getY()-this.getY()-object.getAnimatedSpr().getHeight()/2), object.getAnimatedSpr(), object.getCurrentFrame());
     }
 
     private void DrawTile(double x, double y, Tile tile) {

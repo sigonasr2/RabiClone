@@ -84,10 +84,10 @@ public class DrawLoop {
 					continue;
 				} else {
 					int index = (Y-(int)yOffset+(int)y)*RabiClone.BASE_WIDTH+X-(int)xOffset+(int)x;
-					if (index<0||index>=p.length||sprite.getBi_array()[Y*sprite.getWidth()+X]==32||p[index]==sprite.getBi_array()[Y*sprite.getWidth()+X]) {
+					if (index<0||index>=p.length||sprite.getBi_array()[Y*sprite.getCanvasWidth()+X]==32||p[index]==sprite.getBi_array()[Y*sprite.getCanvasWidth()+X]) {
 						continue;
 					} else {
-						Draw(p,index,sprite.getBi_array()[Y*sprite.getWidth()+X],Alpha.ALPHA0);	
+						Draw(p,index,sprite.getBi_array()[Y*sprite.getCanvasWidth()+X],Alpha.ALPHA0);	
 					}
 				}
 			}	
@@ -111,10 +111,10 @@ public class DrawLoop {
 					continue;
 				} else {
 					int index = (Y-(int)yOffset+(int)y)*RabiClone.BASE_WIDTH+X-(int)xOffset+(int)x;
-					if (index<0||index>=p.length||sprite.getBi_array()[Y*sprite.getWidth()+X]==32||p[index]==sprite.getBi_array()[Y*sprite.getWidth()+X]) {
+					if (index<0||index>=p.length||sprite.getBi_array()[Y*sprite.getCanvasWidth()+X]==32||p[index]==sprite.getBi_array()[Y*sprite.getCanvasWidth()+X]) {
 						continue;
 					} else {
-						Draw(p,index,col==PaletteColor.NORMAL?sprite.getBi_array()[Y*sprite.getWidth()+X]:(byte)col.ordinal(),alpha);	
+						Draw(p,index,col==PaletteColor.NORMAL?sprite.getBi_array()[Y*sprite.getCanvasWidth()+X]:(byte)col.ordinal(),alpha);	
 					}
 				}
 			}	

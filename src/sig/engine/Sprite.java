@@ -18,6 +18,7 @@ public class Sprite{
     public static Sprite BACKGROUND2 = new Sprite(new File(new File("..","backgrounds"),"back2.gif"));
     public static Sprite BACKGROUND3 = new Sprite(new File(new File("..","backgrounds"),"back3.gif"));
     public static AnimatedSprite ERINOAH = new AnimatedSprite(new File(new File("..","sprites"),"erinoah.gif"),48,48);
+    public static AnimatedSprite ERINA = new AnimatedSprite(new File(new File("..","sprites"),"erina.gif"),32,32);
 
 
 
@@ -85,11 +86,19 @@ public class Sprite{
         return height;
     }
 
+    public int getCanvasHeight() {
+        return height;
+    }
+
     public void setHeight(int height) {
         this.height = height;
     }
 
     public int getWidth() {
+        return width;
+    }
+
+    public int getCanvasWidth() {
         return width;
     }
 

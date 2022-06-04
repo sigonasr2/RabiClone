@@ -7,7 +7,7 @@ import sig.engine.Sprite;
 public class Erinoah extends AnimatedObject{
 
     public Erinoah(Panel panel) {
-        super(Sprite.ERINOAH, 4, panel);
+        super(Sprite.ERINOAH, 6.5, panel);
     }
 
     @Override
