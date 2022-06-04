@@ -31,7 +31,7 @@ public class Player extends AnimatedObject{
     double horizontal_air_drag = 600;
     double horizontal_air_friction = 180;
 
-    double jump_velocity = -200;
+    double jump_velocity = -300;
 
     int maxJumpCount=2;
     int jumpCount=maxJumpCount;
@@ -80,13 +80,16 @@ public class Player extends AnimatedObject{
                 break;
         }
 
-        System.out.println(state);
+        if (KeyHeld(KeyEvent.VK_SPACE)&&System.currentTimeMillis()-spacebarPressed<jumpHoldTime) {
+            y_velocity=jump_velocity;
+        }
     }
 
 
     @Override
     protected void KeyReleased(int key) {
         if (key==KeyEvent.VK_SPACE) {
+            spacebarPressed=0;
             spacebarReleased=true;
         }
     }
@@ -99,6 +102,7 @@ public class Player extends AnimatedObject{
                 jumpCount--;
                 y_velocity = jump_velocity;
                 spacebarReleased=false;
+                spacebarPressed=System.currentTimeMillis();
                 //System.out.println("Jump");
             }
         } else
@@ -106,6 +110,7 @@ public class Player extends AnimatedObject{
             jumpCount=0;
             y_velocity = jump_velocity;
             spacebarReleased=false;
+            spacebarPressed=System.currentTimeMillis();
         }
     }
 
