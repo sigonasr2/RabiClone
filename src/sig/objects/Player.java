@@ -96,6 +96,30 @@ public class Player extends AnimatedObject{
 
     @Override
     protected void KeyPressed(int key) {
+
+        switch(state){
+            case ATTACK:
+                break;
+            case IDLE:
+                break;
+            case FALLING:
+            case JUMP:
+                if (jumpCount>0 && spacebarReleased && key == KeyEvent.VK_SPACE){
+                    jumpCount=0;
+                    y_velocity = jump_velocity;
+                    spacebarReleased=false;
+                    spacebarPressed=System.currentTimeMillis();
+                }
+                break;
+            case SLIDE:
+                break;
+            case STAGGER:
+                break;
+            case UNCONTROLLABLE:
+                break;
+            default:
+                break;
+        }
         if (groundCollision) {
             if (spacebarReleased&&key==KeyEvent.VK_SPACE&&jumpCount>0) {
                 state = State.JUMP;
@@ -105,12 +129,6 @@ public class Player extends AnimatedObject{
                 spacebarPressed=System.currentTimeMillis();
                 //System.out.println("Jump");
             }
-        } else
-        if ((state == State.JUMP||state==State.FALLING) && jumpCount>0 && spacebarReleased && key == KeyEvent.VK_SPACE){
-            jumpCount=0;
-            y_velocity = jump_velocity;
-            spacebarReleased=false;
-            spacebarPressed=System.currentTimeMillis();
         }
     }
 
