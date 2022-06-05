@@ -264,18 +264,12 @@ public class Player extends AnimatedObject{
             //System.out.println(((int)(getX()+getAnimatedSpr().getWidth()/2+displacement_x)/Tile.TILE_WIDTH)+"//"+((int)(getY()+getAnimatedSpr().getHeight()/2)/Tile.TILE_HEIGHT));
             boolean collisionOccured=false;
             for(int i=0;i<4;i++){
-                if (groundCollision) {
-                    break;
-                }
                 double check_distance_y = (displacement_y/4)*(i+1);
                 Tile checked_tile_bottom_right = RabiClone.CURRENT_MAP.getTile((int)(getX()+getAnimatedSpr().getWidth()/2-4)/Tile.TILE_WIDTH, (int)(getY()+getAnimatedSpr().getHeight()/2+check_distance_y)/Tile.TILE_HEIGHT);
                 Tile checked_tile_bottom_left = RabiClone.CURRENT_MAP.getTile((int)(getX()-getAnimatedSpr().getWidth()/2+4)/Tile.TILE_WIDTH, (int)(getY()+getAnimatedSpr().getHeight()/2+check_distance_y)/Tile.TILE_HEIGHT);
                 //System.out.println((int)getX()/Tile.TILE_WIDTH);
                 if(checked_tile_bottom_right.getCollision()==CollisionType.BLOCK||checked_tile_bottom_left.getCollision()==CollisionType.BLOCK){
                     setY((getY()-check_distance_y));
-                    if (y_velocity>0) {
-                        jumpCount=maxJumpCount;
-                    }
                     y_acceleration = 0;
                     y_velocity = 0;
                     groundCollision=true;
