@@ -16,6 +16,7 @@ import java.awt.event.KeyEvent;
 public class Player extends AnimatedObject{
     final double GRAVITY = 1300;
     final double NORMAL_FRICTION = 6400;
+    final double NORMAL_JUMP_VELOCITY = -300;
     final boolean LEFT = false;
     final boolean RIGHT = true;
     final int jump_fall_AnimationWaitTime = 200;
@@ -29,14 +30,15 @@ public class Player extends AnimatedObject{
     double x_velocity = 0;
     double x_velocity_limit = 164;
     double y_velocity = 5;
-    double y_velocity_limit = 400;
+    double y_velocity_limit = 500;
+    double sliding_velocity = 164;
 
     double horizontal_drag = 2000;
     double horizontal_friction = NORMAL_FRICTION;
     double horizontal_air_drag = 800;
     double horizontal_air_friction = 180;
 
-    double jump_velocity = -300;
+    double jump_velocity = NORMAL_JUMP_VELOCITY;
 
     int maxJumpCount=2;
     int jumpCount=maxJumpCount;
@@ -85,6 +87,7 @@ public class Player extends AnimatedObject{
             }
                 break;
             case IDLE:
+            jump_velocity = NORMAL_JUMP_VELOCITY;
             horizontal_friction = NORMAL_FRICTION;
             jump_slide_fall_StartAnimationTimer=-1;
 
@@ -106,6 +109,9 @@ public class Player extends AnimatedObject{
             }
                 break;
             case JUMP:
+            if(prvState==State.SLIDE){
+                //jump_velocity=-500;
+            }
             if(jump_slide_fall_StartAnimationTimer==-1){
                 jump_slide_fall_StartAnimationTimer = System.currentTimeMillis();
                 setAnimatedSpr(Sprite.ERINA_JUMP_RISE1);
@@ -124,6 +130,12 @@ public class Player extends AnimatedObject{
                 setAnimatedSpr(Sprite.ERINA_SLIDE);
             }
             if(System.currentTimeMillis()-slide_time>slide_duration){
+                if(KeyHeld(KeyEvent.VK_A)||KeyHeld(KeyEvent.VK_LEFT)){
+                    facing_direction=LEFT;
+                }
+                if(KeyHeld(KeyEvent.VK_D)||KeyHeld(KeyEvent.VK_RIGHT)){
+                    facing_direction=RIGHT;
+                }
                 state=State.IDLE;
             }
                 break;
@@ -139,7 +151,7 @@ public class Player extends AnimatedObject{
         if ((KeyHeld(KeyEvent.VK_SPACE)||KeyHeld(KeyEvent.VK_W))&&System.currentTimeMillis()-spacebarPressed<jumpHoldTime) {
             y_velocity=jump_velocity;
         }
-
+        //System.out.println(state);
     }
 
 
@@ -149,11 +161,13 @@ public class Player extends AnimatedObject{
             spacebarPressed=0;
             spacebarReleased=true;
         }
-        if((key==KeyEvent.VK_A||key==KeyEvent.VK_LEFT)&&(KeyHeld(KeyEvent.VK_D)||KeyHeld(KeyEvent.VK_RIGHT))){
-            facing_direction=RIGHT;
-        }
-        if((key==KeyEvent.VK_D||key==KeyEvent.VK_RIGHT)&&(KeyHeld(KeyEvent.VK_A)||KeyHeld(KeyEvent.VK_LEFT))){
-            facing_direction=LEFT;
+        if(state!=State.SLIDE){
+            if((key==KeyEvent.VK_A||key==KeyEvent.VK_LEFT)&&(KeyHeld(KeyEvent.VK_D)||KeyHeld(KeyEvent.VK_RIGHT))){
+                facing_direction=RIGHT;
+            }
+            if((key==KeyEvent.VK_D||key==KeyEvent.VK_RIGHT)&&(KeyHeld(KeyEvent.VK_A)||KeyHeld(KeyEvent.VK_LEFT))){
+                facing_direction=LEFT;
+            }
         }
     }
 
@@ -166,6 +180,12 @@ public class Player extends AnimatedObject{
             case IDLE:
             if(key==KeyEvent.VK_CONTROL){
                 slide_time = System.currentTimeMillis();
+                if(facing_direction){
+                    x_velocity=sliding_velocity;
+                }
+                else{
+                    x_velocity=-sliding_velocity;
+                }
                 state=State.SLIDE;
             }
                 break;
@@ -197,13 +217,15 @@ public class Player extends AnimatedObject{
                 //System.out.println("Jump");
             }
         }
-        switch(key){
-            case KeyEvent.VK_LEFT: case KeyEvent.VK_A:
-            facing_direction=LEFT;
-            break;
-            case KeyEvent.VK_RIGHT:case KeyEvent.VK_D:
-            facing_direction=RIGHT;
-            break;
+        if(state!=State.SLIDE){
+            switch(key){
+                case KeyEvent.VK_LEFT: case KeyEvent.VK_A:
+                facing_direction=LEFT;
+                break;
+                case KeyEvent.VK_RIGHT:case KeyEvent.VK_D:
+                facing_direction=RIGHT;
+                break;
+            }   
         }
     }
 
@@ -296,7 +318,10 @@ public class Player extends AnimatedObject{
     private void handleMovementPhysics(double updateMult) {
         int right = (KeyHeld(KeyEvent.VK_RIGHT))||(KeyHeld(KeyEvent.VK_D))?1:0;
         int left = (KeyHeld(KeyEvent.VK_LEFT))||(KeyHeld(KeyEvent.VK_A))?1:0;
-
+        if(state==State.SLIDE){
+            right=0;
+            left=0;
+        }
         x_velocity = 
             Math.abs(x_velocity+x_acceleration*updateMult)>x_velocity_limit
                 ?Math.signum(x_velocity+x_acceleration*updateMult)*x_velocity_limit
