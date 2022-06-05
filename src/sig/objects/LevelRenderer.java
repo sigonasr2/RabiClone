@@ -6,6 +6,7 @@ import sig.engine.AnimatedObject;
 import sig.engine.Object;
 import sig.engine.Panel;
 import sig.engine.Sprite;
+import sig.engine.Transform;
 import sig.map.Background;
 import sig.map.Map;
 import sig.map.Tile;
@@ -37,7 +38,7 @@ public class LevelRenderer extends Object{
             }
         }
         if (RabiClone.player!=null) {
-            Draw_Animated_Object(RabiClone.player);
+            Draw_Animated_Object(RabiClone.player,RabiClone.player.facing_direction?Transform.HORIZONTAL:Transform.NONE);
         }
     }
 
@@ -67,15 +68,19 @@ public class LevelRenderer extends Object{
     }
 
     protected void Draw_Animated_Object(AnimatedObject object) {
-        super.Draw_Animated_Sprite(object.getX()-this.getX()-object.getAnimatedSpr().getWidth()/2, Math.round(object.getY()-this.getY()-object.getAnimatedSpr().getHeight()/2), object.getAnimatedSpr(), object.getCurrentFrame());
+        Draw_Animated_Object(object,Transform.NONE);
+    }
+
+    protected void Draw_Animated_Object(AnimatedObject object, Transform transform){
+        super.Draw_Animated_Sprite(object.getX()-this.getX()-object.getAnimatedSpr().getWidth()/2, Math.round(object.getY()-this.getY()-object.getAnimatedSpr().getHeight()/2), object.getAnimatedSpr(), object.getCurrentFrame(), transform);
     }
 
     private void DrawTile(double x, double y, Tile tile) {
-        Draw_Sprite_Partial(x,y, tile.getSpriteSheetX()*tile.getTileWidth(), tile.getSpriteSheetY()*tile.getTileHeight(), tile.getTileWidth(), tile.getTileHeight(), getSprite(), 0);
+        Draw_Sprite_Partial(x,y, tile.getSpriteSheetX()*tile.getTileWidth(), tile.getSpriteSheetY()*tile.getTileHeight(), tile.getTileWidth(), tile.getTileHeight(), getSprite(), 0, Transform.NONE);
     }
 
     protected void DrawTransparentTile(double x, double y, Tile tile, Alpha alpha) {
-        Draw_Sprite_Partial_Ext(x,y, tile.getSpriteSheetX()*tile.getTileWidth(), tile.getSpriteSheetY()*tile.getTileHeight(), tile.getTileWidth(), tile.getTileHeight(), getSprite(), alpha);
+        Draw_Sprite_Partial_Ext(x,y, tile.getSpriteSheetX()*tile.getTileWidth(), tile.getSpriteSheetY()*tile.getTileHeight(), tile.getTileWidth(), tile.getTileHeight(), getSprite(), alpha, Transform.NONE);
     }
     
 }

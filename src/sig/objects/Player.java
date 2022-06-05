@@ -16,6 +16,8 @@ import java.awt.event.KeyEvent;
 public class Player extends AnimatedObject{
     final double GRAVITY = 890;
     final double NORMAL_FRICTION = 6400;
+    final boolean LEFT = false;
+    final boolean RIGHT = true;
 
     double y_acceleration = GRAVITY;
     double y_acceleration_limit = 100;
@@ -43,6 +45,7 @@ public class Player extends AnimatedObject{
 
     boolean groundCollision = false;
     boolean spacebarReleased = true;
+    boolean facing_direction = RIGHT;
 
     long spacebarPressed = System.currentTimeMillis();
     int jumpHoldTime = 150;
@@ -68,7 +71,6 @@ public class Player extends AnimatedObject{
             case IDLE:
                 break;
             case JUMP:
-
                 break;
             case SLIDE:
                 break;
@@ -129,6 +131,14 @@ public class Player extends AnimatedObject{
                 spacebarPressed=System.currentTimeMillis();
                 //System.out.println("Jump");
             }
+        }
+        switch(key){
+            case KeyEvent.VK_LEFT: case KeyEvent.VK_A:
+            facing_direction=LEFT;
+            break;
+            case KeyEvent.VK_RIGHT:case KeyEvent.VK_D:
+            facing_direction=RIGHT;
+            break;
         }
     }
 

@@ -65,6 +65,10 @@ public abstract class Object implements GameEntity{
         DrawLoop.Draw_Animated_Sprite(x,y,sprite,frameIndex);
     }
 
+    protected void Draw_Animated_Sprite(double x, double y, AnimatedSprite sprite, double frameIndex, Transform transform){
+        DrawLoop.Draw_Animated_Sprite(x,y,sprite,frameIndex,transform);
+    }
+
 	protected void Draw_Text(double x, double y, StringBuilder string, Font font){
         DrawLoop.Draw_Text(x,y,string,font);
     }
@@ -73,16 +77,16 @@ public abstract class Object implements GameEntity{
         DrawLoop.Draw_Text_Ext(x,y,string,font,alpha,col);
     }
 
-	protected void Draw_Sprite_Partial(double x, double y, double xOffset, double yOffset, double w, double h, Sprite sprite, double frame_index){
-        DrawLoop.Draw_Sprite_Partial(x,y,xOffset,yOffset,w,h,sprite,frame_index);
+	protected void Draw_Sprite_Partial(double x, double y, double xOffset, double yOffset, double w, double h, Sprite sprite, double frame_index, Transform transform){
+        DrawLoop.Draw_Sprite_Partial(x,y,xOffset,yOffset,w,h,sprite,frame_index,transform);
     }
 
-	protected void Draw_Sprite_Partial_Ext(double x, double y, double xOffset, double yOffset, double w, double h, Sprite sprite, Alpha alpha){
-        DrawLoop.Draw_Sprite_Partial_Ext(x,y,xOffset,yOffset,w,h,sprite,alpha);
+	protected void Draw_Sprite_Partial_Ext(double x, double y, double xOffset, double yOffset, double w, double h, Sprite sprite, Alpha alpha,Transform transform){
+        DrawLoop.Draw_Sprite_Partial_Ext(x,y,xOffset,yOffset,w,h,sprite,alpha,transform);
     }
 
-	protected void Draw_Sprite_Partial_Ext(double x, double y, double xOffset, double yOffset, double w, double h, Sprite sprite, double frame_index, Alpha alpha, PaletteColor col){
-        DrawLoop.Draw_Sprite_Partial_Ext(x,y,xOffset,yOffset,w,h,sprite,frame_index,alpha,col);
+	protected void Draw_Sprite_Partial_Ext(double x, double y, double xOffset, double yOffset, double w, double h, Sprite sprite, double frame_index, Alpha alpha, PaletteColor col,Transform transform){
+        DrawLoop.Draw_Sprite_Partial_Ext(x,y,xOffset,yOffset,w,h,sprite,frame_index,alpha,col,transform);
     }
 
 	protected boolean KeyHeld(int key) {
