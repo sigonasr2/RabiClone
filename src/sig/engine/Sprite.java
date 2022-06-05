@@ -19,6 +19,11 @@ public class Sprite{
     public static Sprite BACKGROUND3 = new Sprite(new File(new File("..","backgrounds"),"back3.gif"));
     public static AnimatedSprite ERINOAH = new AnimatedSprite(new File(new File("..","sprites"),"erinoah.gif"),48,48);
     public static AnimatedSprite ERINA = new AnimatedSprite(new File(new File("..","sprites"),"erina.gif"),32,32);
+    public static AnimatedSprite ERINA_WALK = new AnimatedSprite(new File(new File("..","sprites"),"erina_walk.gif"),32,32);
+    public static AnimatedSprite ERINA_JUMP_RISE1 = new AnimatedSprite(new File(new File("..","sprites"),"erina_jump_rise1.gif"),32,32);
+    public static AnimatedSprite ERINA_JUMP_RISE = new AnimatedSprite(new File(new File("..","sprites"),"erina_jump_rise.gif"),32,32);
+    public static AnimatedSprite ERINA_JUMP_FALL1 = new AnimatedSprite(new File(new File("..","sprites"),"erina_jump_fall1.gif"),32,32);
+    public static AnimatedSprite ERINA_JUMP_FALL = new AnimatedSprite(new File(new File("..","sprites"),"erina_jump_fall.gif"),32,32);
 
 
 

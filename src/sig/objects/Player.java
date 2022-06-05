@@ -62,15 +62,35 @@ public class Player extends AnimatedObject{
         super.update(updateMult);
         handleMovementPhysics(updateMult);
         handleCameraRoomMovement();
+        int right = (KeyHeld(KeyEvent.VK_RIGHT))||(KeyHeld(KeyEvent.VK_D))?1:0;
+        int left = (KeyHeld(KeyEvent.VK_LEFT))||(KeyHeld(KeyEvent.VK_A))?1:0;
 
         switch(state){
             case ATTACK:
                 break;
             case FALLING:
+            setAnimatedSpr(Sprite.ERINA_JUMP_FALL);
                 break;
             case IDLE:
+            if(KeyHeld(KeyEvent.VK_A)||KeyHeld(KeyEvent.VK_LEFT)){
+                setAnimatedSpr(Sprite.ERINA_WALK);
+            }
+            if(KeyHeld(KeyEvent.VK_D)||KeyHeld(KeyEvent.VK_RIGHT)){
+                setAnimatedSpr(Sprite.ERINA_WALK);
+            }
+            
+            if(right-left==0){
+                setAnimatedSpr(Sprite.ERINA);
+            }
+            if(x_velocity!=0){
+                setAnimatedSpr(Sprite.ERINA_WALK);
+            }
+            else{
+                setAnimatedSpr(Sprite.ERINA);
+            }
                 break;
             case JUMP:
+            setAnimatedSpr(Sprite.ERINA_JUMP_RISE);
                 break;
             case SLIDE:
                 break;
@@ -82,17 +102,24 @@ public class Player extends AnimatedObject{
                 break;
         }
 
-        if (KeyHeld(KeyEvent.VK_SPACE)&&System.currentTimeMillis()-spacebarPressed<jumpHoldTime) {
+        if (KeyHeld(KeyEvent.VK_SPACE)||KeyHeld(KeyEvent.VK_W)&&System.currentTimeMillis()-spacebarPressed<jumpHoldTime) {
             y_velocity=jump_velocity;
         }
+
     }
 
 
     @Override
     protected void KeyReleased(int key) {
-        if (key==KeyEvent.VK_SPACE) {
+        if (key==KeyEvent.VK_SPACE||key==KeyEvent.VK_W) {
             spacebarPressed=0;
             spacebarReleased=true;
+        }
+        if((key==KeyEvent.VK_A||key==KeyEvent.VK_LEFT)&&(KeyHeld(KeyEvent.VK_D)||KeyHeld(KeyEvent.VK_RIGHT))){
+            facing_direction=RIGHT;
+        }
+        if((key==KeyEvent.VK_D||key==KeyEvent.VK_RIGHT)&&(KeyHeld(KeyEvent.VK_A)||KeyHeld(KeyEvent.VK_LEFT))){
+            facing_direction=LEFT;
         }
     }
 
@@ -106,7 +133,7 @@ public class Player extends AnimatedObject{
                 break;
             case FALLING:
             case JUMP:
-                if (jumpCount>0 && spacebarReleased && key == KeyEvent.VK_SPACE){
+                if (jumpCount>0 && spacebarReleased && (key == KeyEvent.VK_SPACE || key == KeyEvent.VK_W)){
                     jumpCount=0;
                     y_velocity = jump_velocity;
                     spacebarReleased=false;
@@ -123,7 +150,7 @@ public class Player extends AnimatedObject{
                 break;
         }
         if (groundCollision) {
-            if (spacebarReleased&&key==KeyEvent.VK_SPACE&&jumpCount>0) {
+            if (spacebarReleased&&(key==KeyEvent.VK_SPACE||key==KeyEvent.VK_W)&&jumpCount>0) {
                 state = State.JUMP;
                 jumpCount--;
                 y_velocity = jump_velocity;
@@ -229,8 +256,8 @@ public class Player extends AnimatedObject{
 
 
     private void handleMovementPhysics(double updateMult) {
-        int right = KeyHeld(KeyEvent.VK_RIGHT)?1:0;
-        int left = KeyHeld(KeyEvent.VK_LEFT)?1:0;
+        int right = (KeyHeld(KeyEvent.VK_RIGHT))||(KeyHeld(KeyEvent.VK_D))?1:0;
+        int left = (KeyHeld(KeyEvent.VK_LEFT))||(KeyHeld(KeyEvent.VK_A))?1:0;
 
         x_velocity = 
             Math.abs(x_velocity+x_acceleration*updateMult)>x_velocity_limit
