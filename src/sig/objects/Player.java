@@ -18,6 +18,7 @@ public class Player extends AnimatedObject{
     final double NORMAL_FRICTION = 6400;
     final boolean LEFT = false;
     final boolean RIGHT = true;
+    final int jump_fall_AnimationWaitTime = 200;
 
     double y_acceleration = GRAVITY;
     double y_acceleration_limit = 100;
@@ -38,6 +39,7 @@ public class Player extends AnimatedObject{
     int maxJumpCount=2;
     int jumpCount=maxJumpCount;
     State state = State.IDLE;
+    State prvState = state;
 
     final double viewBoundaryX=RabiClone.BASE_WIDTH/3;
     final double viewBoundaryY=RabiClone.BASE_HEIGHT/3;
@@ -48,6 +50,7 @@ public class Player extends AnimatedObject{
     boolean facing_direction = RIGHT;
 
     long spacebarPressed = System.currentTimeMillis();
+    long jump_fall_StartAnimationTimer = -1;
     int jumpHoldTime = 150;
 
     public Player(Panel panel) {
@@ -69,9 +72,18 @@ public class Player extends AnimatedObject{
             case ATTACK:
                 break;
             case FALLING:
-            setAnimatedSpr(Sprite.ERINA_JUMP_FALL);
+            if(prvState!=State.FALLING){
+                jump_fall_StartAnimationTimer = System.currentTimeMillis();
+                setAnimatedSpr(Sprite.ERINA_JUMP_FALL1);
+            }
+            if(System.currentTimeMillis()-jump_fall_StartAnimationTimer>jump_fall_AnimationWaitTime){
+                setAnimatedSpr(Sprite.ERINA_JUMP_FALL);
+                jump_fall_StartAnimationTimer=-1;
+            }
                 break;
             case IDLE:
+            jump_fall_StartAnimationTimer=-1;
+
             if(KeyHeld(KeyEvent.VK_A)||KeyHeld(KeyEvent.VK_LEFT)){
                 setAnimatedSpr(Sprite.ERINA_WALK);
             }
@@ -90,7 +102,13 @@ public class Player extends AnimatedObject{
             }
                 break;
             case JUMP:
-            setAnimatedSpr(Sprite.ERINA_JUMP_RISE);
+            if(jump_fall_StartAnimationTimer==-1){
+                jump_fall_StartAnimationTimer = System.currentTimeMillis();
+                setAnimatedSpr(Sprite.ERINA_JUMP_RISE1);
+            }
+            if(System.currentTimeMillis()-jump_fall_StartAnimationTimer>jump_fall_AnimationWaitTime){
+                setAnimatedSpr(Sprite.ERINA_JUMP_RISE);
+            }
                 break;
             case SLIDE:
                 break;
@@ -101,8 +119,9 @@ public class Player extends AnimatedObject{
             default:
                 break;
         }
+        prvState = state;
 
-        if (KeyHeld(KeyEvent.VK_SPACE)||KeyHeld(KeyEvent.VK_W)&&System.currentTimeMillis()-spacebarPressed<jumpHoldTime) {
+        if ((KeyHeld(KeyEvent.VK_SPACE)||KeyHeld(KeyEvent.VK_W))&&System.currentTimeMillis()-spacebarPressed<jumpHoldTime) {
             y_velocity=jump_velocity;
         }
 
