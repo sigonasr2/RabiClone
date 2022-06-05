@@ -147,7 +147,6 @@ public class Player extends AnimatedObject{
                 break;
         }
         prvState = state;
-
         if ((KeyHeld(KeyEvent.VK_SPACE)||KeyHeld(KeyEvent.VK_W))&&System.currentTimeMillis()-spacebarPressed<jumpHoldTime) {
             y_velocity=jump_velocity;
         }
