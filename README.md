@@ -37,7 +37,8 @@ Underwater / Water Dashing (Propelling motion)
 Side Roll -> Slide
 Wall Jumping
 
-Sliding Buffer
+Keybind Management
+Sliding Key Buffer
 Movement Systems
 Collectibles
 Combat Systems
