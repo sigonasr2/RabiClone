@@ -14,7 +14,7 @@ import sig.objects.actor.State;
 import java.awt.event.KeyEvent;
 
 public class Player extends AnimatedObject{
-    final double GRAVITY = 890;
+    final double GRAVITY = 1300;
     final double NORMAL_FRICTION = 6400;
     final boolean LEFT = false;
     final boolean RIGHT = true;
@@ -30,7 +30,7 @@ public class Player extends AnimatedObject{
 
     double horizontal_drag = 2000;
     double horizontal_friction = NORMAL_FRICTION;
-    double horizontal_air_drag = 600;
+    double horizontal_air_drag = 800;
     double horizontal_air_friction = 180;
 
     double jump_velocity = -300;
