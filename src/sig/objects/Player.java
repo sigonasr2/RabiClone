@@ -19,6 +19,8 @@ public class Player extends AnimatedObject{
     final boolean LEFT = false;
     final boolean RIGHT = true;
     final int jump_fall_AnimationWaitTime = 200;
+    final int slide_AnimationWaitTime = 100;
+    final int slide_duration = 700;
 
     double y_acceleration = GRAVITY;
     double y_acceleration_limit = 100;
@@ -50,7 +52,8 @@ public class Player extends AnimatedObject{
     boolean facing_direction = RIGHT;
 
     long spacebarPressed = System.currentTimeMillis();
-    long jump_fall_StartAnimationTimer = -1;
+    long jump_slide_fall_StartAnimationTimer = -1;
+    long slide_time = -1;
     int jumpHoldTime = 150;
 
     public Player(Panel panel) {
@@ -73,16 +76,17 @@ public class Player extends AnimatedObject{
                 break;
             case FALLING:
             if(prvState!=State.FALLING){
-                jump_fall_StartAnimationTimer = System.currentTimeMillis();
+                jump_slide_fall_StartAnimationTimer = System.currentTimeMillis();
                 setAnimatedSpr(Sprite.ERINA_JUMP_FALL1);
             }
-            if(System.currentTimeMillis()-jump_fall_StartAnimationTimer>jump_fall_AnimationWaitTime){
+            if(System.currentTimeMillis()-jump_slide_fall_StartAnimationTimer>jump_fall_AnimationWaitTime){
                 setAnimatedSpr(Sprite.ERINA_JUMP_FALL);
-                jump_fall_StartAnimationTimer=-1;
+                jump_slide_fall_StartAnimationTimer=-1;
             }
                 break;
             case IDLE:
-            jump_fall_StartAnimationTimer=-1;
+            horizontal_friction = NORMAL_FRICTION;
+            jump_slide_fall_StartAnimationTimer=-1;
 
             if(KeyHeld(KeyEvent.VK_A)||KeyHeld(KeyEvent.VK_LEFT)){
                 setAnimatedSpr(Sprite.ERINA_WALK);
@@ -102,15 +106,26 @@ public class Player extends AnimatedObject{
             }
                 break;
             case JUMP:
-            if(jump_fall_StartAnimationTimer==-1){
-                jump_fall_StartAnimationTimer = System.currentTimeMillis();
+            if(jump_slide_fall_StartAnimationTimer==-1){
+                jump_slide_fall_StartAnimationTimer = System.currentTimeMillis();
                 setAnimatedSpr(Sprite.ERINA_JUMP_RISE1);
             }
-            if(System.currentTimeMillis()-jump_fall_StartAnimationTimer>jump_fall_AnimationWaitTime){
+            if(System.currentTimeMillis()-jump_slide_fall_StartAnimationTimer>jump_fall_AnimationWaitTime){
                 setAnimatedSpr(Sprite.ERINA_JUMP_RISE);
             }
                 break;
             case SLIDE:
+            horizontal_friction=0;
+            if(jump_slide_fall_StartAnimationTimer==-1){
+                jump_slide_fall_StartAnimationTimer = System.currentTimeMillis();
+                setAnimatedSpr(Sprite.ERINA_SLIDE1);
+            }
+            if(System.currentTimeMillis()-jump_slide_fall_StartAnimationTimer>slide_AnimationWaitTime){
+                setAnimatedSpr(Sprite.ERINA_SLIDE);
+            }
+            if(System.currentTimeMillis()-slide_time>slide_duration){
+                state=State.IDLE;
+            }
                 break;
             case STAGGER:
                 break;
@@ -149,10 +164,14 @@ public class Player extends AnimatedObject{
             case ATTACK:
                 break;
             case IDLE:
+            if(key==KeyEvent.VK_CONTROL){
+                slide_time = System.currentTimeMillis();
+                state=State.SLIDE;
+            }
                 break;
             case FALLING:
             case JUMP:
-                if (jumpCount>0 && spacebarReleased && (key == KeyEvent.VK_SPACE || key == KeyEvent.VK_W)){
+                if(jumpCount>0 && spacebarReleased && (key == KeyEvent.VK_SPACE || key == KeyEvent.VK_W)){
                     jumpCount=0;
                     y_velocity = jump_velocity;
                     spacebarReleased=false;
