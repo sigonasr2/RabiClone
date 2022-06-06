@@ -5,6 +5,8 @@ import javax.swing.JFrame;
 import net.java.games.input.Component;
 import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
+import net.java.games.input.ControllerEvent;
+import net.java.games.input.ControllerListener;
 import net.java.games.input.Event;
 import net.java.games.input.EventQueue;
 
@@ -42,7 +44,7 @@ public class RabiClone{
 	public static Player player;
 
 	public static Maps CURRENT_MAP = Maps.WORLD1;
-	public static List<Controller> CONTROLLERS = new ArrayList<Controller>();
+	public static Controller[] CONTROLLERS = new Controller[]{};
 	public static void main(String[] args) {
 		f = new JFrame(PROGRAM_NAME);
 		f.setResizable(false);
@@ -68,21 +70,28 @@ public class RabiClone{
 		p.render();
 
 		Event event = new Event();
-		CONTROLLERS = Arrays.asList(ControllerEnvironment.getDefaultEnvironment().getControllers());
 		long lastGameTime = System.nanoTime();
 		while (true) {
 			long timePassed = System.nanoTime()-lastGameTime;
 			lastGameTime=System.nanoTime();
 			double updateMult = Math.min(1/60d,timePassed/1000000000d);
 
-			for (int i=0;i<CONTROLLERS.size();i++) {
-				CONTROLLERS.get(i).poll();
-				EventQueue queue = CONTROLLERS.get(i).getEventQueue();
+			CONTROLLERS = ControllerEnvironment.getDefaultEnvironment().getControllers()
+			for (int i=0;i<CONTROLLERS.length;i++) {
+				if (CONTROLLERS[i].poll()) {
+					Component[] components = CONTROLLERS[i].getComponents();
+					for (int j=0;j<components.length;j++) {
+						Component c = components[j];
+						System.out.println(c.getName()+","+c.getIdentifier()+": "+c.getPollData());
+					}
+					System.out.println("--------");
+				}
+				/*EventQueue queue = controller_list[i].getEventQueue();
 
 				while (queue.getNextEvent(event)) {
 					Component c = event.getComponent();
-					System.out.println(c.getName()+","+c.getIdentifier());
-				}
+					System.out.println(c.getName()+","+c.getIdentifier()+": "+c.getPollData());
+				}*/
 			}
 
 			if (p.KEYS.getOrDefault(KeyEvent.VK_F1,false)) {
