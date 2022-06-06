@@ -99,14 +99,14 @@ public class RabiClone{
 				}*/
 			}
 
-			if (p.KEYS.getOrDefault(KeyEvent.VK_F1,false)) {
+			if (Key.isKeyHeld(KeyEvent.VK_F1)) {
 				if (level_renderer instanceof EditorRenderer) {
 					OBJ.remove(level_renderer);
 					OBJ.add(level_renderer=new LevelRenderer(p));
 					StartGame();
 				}
 			}
-			if (p.KEYS.getOrDefault(KeyEvent.VK_F2,false)) {
+			if (Key.isKeyHeld(KeyEvent.VK_F2)) {
 				if (!(level_renderer instanceof EditorRenderer)) {
 					OBJ.clear();
 					ResetGame();

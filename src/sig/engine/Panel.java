@@ -47,7 +47,6 @@ public class Panel extends JPanel implements Runnable,KeyListener {
 	public double nanaY = 0;
 	public Point mousePos=new Point(0,0);
 	public int button = 0;
-	public HashMap<Component.Identifier.Key,Boolean> KEYS = new HashMap<>();
 	public HashMap<Integer,Boolean> MOUSE = new HashMap<>();
 	public static byte[] generalPalette = new byte[]{
 		(byte)0x5b,(byte)0xa6,(byte)0x75,
@@ -414,8 +413,8 @@ public class Panel extends JPanel implements Runnable,KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if (!KEYS.getOrDefault(e.getKeyCode(),false)) {
-			KEYS.put(Key.KEY_CONVERSION_MAP.get(e.getKeyCode()),true);
+		if (!Key.isKeyHeld(e.getKeyCode())) {
+			Key.setKeyHeld(e.getKeyCode(), true);
 			for (int i=0;i<RabiClone.OBJ.size();i++) {
 				RabiClone.OBJ.get(i).KeyPressed(e.getKeyCode());
 			}
@@ -425,7 +424,7 @@ public class Panel extends JPanel implements Runnable,KeyListener {
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		KEYS.put(Key.KEY_CONVERSION_MAP.get(e.getKeyCode()),false);
+		Key.setKeyHeld(e.getKeyCode(), false);
 		for (int i=0;i<RabiClone.OBJ.size();i++) {
 			RabiClone.OBJ.get(i).KeyReleased(e.getKeyCode());
 		}

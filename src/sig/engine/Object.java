@@ -90,7 +90,7 @@ public abstract class Object implements GameEntity{
     }
 
 	protected boolean KeyHeld(int key) {
-		return panel.KEYS.getOrDefault(Key.KEY_CONVERSION_MAP.get(key),false);
+		return Key.isKeyHeld(key);
 	}
 
 	protected void KeyPressed(int key) {
