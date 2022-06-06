@@ -17,6 +17,7 @@ import java.awt.image.IndexColorModel;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.event.MouseInputListener;
+
 import java.awt.event.KeyListener;
 
 import sig.DrawLoop;
