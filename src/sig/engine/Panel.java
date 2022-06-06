@@ -18,6 +18,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.event.MouseInputListener;
 
+import net.java.games.input.Component;
+
 import java.awt.event.KeyListener;
 
 import sig.DrawLoop;
@@ -45,7 +47,7 @@ public class Panel extends JPanel implements Runnable,KeyListener {
 	public double nanaY = 0;
 	public Point mousePos=new Point(0,0);
 	public int button = 0;
-	public HashMap<Integer,Boolean> KEYS = new HashMap<>();
+	public HashMap<Component.Identifier.Key,Boolean> KEYS = new HashMap<>();
 	public HashMap<Integer,Boolean> MOUSE = new HashMap<>();
 	public static byte[] generalPalette = new byte[]{
 		(byte)0x5b,(byte)0xa6,(byte)0x75,
@@ -413,7 +415,7 @@ public class Panel extends JPanel implements Runnable,KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (!KEYS.getOrDefault(e.getKeyCode(),false)) {
-			KEYS.put(e.getKeyCode(),true);
+			KEYS.put(Key.KEY_CONVERSION_MAP.get(e.getKeyCode()),true);
 			for (int i=0;i<RabiClone.OBJ.size();i++) {
 				RabiClone.OBJ.get(i).KeyPressed(e.getKeyCode());
 			}
@@ -423,7 +425,7 @@ public class Panel extends JPanel implements Runnable,KeyListener {
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		KEYS.put(e.getKeyCode(),false);
+		KEYS.put(Key.KEY_CONVERSION_MAP.get(e.getKeyCode()),false);
 		for (int i=0;i<RabiClone.OBJ.size();i++) {
 			RabiClone.OBJ.get(i).KeyReleased(e.getKeyCode());
 		}
