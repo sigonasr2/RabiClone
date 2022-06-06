@@ -2,7 +2,6 @@ build.sh
 clean.sh
 commit.sh
 jar.sh
-.package.files
 release.sh
 update.sh
 version_info
