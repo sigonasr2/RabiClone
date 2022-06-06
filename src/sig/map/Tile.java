@@ -1,7 +1,5 @@
 package sig.map;
 
-import sig.RabiClone;
-
 public enum Tile {
     VOID(0,0,true,CollisionType.NONE), //File is populated by 0s by default. This represents the void.
     WALL(0,0,CollisionType.BLOCK),

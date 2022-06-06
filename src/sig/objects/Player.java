@@ -2,7 +2,6 @@ package sig.objects;
 
 import sig.RabiClone;
 import sig.engine.AnimatedObject;
-import sig.engine.Object;
 import sig.engine.Panel;
 import sig.engine.Sprite;
 import sig.map.CollisionType;
@@ -307,6 +306,10 @@ public class Player extends AnimatedObject{
                         newY=(tileY/Tile.TILE_SCREEN_COUNT_Y)*Map.MAP_HEIGHT;
                     }
                 }
+                break;
+            case FIXED:
+                break;
+            default:
                 break;
         }
         RabiClone.level_renderer.setX(newX<0?0:newX);

@@ -10,7 +10,6 @@ import sig.engine.Font;
 import sig.engine.MouseScrollValue;
 import sig.engine.PaletteColor;
 import sig.engine.Panel;
-import sig.engine.Sprite;
 import sig.map.Background;
 import sig.map.Map;
 import sig.map.Tile;
@@ -61,8 +60,8 @@ public class EditorRenderer extends LevelRenderer{
             setY(Math.max(0,getY()+(down-up)*CAMERA_SPD*updateMult));
         }
         boolean left_mb = MouseHeld(MouseEvent.BUTTON1);
-        boolean middle_mb = MouseHeld(MouseEvent.BUTTON2);
-        boolean right_mb = MouseHeld(MouseEvent.BUTTON3);
+        // boolean middle_mb = MouseHeld(MouseEvent.BUTTON2);
+        // boolean right_mb = MouseHeld(MouseEvent.BUTTON3);
 
         if(left_mb){
             int tileX = (int)(RabiClone.MOUSE_POS.getX()+getX())/Tile.TILE_WIDTH;
