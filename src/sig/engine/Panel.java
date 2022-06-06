@@ -18,8 +18,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.event.MouseInputListener;
 
-import net.java.games.input.Component;
-
 import java.awt.event.KeyListener;
 
 import sig.DrawLoop;
@@ -217,21 +215,16 @@ public class Panel extends JPanel implements Runnable,KeyListener {
 		DrawLoop.drawGame(this);
     }
     
-	/**
-	 * @deprecated Until it implements the new indexed coloring mode, this is unusable.
-	 */
-	@Deprecated
-    public void FillRect(int[] p,Color col,double x,double y,double w,double h) {
+    public void FillRect(byte[] p,byte col,double x,double y,double w,double h) {
     	for (int xx=0;xx<w;xx++) {
         	for (int yy=0;yy<h;yy++) {
         		int index = ((int)y+yy)*getWidth()+(int)x+xx;
-				//TODO Old Color System
-				//Draw(p,index,col.getColor());
+				Draw(p,index,col);
         	}	
     	}
     }
     
-    public void FillCircle(int[] p,Color col,double center_x,double center_y,double r) {
+    public void FillCircle(byte[] p,byte col,double center_x,double center_y,double r) {
     	int counter=0;
     	Point[] points = new Point[CIRCLE_PRECISION];
     	for (double theta=0;theta<Math.PI*2;theta+=((Math.PI*2)/CIRCLE_PRECISION)) {
@@ -243,7 +236,7 @@ public class Panel extends JPanel implements Runnable,KeyListener {
     }
 
     
-    public void FillOval(int[] p,Color col,double center_x,double center_y,double w,double h) {
+    public void FillOval(byte[] p,byte col,double center_x,double center_y,double w,double h) {
     	int counter=0;
     	Point[] points = new Point[CIRCLE_PRECISION];
     	double r = Math.max(w,h);
@@ -264,11 +257,7 @@ public class Panel extends JPanel implements Runnable,KeyListener {
         FillPolygon(p,col,0,0,points);
     }
     
-	/**
-	 * @deprecated Until it implements the new indexed coloring mode, this is unusable.
-	 */
-	@Deprecated
-    public void FillPolygon(int[] p,Color col,double x_offset,double y_offset,Point...points) {
+    public void FillPolygon(byte[] p,byte col,double x_offset,double y_offset,Point...points) {
     	Edge[] edges = new Edge[points.length];
     	List<Edge> edges_sorted = new ArrayList<Edge>();
     	for (int i=0;i<points.length;i++) {
@@ -304,8 +293,7 @@ public class Panel extends JPanel implements Runnable,KeyListener {
     			for (int x=(int)Math.round(e1.x_of_min_y);x<=e2.x_of_min_y;x++) {
     				int index = (scanLine+(int)y_offset)*getWidth()+x+(int)x_offset;
     				if (index<p.length&&index>=0) {
-						//TODO Old color system.
-						//Draw(p,index,col.getColor());
+						Draw(p,index,col);
 					}
     			}
     		}
