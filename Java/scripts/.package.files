@@ -1,0 +1,8 @@
+bin/RabiClone.jar
+lib/*.dll
+lib/*.so
+lib/*.jnilib
+sprites
+backgrounds
+runGame
+maps
