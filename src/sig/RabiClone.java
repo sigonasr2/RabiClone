@@ -42,7 +42,7 @@ public class RabiClone{
 		f.setSize(BASE_WIDTH,BASE_HEIGHT); //1024x576 (64x64)
 		ChooseBestRatio();
 
-		p = new Panel(f);
+		p = new Panel(f); //Comment
 
 		MOUSE_POS=p.mousePos;
 		
