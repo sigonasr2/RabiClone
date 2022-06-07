@@ -3,7 +3,7 @@ package sig.engine;
 import java.util.HashMap;
 import java.util.List;
 
-import net.java.games.input.Component;
+import net.java.games.input.Controller;
 import net.java.games.input.Component.Identifier;
 import net.java.games.input.Component.POV;
 import sig.RabiClone;
@@ -12,40 +12,61 @@ public class KeyBind {
     public static HashMap<Action,List<KeyBind>> KEYBINDS = new HashMap<>();
     static HashMap<Action,Boolean> KEYS = new HashMap<>();
 
-    public Component c;
+    public Controller c;
+    public Identifier id;
     float val;
 
-    public KeyBind(Component c) {
+    public KeyBind(Controller c, Identifier id) {
         this.c=c;
+        this.id=id;
     }
 
     public KeyBind(int keycode) {
-        this(new Key(keycode));
+        this(null,new Key(keycode));
     }
 
-    public KeyBind(Component c, float val) {
+    public KeyBind(Controller c, Identifier id, float val) {
         this.c=c;
+        this.id=id;
         this.val=val;
     }
 
-    public static boolean isKeyHeld(Action action) {
-        return KEYS.getOrDefault(action,false);
-    }
-
     public boolean isKeyHeld() {
-        if (c instanceof Key) {
-            return ((Key)c).isKeyHeld();
-        } else if (c instanceof Identifier.Button) {
-            return c.getPollData()>0.0f;
+        if (id instanceof Key) {
+            return ((Key)id).isKeyHeld();
+        } else if (id instanceof Identifier.Button) {
+            return c.getComponent(id).getPollData()>0.0f;
         } else
-        if (c.getIdentifier()==Identifier.Axis.POV) {
-            return c.getPollData()!=POV.CENTER;
+        if (c.getComponent(id).getIdentifier()==Identifier.Axis.POV) {
+            if (val==POV.DOWN) {
+                return c.getComponent(id).getPollData()==POV.DOWN||
+                c.getComponent(id).getPollData()==POV.DOWN_LEFT||
+                c.getComponent(id).getPollData()==POV.DOWN_RIGHT;
+            } else
+            if (val==POV.UP) {
+                    return c.getComponent(id).getPollData()==POV.UP||
+                    c.getComponent(id).getPollData()==POV.UP_LEFT||
+                    c.getComponent(id).getPollData()==POV.UP_RIGHT;
+            } else
+            if (val==POV.RIGHT) {
+                    return c.getComponent(id).getPollData()==POV.RIGHT||
+                    c.getComponent(id).getPollData()==POV.UP_RIGHT||
+                    c.getComponent(id).getPollData()==POV.DOWN_RIGHT;
+            } else
+            if (val==POV.LEFT) {
+                    return c.getComponent(id).getPollData()==POV.LEFT||
+                    c.getComponent(id).getPollData()==POV.DOWN_LEFT||
+                    c.getComponent(id).getPollData()==POV.UP_LEFT;
+            } else {
+                System.err.println("Unexpected value for POV! Must be a cardinal direction! Given value: "+val);
+                return false;
+            }
         } else
-        if (c.getIdentifier() instanceof Identifier.Axis) {
-            return Math.abs(c.getPollData())>=c.getDeadZone();
+        if (id instanceof Identifier.Axis) {
+            return Math.abs(c.getComponent(id).getPollData())>=c.getComponent(id).getDeadZone()&&Math.signum(c.getComponent(id).getPollData())==Math.signum(val);
         }
         else {
-            System.out.println("Could not find proper recognition for component "+c.getName());
+            System.out.println("Could not find proper recognition for component "+id.getName());
             return false;
         }
     }
@@ -68,10 +89,18 @@ public class KeyBind {
                 }
             }
             if (held) {
-                KEYBINDS.get(a).remove(cc);
-                KEYBINDS.get(a).add(0,cc);
+                if (KEYBINDS.get(a).get(0)!=cc) {
+                    for (int i=0;i<KEYBINDS.get(a).size()-1;i++) {
+                        KEYBINDS.get(a).set(i+1,KEYBINDS.get(a).get(i));
+                    }
+                    KEYBINDS.get(a).set(0,cc);
+                }
             }
         }
+    }
+
+    public static boolean isKeyHeld(Action action) {
+        return KEYS.getOrDefault(action,false);
     }
 
     private static void actionEventCheck(Action a, boolean held) {
@@ -95,5 +124,16 @@ public class KeyBind {
 		for (int i=0;i<RabiClone.OBJ.size();i++) {
 			RabiClone.OBJ.get(i).KeyPressed(a);
 		}
+    }
+
+    public String getName() {
+        if (c!=null) {
+            return c.getComponent(id).getName();
+        } else
+        if (id instanceof Key) {
+            return ((Key)id).getName();
+        } else {
+            return "?";
+        }
     }
 }

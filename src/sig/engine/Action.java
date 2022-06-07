@@ -4,7 +4,8 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import net.java.games.input.Component;
+import net.java.games.input.Controller;
+import net.java.games.input.Component.Identifier;
 
 public enum Action {
     MOVE_RIGHT(new KeyBind(KeyEvent.VK_RIGHT),new KeyBind(KeyEvent.VK_D)),
@@ -24,9 +25,9 @@ public enum Action {
     Action(KeyBind...keybinds) {
         KeyBind.KEYBINDS.put(this,new ArrayList<>(Arrays.asList(keybinds)));
     }
-    Action(Component axis,float val) {
+    Action(Controller c, Identifier.Axis axis,float val) {
         ArrayList<KeyBind> comps = new ArrayList<KeyBind>();
-        comps.add(new KeyBind(axis,val));
+        comps.add(new KeyBind(c,axis,val));
         KeyBind.KEYBINDS.put(this,comps);
     }
 }

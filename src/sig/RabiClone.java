@@ -12,6 +12,7 @@ import java.util.List;
 import sig.engine.Panel;
 import sig.engine.Point;
 import sig.map.Maps;
+import sig.objects.ConfigureControls;
 import sig.objects.EditorRenderer;
 import sig.objects.Erinoah;
 import sig.objects.LevelRenderer;
@@ -116,6 +117,11 @@ public class RabiClone{
 					OBJ.add(level_renderer=new EditorRenderer(p));
 				}
 			}
+			if (Key.isKeyHeld(KeyEvent.VK_F3)) {
+				OBJ.clear();
+				ResetGame();
+				OBJ.add(new ConfigureControls(p));
+			}
 
 			for (int i=0;i<OBJ.size();i++) {
 				OBJ.get(i).update(updateMult);
@@ -128,6 +134,7 @@ public class RabiClone{
 
 	private static void ResetGame() {
 		player=null;
+		level_renderer=null;
 	}
 
 	private static void StartGame() {

@@ -96,12 +96,20 @@ public class Panel extends JPanel implements Runnable,KeyListener {
 				MOUSE.put(e.getButton(),true);
 				mousePos.set(e.getX()/RabiClone.SIZE_MULTIPLIER,e.getY()/RabiClone.SIZE_MULTIPLIER);
 				//System.out.println("Mouse List: "+MOUSE);
+
+				for(int i=0; i<RabiClone.OBJ.size();i++){
+					RabiClone.OBJ.get(i).MousePressed(e);
+				}
 			}
 		
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				MOUSE.put(e.getButton(),false);
 				mousePos.set(e.getX()/RabiClone.SIZE_MULTIPLIER,e.getY()/RabiClone.SIZE_MULTIPLIER);
+
+				for(int i=0; i<RabiClone.OBJ.size();i++){
+					RabiClone.OBJ.get(i).MouseReleased(e);
+				}
 			}
 		
 			@Override
@@ -213,15 +221,6 @@ public class Panel extends JPanel implements Runnable,KeyListener {
     public /* abstract */ void render(){
         //a=h/w
 		DrawLoop.drawGame(this);
-    }
-    
-    public void FillRect(byte[] p,byte col,double x,double y,double w,double h) {
-    	for (int xx=0;xx<w;xx++) {
-        	for (int yy=0;yy<h;yy++) {
-        		int index = ((int)y+yy)*getWidth()+(int)x+xx;
-				Draw(p,index,col);
-        	}	
-    	}
     }
     
     public void FillCircle(byte[] p,byte col,double center_x,double center_y,double r) {

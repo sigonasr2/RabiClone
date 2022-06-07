@@ -67,6 +67,15 @@ public class DrawLoop {
 			}
 		}
 	}
+    
+    public static void FillRect(byte[] p,byte col,double x,double y,double w,double h) {
+    	for (int xx=0;xx<w;xx++) {
+        	for (int yy=0;yy<h;yy++) {
+        		int index = ((int)y+yy)*RabiClone.BASE_WIDTH+(int)x+xx;
+				Draw(p,index,col, Alpha.ALPHA0);
+        	}	
+    	}
+    }
 
 	public static void Draw_Sprite(double x, double y, Sprite sprite){
 		Draw_Sprite_Partial(x,y,0,0,sprite.getWidth(),sprite.getHeight(),sprite,0,Transform.NONE );

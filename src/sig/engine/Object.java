@@ -1,5 +1,6 @@
 package sig.engine;
 
+import java.awt.event.MouseEvent;
 import sig.DrawLoop;
 
 public abstract class Object implements GameEntity{
@@ -57,6 +58,10 @@ public abstract class Object implements GameEntity{
         DrawLoop.Draw(canvas, index, (byte)col.ordinal(), alpha);
     }
 
+    protected void Draw_Rect(byte[] p,byte col,double x,double y,double w,double h) {
+        DrawLoop.FillRect(p, col, x, y, w, h);
+    }
+
 	protected void Draw_Sprite(double x, double y, Sprite sprite){
         DrawLoop.Draw_Sprite(x,y,sprite);
     }
@@ -97,6 +102,12 @@ public abstract class Object implements GameEntity{
 	}
 
 	protected void KeyReleased(Action a) {
+	}
+
+	protected void MousePressed(MouseEvent e) {
+	}
+
+	protected void MouseReleased(MouseEvent e) {
 	}
 
     protected boolean MouseHeld(int mb) {
