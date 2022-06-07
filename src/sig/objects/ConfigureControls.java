@@ -38,7 +38,7 @@ public class ConfigureControls extends Object{
         StringBuilder sb = new StringBuilder(a.toString()).append(": ");
         boolean first=true;
         for (KeyBind c : KeyBind.KEYBINDS.get(a)) {
-            sb.append(c.isKeyHeld()?PaletteColor.YELLOW_GREEN:PaletteColor.MIDNIGHT_BLUE).append(c.c.getName()).append(!first?",":"");
+            sb.append(c.isKeyHeld()?PaletteColor.YELLOW_GREEN:"").append(c.c.getName()).append(PaletteColor.MIDNIGHT_BLUE).append(!first?",":"");
             sb.append("\n");
         }
         return sb;
