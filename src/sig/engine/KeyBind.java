@@ -45,19 +45,33 @@ public class KeyBind {
     public static void poll() {
         //Polls all KeyBinds based on device.
         for (Action a : Action.values()) {
+            boolean held = false;
+            Component cc = null;
             for (Component c : KEYBINDS.get(a)) {
                 if (c instanceof Key) {
-                    actionEventCheck(a,((Key)c).isKeyHeld());
+                    held = ((Key)c).isKeyHeld();
+                    actionEventCheck(a,held);
                 } else
                 if (c instanceof Identifier.Button) {
-                    actionEventCheck(a,c.getPollData()>0.0f);
+                    held = c.getPollData()>0.0f;
+                    actionEventCheck(a,held);
                 } else
                 if (c.getIdentifier()==Identifier.Axis.POV) {
-                    actionEventCheck(a,a.val==c.getPollData());
+                    held = a.val==c.getPollData();
+                    actionEventCheck(a,held);
                 } else
                 if (c.getIdentifier() instanceof Identifier.Axis) {
-                    actionEventCheck(a,c.getPollData()>=c.getDeadZone()&&Math.signum(c.getPollData())==Math.signum(a.val));
+                    held = c.getPollData()>=c.getDeadZone()&&Math.signum(c.getPollData())==Math.signum(a.val);
+                    actionEventCheck(a,held);
                 }
+                if (held) {
+                    cc=c;
+                    break;
+                }
+            }
+            if (held) {
+                KEYBINDS.get(a).remove(cc);
+                KEYBINDS.get(a).add(0,cc);
             }
         }
     }
@@ -73,9 +87,9 @@ public class KeyBind {
     }
 
     private static void emitReleaseEvent(Action a) {
-        System.out.println("Release for "+a);
+        //System.out.println("Release for "+a);
     }
     private static void emitPressEvent(Action a) {
-        System.out.println("Press for "+a);
+        //System.out.println("Press for "+a);
     }
 }

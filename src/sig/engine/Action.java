@@ -16,6 +16,7 @@ public enum Action {
     PLAY_GAME(new Key(KeyEvent.VK_F1)),;
 
     float val;
+    Key controllingKey;
 
     Action(Component...components) {
         KeyBind.KEYBINDS.put(this,new ArrayList<>(Arrays.asList(components)));

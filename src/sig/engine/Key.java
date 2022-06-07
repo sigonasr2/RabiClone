@@ -118,6 +118,7 @@ public class Key implements Component{
 
     public static void setKeyHeld(int keycode,boolean pressed) {
         KEYS.put(KEY_CONVERSION_MAP.get(keycode),pressed);
+		//System.out.println(KEYS);
     }
 
     public static boolean isKeyHeld(int keycode) {
@@ -129,7 +130,7 @@ public class Key implements Component{
     }
 
     @Override
-    public Identifier getIdentifier() {
+    public Identifier.Key getIdentifier() {
         return KEY_CONVERSION_MAP.get(keycode);
     }
 
