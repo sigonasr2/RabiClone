@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.java.games.input.Component;
 import net.java.games.input.Component.Identifier;
+import net.java.games.input.Component.POV;
 import sig.RabiClone;
 
 public class KeyBind {
@@ -27,20 +28,26 @@ public class KeyBind {
         return KEYS.getOrDefault(action,false);
     }
 
+    public static boolean isKeyHeld(Component c) {
+        if (c instanceof Key) {
+            return ((Key)c).isKeyHeld();
+        } else if (c instanceof Identifier.Button) {
+            return c.getPollData()>0.0f;
+        } else
+        if (c.getIdentifier()==Identifier.Axis.POV) {
+            return c.getPollData()!=POV.CENTER;
+        } else
+        if (c.getIdentifier() instanceof Identifier.Axis) {
+            return Math.abs(c.getPollData())>=c.getDeadZone();
+        }
+        else {
+            System.out.println("Could not find proper recognition for component "+c.getName());
+            return false;
+        }
+    }
+
     public static void setKeyPressed(Action action, boolean state) {
         KEYS.put(action,state);
-        /*if (c instanceof Key) {
-            return ((Key)c).isKeyHeld();
-        } else 
-        if (c instanceof Identifier.Button) {
-            return c.getPollData()>0.0f;
-        } else 
-        if (c.getIdentifier()==Identifier.Axis.POV) {
-            return val==c.getPollData();
-        } else 
-        if (c instanceof Identifier.Axis) {
-            return c.getPollData()>=c.getDeadZone()&&Math.signum(c.getPollData())==Math.signum(val);
-        }*/
     }
 
     public static void poll() {
@@ -49,22 +56,8 @@ public class KeyBind {
             boolean held = false;
             Component cc = null;
             for (Component c : KEYBINDS.get(a)) {
-                if (c instanceof Key) {
-                    held = ((Key)c).isKeyHeld();
-                    actionEventCheck(a,held);
-                } else
-                if (c instanceof Identifier.Button) {
-                    held = c.getPollData()>0.0f;
-                    actionEventCheck(a,held);
-                } else
-                if (c.getIdentifier()==Identifier.Axis.POV) {
-                    held = a.val==c.getPollData();
-                    actionEventCheck(a,held);
-                } else
-                if (c.getIdentifier() instanceof Identifier.Axis) {
-                    held = c.getPollData()>=c.getDeadZone()&&Math.signum(c.getPollData())==Math.signum(a.val);
-                    actionEventCheck(a,held);
-                }
+                held = isKeyHeld(c);
+                actionEventCheck(a,held);
                 if (held) {
                     cc=c;
                     break;

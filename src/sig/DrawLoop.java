@@ -19,7 +19,7 @@ public class DrawLoop {
         
 		for (int y=0;y<RabiClone.BASE_HEIGHT;y++) {
 			for (int x=0;x<RabiClone.BASE_WIDTH;x++) {
-        		p[y*RabiClone.BASE_WIDTH+x]=(byte)PaletteColor.DARK_ORCHID.ordinal();//RGB
+        		p[y*RabiClone.BASE_WIDTH+x]=(byte)RabiClone.BACKGROUND_COLOR.ordinal();//RGB
         	}
         }
 		

@@ -5,6 +5,7 @@ import javax.swing.JFrame;
 import net.java.games.input.Component;
 import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
+import net.java.games.input.Controller.Type;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,8 @@ import sig.objects.Player;
 import sig.engine.Key;
 import sig.engine.KeyBind;
 import sig.engine.Object;
+import sig.engine.PaletteColor;
+
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 
@@ -36,6 +39,8 @@ public class RabiClone{
 	public static int BASE_HEIGHT=288;
 	public static int SIZE_MULTIPLIER=1;
 	public static Point MOUSE_POS;
+
+	public static PaletteColor BACKGROUND_COLOR = PaletteColor.DARK_ORCHID;
 
 	public static LevelRenderer level_renderer;
 	public static Player player;
@@ -80,6 +85,7 @@ public class RabiClone{
 			CONTROLLERS = ControllerEnvironment.getDefaultEnvironment().getControllers();
 			for (int i=0;i<CONTROLLERS.length;i++) {
 				if (CONTROLLERS[i].poll()) {
+					//System.out.println(CONTROLLERS[i].getPortType()+" // "+CONTROLLERS[i].getType());
 					Component[] components = CONTROLLERS[i].getComponents();
 					for (int j=0;j<components.length;j++) {
 						//Component c = components[j];
