@@ -26,7 +26,6 @@ public class ConfigureControls extends Object{
 
     @Override
     public void draw(byte[] p) {
-        int y=4;
         for (Action a : Action.values()) {
             Draw_Text_Ext(4,getY(),DisplayActionKeys(a),Font.PROFONT_12,Alpha.ALPHA0,PaletteColor.MIDNIGHT_BLUE);
         }
