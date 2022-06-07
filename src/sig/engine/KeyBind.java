@@ -9,14 +9,18 @@ import net.java.games.input.Component.POV;
 import sig.RabiClone;
 
 public class KeyBind {
-    public static HashMap<Action,List<Component>> KEYBINDS = new HashMap<>();
+    public static HashMap<Action,List<KeyBind>> KEYBINDS = new HashMap<>();
     static HashMap<Action,Boolean> KEYS = new HashMap<>();
 
-    Component c;
+    public Component c;
     float val;
 
     public KeyBind(Component c) {
         this.c=c;
+    }
+
+    public KeyBind(int keycode) {
+        this(new Key(keycode));
     }
 
     public KeyBind(Component c, float val) {
@@ -28,7 +32,7 @@ public class KeyBind {
         return KEYS.getOrDefault(action,false);
     }
 
-    public static boolean isKeyHeld(Component c) {
+    public boolean isKeyHeld() {
         if (c instanceof Key) {
             return ((Key)c).isKeyHeld();
         } else if (c instanceof Identifier.Button) {
@@ -54,9 +58,9 @@ public class KeyBind {
         //Polls all KeyBinds based on device.
         for (Action a : Action.values()) {
             boolean held = false;
-            Component cc = null;
-            for (Component c : KEYBINDS.get(a)) {
-                held = isKeyHeld(c);
+            KeyBind cc = null;
+            for (KeyBind c : KEYBINDS.get(a)) {
+                held = c.isKeyHeld();
                 actionEventCheck(a,held);
                 if (held) {
                     cc=c;

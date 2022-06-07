@@ -7,26 +7,26 @@ import java.util.Arrays;
 import net.java.games.input.Component;
 
 public enum Action {
-    MOVE_RIGHT(new Key(KeyEvent.VK_RIGHT),new Key(KeyEvent.VK_D)),
-    MOVE_LEFT(new Key(KeyEvent.VK_LEFT),new Key(KeyEvent.VK_A)),
-    JUMP(new Key(KeyEvent.VK_SPACE),new Key(KeyEvent.VK_W)),
-    FALL(new Key(KeyEvent.VK_DOWN),new Key(KeyEvent.VK_S)),
-    SLIDE(new Key(KeyEvent.VK_CONTROL)),
-    LEVEL_EDITOR(new Key(KeyEvent.VK_F2)),
-    PLAY_GAME(new Key(KeyEvent.VK_F1)),
-    EDITOR_SET_VIEW(new Key(KeyEvent.VK_F3)),
-    EDITOR_SET_TYPE(new Key(KeyEvent.VK_F4)),
-    EDITOR_SET_BACKGROUND(new Key(KeyEvent.VK_F5)),;
+    MOVE_RIGHT(new KeyBind(KeyEvent.VK_RIGHT),new KeyBind(KeyEvent.VK_D)),
+    MOVE_LEFT(new KeyBind(KeyEvent.VK_LEFT),new KeyBind(KeyEvent.VK_A)),
+    JUMP(new KeyBind(KeyEvent.VK_SPACE),new KeyBind(KeyEvent.VK_W)),
+    FALL(new KeyBind(KeyEvent.VK_DOWN),new KeyBind(KeyEvent.VK_S)),
+    SLIDE(new KeyBind(KeyEvent.VK_CONTROL)),
+    LEVEL_EDITOR(new KeyBind(KeyEvent.VK_F2)),
+    PLAY_GAME(new KeyBind(KeyEvent.VK_F1)),
+    EDITOR_SET_VIEW(new KeyBind(KeyEvent.VK_F3)),
+    EDITOR_SET_TYPE(new KeyBind(KeyEvent.VK_F4)),
+    EDITOR_SET_BACKGROUND(new KeyBind(KeyEvent.VK_F5)),;
 
     float val;
     Key controllingKey;
 
-    Action(Component...components) {
-        KeyBind.KEYBINDS.put(this,new ArrayList<>(Arrays.asList(components)));
+    Action(KeyBind...keybinds) {
+        KeyBind.KEYBINDS.put(this,new ArrayList<>(Arrays.asList(keybinds)));
     }
     Action(Component axis,float val) {
-        ArrayList<Component> comps = new ArrayList<Component>();
-        comps.add(axis);
+        ArrayList<KeyBind> comps = new ArrayList<KeyBind>();
+        comps.add(new KeyBind(axis,val));
         KeyBind.KEYBINDS.put(this,comps);
     }
 }
