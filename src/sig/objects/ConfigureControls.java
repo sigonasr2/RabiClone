@@ -1,8 +1,7 @@
 package sig.objects;
 
-import java.util.HashMap;
-
 import net.java.games.input.Component;
+import net.java.games.input.Event;
 import sig.RabiClone;
 import sig.engine.Action;
 import sig.engine.Alpha;
@@ -14,8 +13,6 @@ import sig.engine.Panel;
 
 public class ConfigureControls extends Object{
 
-    HashMap<Component,Float> defaultValues = new HashMap<>();
-
     protected ConfigureControls(Panel panel) {
         super(panel);
         RabiClone.BACKGROUND_COLOR = PaletteColor.WHITE;
@@ -23,8 +20,21 @@ public class ConfigureControls extends Object{
 
     @Override
     public void update(double updateMult) {
-        // TODO Auto-generated method stub
-        
+        Event e = new Event();
+        for (int i=0;i<RabiClone.CONTROLLERS.length;i++) {
+            if (RabiClone.CONTROLLERS[i].poll()) {
+                Component[] components = RabiClone.CONTROLLERS[i].getComponents();
+                for (int j=0;j<components.length;j++) {
+                    //Component c = components[j];
+                    //System.out.println(c.getName()+","+c.getIdentifier()+": "+c.getPollData());
+                    
+                }
+                //System.out.println("--------");
+                if (RabiClone.CONTROLLERS[i].getEventQueue().getNextEvent(e)) {
+                    System.out.println(e.getComponent().getName()+" value: "+e.getValue());
+                }
+            }
+        }
     }
 
     @Override
