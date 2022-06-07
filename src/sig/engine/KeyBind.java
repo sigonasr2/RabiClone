@@ -79,23 +79,21 @@ public class KeyBind {
         //Polls all KeyBinds based on device.
         for (Action a : Action.values()) {
             boolean held = false;
-            KeyBind cc = null;
             for (KeyBind c : KEYBINDS.get(a)) {
                 held = c.isKeyHeld();
-                actionEventCheck(a,held);
                 if (held) {
-                    cc=c;
                     break;
                 }
             }
-            if (held) {
+            actionEventCheck(a,held);
+            /*if (held) {
                 if (KEYBINDS.get(a).get(0)!=cc) {
                     for (int i=0;i<KEYBINDS.get(a).size()-1;i++) {
                         KEYBINDS.get(a).set(i+1,KEYBINDS.get(a).get(i));
                     }
                     KEYBINDS.get(a).set(0,cc);
                 }
-            }
+            }*/
         }
     }
 

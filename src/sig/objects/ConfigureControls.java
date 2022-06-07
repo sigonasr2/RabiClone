@@ -5,6 +5,8 @@ import java.util.List;
 
 import net.java.games.input.Component;
 import net.java.games.input.Event;
+import net.java.games.input.Component.Identifier;
+import net.java.games.input.Component.POV;
 import sig.RabiClone;
 import sig.engine.Action;
 import sig.engine.Alpha;
@@ -35,10 +37,19 @@ public class ConfigureControls extends Object{
                     //System.out.println(c.getName()+","+c.getIdentifier()+": "+c.getPollData());
                 }
                 //System.out.println("--------");
-                if (RabiClone.CONTROLLERS[i].getEventQueue().getNextEvent(e)) {
+                while (RabiClone.CONTROLLERS[i].getEventQueue().getNextEvent(e)) {
                     if (assigningKey) {
                         List<KeyBind> clist = KeyBind.KEYBINDS.get(selectedAction);
-                        clist.add(new KeyBind(RabiClone.CONTROLLERS[i],e.getComponent().getIdentifier(),e.getValue()));
+                        Identifier id = e.getComponent().getIdentifier();
+                        if (id==Identifier.Axis.POV) {
+                            if (e.getValue()!=POV.DOWN&&
+                                e.getValue()!=POV.RIGHT&&
+                                e.getValue()!=POV.LEFT&&
+                                e.getValue()!=POV.UP) {
+                                continue; //Can't add ordinal directions, only cardinal.
+                            }
+                        }
+                        clist.add(new KeyBind(RabiClone.CONTROLLERS[i],id,e.getValue()));
                         KeyBind.KEYBINDS.put(selectedAction,clist);
                         assigningKey=false;
                     }
