@@ -82,10 +82,10 @@ public class RabiClone{
 				if (CONTROLLERS[i].poll()) {
 					Component[] components = CONTROLLERS[i].getComponents();
 					for (int j=0;j<components.length;j++) {
-						Component c = components[j];
-						System.out.println(c.getName()+","+c.getIdentifier()+": "+c.getPollData());
+						//Component c = components[j];
+						//System.out.println(c.getName()+","+c.getIdentifier()+": "+c.getPollData());
 					}
-					System.out.println("--------");
+					//System.out.println("--------");
 				}
 				/*EventQueue queue = controller_list[i].getEventQueue();
 

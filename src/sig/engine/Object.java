@@ -89,14 +89,14 @@ public abstract class Object implements GameEntity{
         DrawLoop.Draw_Sprite_Partial_Ext(x,y,xOffset,yOffset,w,h,sprite,frame_index,alpha,col,transform);
     }
 
-	protected boolean KeyHeld(int key) {
-		return Key.isKeyHeld(key);
+	protected boolean KeyHeld(Action a) {
+		return KeyBind.isKeyHeld(a);
 	}
 
-	protected void KeyPressed(int key) {
+	protected void KeyPressed(Action a) {
 	}
 
-	protected void KeyReleased(int key) {
+	protected void KeyReleased(Action a) {
 	}
 
     protected boolean MouseHeld(int mb) {

@@ -13,7 +13,10 @@ public enum Action {
     FALL(new Key(KeyEvent.VK_DOWN),new Key(KeyEvent.VK_S)),
     SLIDE(new Key(KeyEvent.VK_CONTROL)),
     LEVEL_EDITOR(new Key(KeyEvent.VK_F2)),
-    PLAY_GAME(new Key(KeyEvent.VK_F1)),;
+    PLAY_GAME(new Key(KeyEvent.VK_F1)),
+    EDITOR_SET_VIEW(new Key(KeyEvent.VK_F3)),
+    EDITOR_SET_TYPE(new Key(KeyEvent.VK_F4)),
+    EDITOR_SET_BACKGROUND(new Key(KeyEvent.VK_F5)),;
 
     float val;
     Key controllingKey;

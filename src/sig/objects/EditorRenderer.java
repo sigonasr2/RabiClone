@@ -1,10 +1,10 @@
 package sig.objects;
 
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 
 import sig.RabiClone;
+import sig.engine.Action;
 import sig.engine.Alpha;
 import sig.engine.Font;
 import sig.engine.MouseScrollValue;
@@ -49,10 +49,10 @@ public class EditorRenderer extends LevelRenderer{
 
    @Override 
     public void update(double updateMult) {
-        int right = KeyHeld(KeyEvent.VK_RIGHT)||KeyHeld(KeyEvent.VK_D)?1:0;
-        int left = KeyHeld(KeyEvent.VK_LEFT)||KeyHeld(KeyEvent.VK_A)?1:0;
-        int up = KeyHeld(KeyEvent.VK_UP)||KeyHeld(KeyEvent.VK_W)?1:0;
-        int down = KeyHeld(KeyEvent.VK_DOWN)||KeyHeld(KeyEvent.VK_S)?1:0;
+        int right = KeyHeld(Action.MOVE_RIGHT)?1:0;
+        int left = KeyHeld(Action.MOVE_LEFT)?1:0;
+        int up = KeyHeld(Action.JUMP)?1:0;
+        int down = KeyHeld(Action.FALL)?1:0;
         if (right-left!=0) {
             setX(Math.max(0,getX()+(right-left)*CAMERA_SPD*updateMult));
         }
@@ -68,7 +68,7 @@ public class EditorRenderer extends LevelRenderer{
             int tileY = (int)(RabiClone.MOUSE_POS.getY()+getY())/Tile.TILE_HEIGHT;
             RabiClone.CURRENT_MAP.ModifyTile(tileX, tileY, selectedTile);
         }
-        if(KeyHeld(KeyEvent.VK_CONTROL)&&KeyHeld(KeyEvent.VK_S)){
+        if(KeyHeld(Action.SLIDE)||KeyHeld(Action.FALL)){
             AddMessage("Saving map...");
             try {
                 Map.SaveMap(RabiClone.CURRENT_MAP);
@@ -177,17 +177,18 @@ public class EditorRenderer extends LevelRenderer{
     }
 
     @Override
-    protected void KeyPressed(int key) {
+    @SuppressWarnings("incomplete-switch")
+    protected void KeyPressed(Action a) {
         int tileX = (int)(RabiClone.MOUSE_POS.getX()+getX())/Tile.TILE_WIDTH;
         int tileY = (int)(RabiClone.MOUSE_POS.getY()+getY())/Tile.TILE_HEIGHT;
-        switch (key) {
-            case KeyEvent.VK_F3:{
+        switch (a) {
+            case EDITOR_SET_VIEW:{
                 RabiClone.CURRENT_MAP.setView(tileX,tileY,View.values()[(RabiClone.CURRENT_MAP.getView(tileX, tileY).ordinal()+1)%View.values().length]);
             }break;
-            case KeyEvent.VK_F4:{
+            case EDITOR_SET_TYPE:{
                 RabiClone.CURRENT_MAP.setType(tileX,tileY,Type.values()[(RabiClone.CURRENT_MAP.getType(tileX, tileY).ordinal()+1)%Type.values().length]);
             }break;
-            case KeyEvent.VK_F5:{
+            case EDITOR_SET_BACKGROUND:{
                 RabiClone.CURRENT_MAP.setBackground(tileX,tileY,Background.values()[(RabiClone.CURRENT_MAP.getBackground(tileX, tileY).ordinal()+1)%Background.values().length]);
             }break;
         }

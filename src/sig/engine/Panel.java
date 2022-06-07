@@ -403,9 +403,6 @@ public class Panel extends JPanel implements Runnable,KeyListener {
 	public void keyPressed(KeyEvent e) {
 		if (!Key.isKeyHeld(e.getKeyCode())) {
 			Key.setKeyHeld(e.getKeyCode(), true);
-			for (int i=0;i<RabiClone.OBJ.size();i++) {
-				RabiClone.OBJ.get(i).KeyPressed(e.getKeyCode());
-			}
 		}
 		//System.out.println("Key List: "+KEYS);
 	}
@@ -413,9 +410,6 @@ public class Panel extends JPanel implements Runnable,KeyListener {
 	@Override
 	public void keyReleased(KeyEvent e) {
 		Key.setKeyHeld(e.getKeyCode(), false);
-		for (int i=0;i<RabiClone.OBJ.size();i++) {
-			RabiClone.OBJ.get(i).KeyReleased(e.getKeyCode());
-		}
 		//System.out.println("Key List: "+KEYS);
 	}
 }

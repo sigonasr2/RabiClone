@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.java.games.input.Component;
 import net.java.games.input.Component.Identifier;
+import sig.RabiClone;
 
 public class KeyBind {
     public static HashMap<Action,List<Component>> KEYBINDS = new HashMap<>();
@@ -22,7 +23,7 @@ public class KeyBind {
         this.val=val;
     }
 
-    public static boolean IsKeyHeld(Action action) {
+    public static boolean isKeyHeld(Action action) {
         return KEYS.getOrDefault(action,false);
     }
 
@@ -77,19 +78,25 @@ public class KeyBind {
     }
 
     private static void actionEventCheck(Action a, boolean held) {
-        if (KeyBind.IsKeyHeld(a)&&!held) {
+        if (KeyBind.isKeyHeld(a)&&!held) {
             emitReleaseEvent(a);
         } else
-        if (!KeyBind.IsKeyHeld(a)&&held) {
+        if (!KeyBind.isKeyHeld(a)&&held) {
             emitPressEvent(a);
         }
         KeyBind.setKeyPressed(a, held);
     }
 
     private static void emitReleaseEvent(Action a) {
-        //System.out.println("Release for "+a);
+        System.out.println("Release for "+a);
+		for (int i=0;i<RabiClone.OBJ.size();i++) {
+			RabiClone.OBJ.get(i).KeyReleased(a);
+		}
     }
     private static void emitPressEvent(Action a) {
-        //System.out.println("Press for "+a);
+        System.out.println("Press for "+a);
+		for (int i=0;i<RabiClone.OBJ.size();i++) {
+			RabiClone.OBJ.get(i).KeyPressed(a);
+		}
     }
 }
