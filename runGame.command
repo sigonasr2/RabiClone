@@ -1,3 +1,3 @@
 cd bin
-java -jar RabiClone.jar
+java -Djava.library.path="../lib" -jar RabiClone.jar
 cd ..
