@@ -26,7 +26,7 @@ import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 
 public class RabiClone{
-	public static final String PROGRAM_NAME="Sig's Java Project Template";
+	public static final String PROGRAM_NAME="RabiClone";
 
 	public static int UPCOUNT=0;
 	public static Panel p;
