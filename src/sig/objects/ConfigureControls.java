@@ -44,7 +44,7 @@ public class ConfigureControls extends Object{
                     clist.add(new KeyBind((byte)i,id,e.getValue()));
                     KeyBind.KEYBINDS.put(selectedAction,clist);
                     assigningKey=false;
-                }.
+                }
                 //System.out.println(e.getComponent().getName()+" value: "+e.getValue());
             }
         }
