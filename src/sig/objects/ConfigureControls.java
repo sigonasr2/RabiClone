@@ -31,31 +31,23 @@ public class ConfigureControls extends Object{
     public void update(double updateMult) {
         Event e = new Event();
         for (int i=0;i<RabiClone.CONTROLLERS.length;i++) {
-            if (RabiClone.CONTROLLERS[i].poll()) {
-                Component[] components = RabiClone.CONTROLLERS[i].getComponents();
-                for (int j=0;j<components.length;j++) {
-                    //Component c = components[j];
-                    //System.out.println(c.getName()+","+c.getIdentifier()+": "+c.getPollData());
-                }
-                //System.out.println("--------");
-                while (RabiClone.CONTROLLERS[i].getEventQueue().getNextEvent(e)) {
-                    if (assigningKey) {
-                        List<KeyBind> clist = KeyBind.KEYBINDS.get(selectedAction);
-                        Identifier id = e.getComponent().getIdentifier();
-                        if (id==Identifier.Axis.POV) {
-                            if (e.getValue()!=POV.DOWN&&
-                                e.getValue()!=POV.RIGHT&&
-                                e.getValue()!=POV.LEFT&&
-                                e.getValue()!=POV.UP) {
-                                continue; //Can't add ordinal directions, only cardinal.
-                            }
+            while (RabiClone.CONTROLLERS[i].getEventQueue().getNextEvent(e)) {
+                if (assigningKey) {
+                    List<KeyBind> clist = KeyBind.KEYBINDS.get(selectedAction);
+                    Identifier id = e.getComponent().getIdentifier();
+                    if (id==Identifier.Axis.POV) {
+                        if (e.getValue()!=POV.DOWN&&
+                            e.getValue()!=POV.RIGHT&&
+                            e.getValue()!=POV.LEFT&&
+                            e.getValue()!=POV.UP) {
+                            continue; //Can't add ordinal directions, only cardinal.
                         }
-                        clist.add(new KeyBind((byte)i,id,e.getValue()));
-                        KeyBind.KEYBINDS.put(selectedAction,clist);
-                        assigningKey=false;
                     }
-                    //System.out.println(e.getComponent().getName()+" value: "+e.getValue());
+                    clist.add(new KeyBind((byte)i,id,e.getValue()));
+                    KeyBind.KEYBINDS.put(selectedAction,clist);
+                    assigningKey=false;
                 }
+                //System.out.println(e.getComponent().getName()+" value: "+e.getValue());
             }
         }
     }

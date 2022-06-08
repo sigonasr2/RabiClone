@@ -5,7 +5,6 @@ import javax.swing.JFrame;
 import net.java.games.input.Component;
 import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
-import net.java.games.input.ControllerListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,33 +87,26 @@ public class RabiClone{
 
 
 			//System.out.println(CONTROLLERS.length);
+			CONTROLLERS = ControllerEnvironment.getDefaultEnvironment().getControllers();
 			if (System.currentTimeMillis()-lastControllerScan>=5000) {
-				if (CONTROLLERS.length==0) {
-					CONTROLLERS = ControllerEnvironment.getDefaultEnvironment().getControllers();
-					lastControllerScan=System.currentTimeMillis();
-				} else {
-					for (int i=0;i<CONTROLLERS.length;i++) {
-						if (CONTROLLERS[i].poll()) {
-							//System.out.println(CONTROLLERS[i].getPortType()+" // "+CONTROLLERS[i].getType());
-							Component[] components = CONTROLLERS[i].getComponents();
-							for (int j=0;j<components.length;j++) {
-								//Component c = components[j];
-								//System.out.println(c.getName()+","+c.getIdentifier()+": "+c.getPollData());
-							}
-							//System.out.println("--------");
-						} else {
-							CONTROLLERS = ControllerEnvironment.getDefaultEnvironment().getControllers();
-							lastControllerScan=System.currentTimeMillis();
-							break;
-						}
-						/*EventQueue queue = controller_list[i].getEventQueue();
-
-						while (queue.getNextEvent(event)) {
-							Component c = event.getComponent();
-							System.out.println(c.getName()+","+c.getIdentifier()+": "+c.getPollData());
-						}*/
+				CONTROLLERS = ControllerEnvironment.getDefaultEnvironment().rescanControllers();
+			}
+			for (int i=0;i<CONTROLLERS.length;i++) {
+				if (CONTROLLERS[i].poll()) {
+					//System.out.println(CONTROLLERS[i].getPortType()+" // "+CONTROLLERS[i].getType());
+					Component[] components = CONTROLLERS[i].getComponents();
+					for (int j=0;j<components.length;j++) {
+						//Component c = components[j];
+						//System.out.println(c.getName()+","+c.getIdentifier()+": "+c.getPollData());
 					}
+					//System.out.println("--------");
 				}
+				/*EventQueue queue = controller_list[i].getEventQueue();
+
+				while (queue.getNextEvent(event)) {
+					Component c = event.getComponent();
+					System.out.println(c.getName()+","+c.getIdentifier()+": "+c.getPollData());
+				}*/
 			}
 
 			KeyBind.poll();

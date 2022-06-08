@@ -1,5 +1,6 @@
 {
     "java.project.referencedLibraries": [
-        "lib/jinput.jar"
+        "lib/jinput.jar",
+        "lib/bin/**/*.jar"
     ]
 }
