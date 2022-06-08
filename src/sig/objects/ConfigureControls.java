@@ -3,8 +3,6 @@ package sig.objects;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
-import net.java.games.input.Component;
-import net.java.games.input.Controller;
 import net.java.games.input.Event;
 import net.java.games.input.Component.Identifier;
 import net.java.games.input.Component.POV;
@@ -46,7 +44,7 @@ public class ConfigureControls extends Object{
                     clist.add(new KeyBind((byte)i,id,e.getValue()));
                     KeyBind.KEYBINDS.put(selectedAction,clist);
                     assigningKey=false;
-                }
+                }.
                 //System.out.println(e.getComponent().getName()+" value: "+e.getValue());
             }
         }
@@ -66,6 +64,15 @@ public class ConfigureControls extends Object{
             }
         } else {
             Draw_Text_Ext(4, 4, new StringBuilder("Press a key to assign to ").append(selectedAction), Font.PROFONT_12, Alpha.ALPHA0, PaletteColor.MIDNIGHT_BLUE);
+        }
+    }
+
+    public void rawKeyPressed(int keyCode) {
+        if (assigningKey) {
+            List<KeyBind> clist = KeyBind.KEYBINDS.get(selectedAction);
+            clist.add(new KeyBind(keyCode));
+            KeyBind.KEYBINDS.put(selectedAction,clist);
+            assigningKey=false;
         }
     }
 

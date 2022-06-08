@@ -3,7 +3,6 @@ package sig.engine;
 import java.util.HashMap;
 import java.util.List;
 
-import net.java.games.input.Controller;
 import net.java.games.input.Component.Identifier;
 import net.java.games.input.Component.POV;
 import sig.RabiClone;

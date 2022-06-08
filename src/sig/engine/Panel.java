@@ -22,6 +22,7 @@ import java.awt.event.KeyListener;
 
 import sig.DrawLoop;
 import sig.RabiClone;
+import sig.objects.ConfigureControls;
 
 public class Panel extends JPanel implements Runnable,KeyListener {
 	JFrame window;
@@ -402,6 +403,12 @@ public class Panel extends JPanel implements Runnable,KeyListener {
 	public void keyPressed(KeyEvent e) {
 		if (!Key.isKeyHeld(e.getKeyCode())) {
 			Key.setKeyHeld(e.getKeyCode(), true);
+		}
+		for (Object o : RabiClone.OBJ) {
+			if (o instanceof ConfigureControls) {
+				((ConfigureControls)o).rawKeyPressed(e.getKeyCode());
+				break;
+			}
 		}
 		//System.out.println("Key List: "+KEYS);
 	}
