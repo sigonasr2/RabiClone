@@ -1,19 +1,12 @@
 package sig;
 
-import javax.sound.midi.ControllerEventListener;
-import javax.sound.midi.ShortMessage;
 import javax.swing.JFrame;
 
 import net.java.games.input.Component;
 import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
-import net.java.games.input.ControllerEvent;
-import net.java.games.input.ControllerListener;
-import net.java.games.input.DirectAndRawInputEnvironmentPlugin;
-import net.java.games.input.DirectInputEnvironmentPlugin;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import sig.engine.Panel;
@@ -85,12 +78,18 @@ public class RabiClone{
 		p.render();
 
 		long lastGameTime = System.nanoTime();
+
+		CONTROLLERS = ControllerEnvironment.getDefaultEnvironment().getControllers();
 		while (true) {
 			long timePassed = System.nanoTime()-lastGameTime;
 			lastGameTime=System.nanoTime();
 			double updateMult = Math.min(1/60d,timePassed/1000000000d);
 
-			CONTROLLERS = ControllerEnvironment.getDefaultEnvironment().getControllers();
+			if (System.currentTimeMillis()-lastControllerScan>=5000) {
+				CONTROLLERS = ControllerEnvironment.getDefaultEnvironment().getControllers();
+				lastControllerScan=System.currentTimeMillis();
+			}
+
 			//System.out.println(CONTROLLERS.length);
 			for (int i=0;i<CONTROLLERS.length;i++) {
 				if (CONTROLLERS[i].poll()) {
