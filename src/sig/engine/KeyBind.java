@@ -12,21 +12,21 @@ public class KeyBind {
     public static HashMap<Action,List<KeyBind>> KEYBINDS = new HashMap<>();
     static HashMap<Action,Boolean> KEYS = new HashMap<>();
 
-    public Controller c;
+    public byte port;
     public Identifier id;
     float val;
 
-    public KeyBind(Controller c, Identifier id) {
-        this.c=c;
+    public KeyBind(byte port, Identifier id) {
+        this.port=port;
         this.id=id;
     }
 
     public KeyBind(int keycode) {
-        this(null,new Key(keycode));
+        this((byte)-1,new Key(keycode));
     }
 
-    public KeyBind(Controller c, Identifier id, float val) {
-        this.c=c;
+    public KeyBind(byte port, Identifier id, float val) {
+        this.port=port;
         this.id=id;
         this.val=val;
     }
@@ -34,39 +34,39 @@ public class KeyBind {
     public boolean isKeyHeld() {
         if (id instanceof Key) {
             return ((Key)id).isKeyHeld();
-        } else if (id instanceof Identifier.Button) {
-            return c.getComponent(id).getPollData()>0.0f;
+        } else if (RabiClone.CONTROLLERS.length>port && id instanceof Identifier.Button) {
+            return RabiClone.CONTROLLERS[port].getComponent(id).getPollData()>0.0f;
         } else
-        if (c.getComponent(id).getIdentifier()==Identifier.Axis.POV) {
+        if (RabiClone.CONTROLLERS.length>port && RabiClone.CONTROLLERS[port].getComponent(id).getIdentifier()==Identifier.Axis.POV) {
             if (val==POV.DOWN) {
-                return c.getComponent(id).getPollData()==POV.DOWN||
-                c.getComponent(id).getPollData()==POV.DOWN_LEFT||
-                c.getComponent(id).getPollData()==POV.DOWN_RIGHT;
+                return RabiClone.CONTROLLERS[port].getComponent(id).getPollData()==POV.DOWN||
+                RabiClone.CONTROLLERS[port].getComponent(id).getPollData()==POV.DOWN_LEFT||
+                RabiClone.CONTROLLERS[port].getComponent(id).getPollData()==POV.DOWN_RIGHT;
             } else
             if (val==POV.UP) {
-                    return c.getComponent(id).getPollData()==POV.UP||
-                    c.getComponent(id).getPollData()==POV.UP_LEFT||
-                    c.getComponent(id).getPollData()==POV.UP_RIGHT;
+                    return RabiClone.CONTROLLERS[port].getComponent(id).getPollData()==POV.UP||
+                    RabiClone.CONTROLLERS[port].getComponent(id).getPollData()==POV.UP_LEFT||
+                    RabiClone.CONTROLLERS[port].getComponent(id).getPollData()==POV.UP_RIGHT;
             } else
             if (val==POV.RIGHT) {
-                    return c.getComponent(id).getPollData()==POV.RIGHT||
-                    c.getComponent(id).getPollData()==POV.UP_RIGHT||
-                    c.getComponent(id).getPollData()==POV.DOWN_RIGHT;
+                    return RabiClone.CONTROLLERS[port].getComponent(id).getPollData()==POV.RIGHT||
+                    RabiClone.CONTROLLERS[port].getComponent(id).getPollData()==POV.UP_RIGHT||
+                    RabiClone.CONTROLLERS[port].getComponent(id).getPollData()==POV.DOWN_RIGHT;
             } else
             if (val==POV.LEFT) {
-                    return c.getComponent(id).getPollData()==POV.LEFT||
-                    c.getComponent(id).getPollData()==POV.DOWN_LEFT||
-                    c.getComponent(id).getPollData()==POV.UP_LEFT;
+                    return RabiClone.CONTROLLERS[port].getComponent(id).getPollData()==POV.LEFT||
+                    RabiClone.CONTROLLERS[port].getComponent(id).getPollData()==POV.DOWN_LEFT||
+                    RabiClone.CONTROLLERS[port].getComponent(id).getPollData()==POV.UP_LEFT;
             } else {
                 System.err.println("Unexpected value for POV! Must be a cardinal direction! Given value: "+val);
                 return false;
             }
         } else
-        if (id instanceof Identifier.Axis) {
-            return Math.abs(c.getComponent(id).getPollData())>=c.getComponent(id).getDeadZone()&&Math.signum(c.getComponent(id).getPollData())==Math.signum(val);
+        if (RabiClone.CONTROLLERS.length>port && id instanceof Identifier.Axis) {
+            return Math.abs(RabiClone.CONTROLLERS[port].getComponent(id).getPollData())>=RabiClone.CONTROLLERS[port].getComponent(id).getDeadZone()&&Math.signum(RabiClone.CONTROLLERS[port].getComponent(id).getPollData())==Math.signum(val);
         }
         else {
-            System.out.println("Could not find proper recognition for component "+id.getName());
+            //System.out.println("Could not find proper recognition for component "+id.getName());
             return false;
         }
     }
@@ -125,8 +125,8 @@ public class KeyBind {
     }
 
     public String getName() {
-        if (c!=null) {
-            return c.getComponent(id).getName();
+        if (RabiClone.CONTROLLERS.length>port&&port!=-1) {
+            return RabiClone.CONTROLLERS[port].getComponent(id).getName();
         } else
         if (id instanceof Key) {
             return ((Key)id).getName();

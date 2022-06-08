@@ -4,7 +4,6 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import net.java.games.input.Controller;
 import net.java.games.input.Component.Identifier;
 
 public enum Action {
@@ -25,9 +24,9 @@ public enum Action {
     Action(KeyBind...keybinds) {
         KeyBind.KEYBINDS.put(this,new ArrayList<>(Arrays.asList(keybinds)));
     }
-    Action(Controller c, Identifier.Axis axis,float val) {
+    Action(byte port, Identifier.Axis axis,float val) {
         ArrayList<KeyBind> comps = new ArrayList<KeyBind>();
-        comps.add(new KeyBind(c,axis,val));
+        comps.add(new KeyBind(port,axis,val));
         KeyBind.KEYBINDS.put(this,comps);
     }
 }

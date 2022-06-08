@@ -4,6 +4,7 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 
 import net.java.games.input.Component;
+import net.java.games.input.Controller;
 import net.java.games.input.Event;
 import net.java.games.input.Component.Identifier;
 import net.java.games.input.Component.POV;
@@ -49,7 +50,7 @@ public class ConfigureControls extends Object{
                                 continue; //Can't add ordinal directions, only cardinal.
                             }
                         }
-                        clist.add(new KeyBind(RabiClone.CONTROLLERS[i],id,e.getValue()));
+                        clist.add(new KeyBind((byte)i,id,e.getValue()));
                         KeyBind.KEYBINDS.put(selectedAction,clist);
                         assigningKey=false;
                     }
