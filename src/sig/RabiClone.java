@@ -92,6 +92,9 @@ public class RabiClone{
 				CONTROLLERS = ControllerEnvironment.getDefaultEnvironment().rescanControllers();
 			}
 			for (int i=0;i<CONTROLLERS.length;i++) {
+				if (CONTROLLERS[i].getType()==Controller.Type.KEYBOARD||CONTROLLERS[i].getType()==Controller.Type.MOUSE) {
+					continue;
+				}
 				if (CONTROLLERS[i].poll()) {
 					//System.out.println(CONTROLLERS[i].getPortType()+" // "+CONTROLLERS[i].getType());
 					Component[] components = CONTROLLERS[i].getComponents();
