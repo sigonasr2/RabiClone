@@ -100,6 +100,12 @@ public class Player extends AnimatedObject{
 
                 if(x_velocity!=0){
                     setAnimatedSpr(Sprite.ERINA_WALK);
+                    if (x_velocity>0) {
+                        facing_direction=RIGHT;
+                    } else 
+                    if (x_velocity<0) {
+                        facing_direction=LEFT;
+                    }
                 }
                 else{
                     setAnimatedSpr(Sprite.ERINA);
