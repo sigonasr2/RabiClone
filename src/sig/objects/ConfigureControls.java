@@ -1,10 +1,10 @@
 package sig.objects;
 
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.List;
 
 import net.java.games.input.Component;
-import net.java.games.input.Controller;
 import net.java.games.input.Event;
 import net.java.games.input.Component.Identifier;
 import net.java.games.input.Component.POV;
@@ -21,10 +21,24 @@ public class ConfigureControls extends Object{
 
     Action selectedAction = Action.MOVE_RIGHT;
     boolean assigningKey = false;
+    List<List<Integer>> actionHighlightSections = new ArrayList<>();
 
     public ConfigureControls(Panel panel) {
         super(panel);
         RabiClone.BACKGROUND_COLOR = PaletteColor.WHITE;
+        int index=0;
+        for (Action a : Action.values()) {
+            actionHighlightSections.add(new ArrayList<Integer>());
+            for (int i=0;i<KeyBind.KEYBINDS.get(a).size();i++) {
+                KeyBind c = KeyBind.KEYBINDS.get(a).get(i);
+                StringBuilder renderedText=new StringBuilder(a.toString()).append(": ");
+                List<Integer> sectionList = actionHighlightSections.get(a.ordinal());
+                sectionList.add(renderedText.length());
+                renderedText.append(c.getName());
+                sectionList.add(renderedText.length());
+                renderedText.append(i!=KeyBind.KEYBINDS.get(a).size()-1?",":"");
+            }
+        }
     }
 
     @Override
@@ -66,6 +80,15 @@ public class ConfigureControls extends Object{
                 if (RabiClone.MOUSE_POS.getY()>=getY()+y&&RabiClone.MOUSE_POS.getY()<getY()+y+Font.PROFONT_12.getGlyphHeight()+4) {
                     selectedAction=a;
                     Draw_Rect(p,(byte)PaletteColor.PEACH.ordinal(),0,getY()+y,RabiClone.BASE_WIDTH,Font.PROFONT_12.getGlyphHeight()+4);
+                }
+                for (int i=0;i<actionHighlightSections.get(a.ordinal()).size();i+=2) {
+                    List<Integer> sectionList = actionHighlightSections.get(a.ordinal());
+                    int startX=sectionList.get(i)*Font.PROFONT_12.getGlyphWidth()-4;
+                    int endX=sectionList.get(i+1)*Font.PROFONT_12.getGlyphWidth()+4;
+                    if (RabiClone.MOUSE_POS.getY()>=getY()+y&&RabiClone.MOUSE_POS.getY()<getY()+y+Font.PROFONT_12.getGlyphHeight()+4&&RabiClone.MOUSE_POS.getX()>=startX&&RabiClone.MOUSE_POS.getX()<=endX) {
+                        Draw_Rect(p,(byte)PaletteColor.AZURE.ordinal(),startX,getY()+y,endX-startX,Font.PROFONT_12.getGlyphHeight()+4);
+                        break;
+                    }
                 }
                 Draw_Text_Ext(4,getY()+y,DisplayActionKeys(a),Font.PROFONT_12,Alpha.ALPHA0,PaletteColor.MIDNIGHT_BLUE);
                 y+=Font.PROFONT_12.getGlyphHeight()+4;

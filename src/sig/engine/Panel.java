@@ -404,11 +404,8 @@ public class Panel extends JPanel implements Runnable,KeyListener {
 		if (!Key.isKeyHeld(e.getKeyCode())) {
 			Key.setKeyHeld(e.getKeyCode(), true);
 		}
-		for (Object o : RabiClone.OBJ) {
-			if (o instanceof ConfigureControls) {
-				((ConfigureControls)o).rawKeyPressed(e.getKeyCode());
-				break;
-			}
+		if (RabiClone.control_settings_menu!=null) {
+			RabiClone.control_settings_menu.rawKeyPressed(e.getKeyCode());
 		}
 		//System.out.println("Key List: "+KEYS);
 	}

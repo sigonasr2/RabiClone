@@ -25,7 +25,6 @@ import sig.engine.PaletteColor;
 
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
-import java.lang.reflect.Constructor;
 
 public class RabiClone{
 	public static final String PROGRAM_NAME="RabiClone";
@@ -44,6 +43,7 @@ public class RabiClone{
 	public static PaletteColor BACKGROUND_COLOR = PaletteColor.DARK_ORCHID;
 
 	public static LevelRenderer level_renderer;
+	public static ConfigureControls control_settings_menu;
 	public static Player player;
 
 	public static Maps CURRENT_MAP = Maps.WORLD1;
@@ -138,7 +138,7 @@ public class RabiClone{
 			if (Key.isKeyHeld(KeyEvent.VK_F3)) {
 				OBJ.clear();
 				ResetGame();
-				OBJ.add(new ConfigureControls(p));
+				OBJ.add(control_settings_menu=new ConfigureControls(p));
 			}
 			if (Key.isKeyHeld(KeyEvent.VK_F5)&&System.currentTimeMillis()-lastControllerScan>5000) {
 				CONTROLLERS=ControllerEnvironment.getDefaultEnvironment().rescanControllers();
@@ -158,6 +158,7 @@ public class RabiClone{
 	private static void ResetGame() {
 		player=null;
 		level_renderer=null;
+		control_settings_menu=null;
 	}
 
 	private static void StartGame() {
