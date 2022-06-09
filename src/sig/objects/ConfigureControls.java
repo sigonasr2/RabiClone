@@ -20,20 +20,25 @@ import sig.engine.Panel;
 public class ConfigureControls extends Object{
 
     Action selectedAction = Action.MOVE_RIGHT;
+    KeyBind selectedKeybind = null;
     boolean assigningKey = false;
     List<List<Integer>> actionHighlightSections = new ArrayList<>();
 
     public ConfigureControls(Panel panel) {
         super(panel);
         RabiClone.BACKGROUND_COLOR = PaletteColor.WHITE;
-        int index=0;
+        updateHighlightSections();
+    }
+
+    private void updateHighlightSections() {
         for (Action a : Action.values()) {
             actionHighlightSections.add(new ArrayList<Integer>());
+            StringBuilder renderedText=new StringBuilder(a.toString()).append(": ");
+            List<Integer> sectionList = actionHighlightSections.get(a.ordinal());
+            sectionList.clear();
             for (int i=0;i<KeyBind.KEYBINDS.get(a).size();i++) {
                 KeyBind c = KeyBind.KEYBINDS.get(a).get(i);
-                StringBuilder renderedText=new StringBuilder(a.toString()).append(": ");
-                List<Integer> sectionList = actionHighlightSections.get(a.ordinal());
-                sectionList.add(renderedText.length());
+                sectionList.add(renderedText.length()+1);
                 renderedText.append(c.getName());
                 sectionList.add(renderedText.length());
                 renderedText.append(i!=KeyBind.KEYBINDS.get(a).size()-1?",":"");
@@ -65,6 +70,7 @@ public class ConfigureControls extends Object{
                     }
                     clist.add(new KeyBind((byte)i,id,e.getValue()));
                     KeyBind.KEYBINDS.put(selectedAction,clist);
+                    updateHighlightSections();
                     assigningKey=false;
                 }
                 //System.out.println(e.getComponent().getName()+" value: "+e.getValue());
@@ -76,6 +82,8 @@ public class ConfigureControls extends Object{
     public void draw(byte[] p) {
         int y = 4;
         if (!assigningKey) {
+            selectedAction=null;
+            selectedKeybind=null;
             for (Action a : Action.values()) {
                 if (RabiClone.MOUSE_POS.getY()>=getY()+y&&RabiClone.MOUSE_POS.getY()<getY()+y+Font.PROFONT_12.getGlyphHeight()+4) {
                     selectedAction=a;
@@ -85,8 +93,9 @@ public class ConfigureControls extends Object{
                     List<Integer> sectionList = actionHighlightSections.get(a.ordinal());
                     int startX=sectionList.get(i)*Font.PROFONT_12.getGlyphWidth()-4;
                     int endX=sectionList.get(i+1)*Font.PROFONT_12.getGlyphWidth()+4;
-                    if (RabiClone.MOUSE_POS.getY()>=getY()+y&&RabiClone.MOUSE_POS.getY()<getY()+y+Font.PROFONT_12.getGlyphHeight()+4&&RabiClone.MOUSE_POS.getX()>=startX&&RabiClone.MOUSE_POS.getX()<=endX) {
+                    if (selectedKeybind==null&&RabiClone.MOUSE_POS.getY()>=getY()+y&&RabiClone.MOUSE_POS.getY()<getY()+y+Font.PROFONT_12.getGlyphHeight()+4&&RabiClone.MOUSE_POS.getX()>=startX&&RabiClone.MOUSE_POS.getX()<=endX) {
                         Draw_Rect(p,(byte)PaletteColor.AZURE.ordinal(),startX,getY()+y,endX-startX,Font.PROFONT_12.getGlyphHeight()+4);
+                        selectedKeybind=KeyBind.KEYBINDS.get(a).get(i/2);
                         break;
                     }
                 }
@@ -100,7 +109,15 @@ public class ConfigureControls extends Object{
 
     @Override
     protected void MousePressed(MouseEvent e) {
-        if (e.getButton()==MouseEvent.BUTTON1) {
+        if ((e.getButton()==MouseEvent.BUTTON3||e.getButton()==MouseEvent.BUTTON1)&&selectedKeybind!=null) {
+            //Remove that keybind.
+            List<KeyBind> keybinds = KeyBind.KEYBINDS.get(selectedAction);
+            System.out.println("Remove "+selectedKeybind);
+            System.out.println(keybinds.remove(selectedKeybind));
+            KeyBind.KEYBINDS.put(selectedAction,keybinds);
+            updateHighlightSections();
+        } else
+        if (e.getButton()==MouseEvent.BUTTON1&&selectedAction!=null) {
             assigningKey=true;
         }
     }
@@ -119,6 +136,7 @@ public class ConfigureControls extends Object{
             List<KeyBind> clist = KeyBind.KEYBINDS.get(selectedAction);
             clist.add(new KeyBind(keyCode));
             KeyBind.KEYBINDS.put(selectedAction,clist);
+            updateHighlightSections();
             assigningKey=false;
         }
     }
