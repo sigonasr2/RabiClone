@@ -92,8 +92,8 @@ public class RabiClone{
 			lastGameTime=System.nanoTime();
 
 
-			while (dt>=(1/244d)*1000000000) {
-				double updateMult = 1/244d;
+			while (dt>=(1/244d)*1000000000l) {
+				final double updateMult = 1/244d;
 				handleGameControllers();
 
 				KeyBind.poll();
@@ -129,10 +129,14 @@ public class RabiClone{
 						OBJ.remove(i--);
 					}
 				}
-				dt-=(1/244d)*1000000000;
+				dt-=(1/244d)*1000000000l;
 			}
-			if (dt<0) {
-				dt=0;
+			if (dt<(1/244d)*1000000000l) {
+				lastReportedTime=System.currentTimeMillis();
+			} else
+			if (System.currentTimeMillis()-lastReportedTime>5000) {
+				System.out.println("WARNING! Game is lagging behind! Frames Behind: "+(dt/((1/244d)*1000000000l)));
+				lastReportedTime=System.currentTimeMillis();
 			}
 		}
 	}

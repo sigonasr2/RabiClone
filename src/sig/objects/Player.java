@@ -395,6 +395,7 @@ public class Player extends AnimatedObject{
                     groundCollision=true;
                     collisionOccured=true;
                     state = State.IDLE;
+                    break;
                 }
             }
             if (!collisionOccured) {
