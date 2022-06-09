@@ -89,35 +89,7 @@ public class RabiClone{
 			double updateMult = Math.min(1/60d,timePassed/1000000000d);
 
 
-			//System.out.println(CONTROLLERS.length);
-			for (int i=0;i<CONTROLLERS.length;i++) {
-				if (CONTROLLERS[i].getType()==Controller.Type.KEYBOARD||CONTROLLERS[i].getType()==Controller.Type.MOUSE) {
-					continue;
-				}
-				if (CONTROLLERS[i].poll()) {
-					//System.out.println(CONTROLLERS[i].getPortType()+" // "+CONTROLLERS[i].getType());
-					Component[] components = CONTROLLERS[i].getComponents();
-					for (int j=0;j<components.length;j++) {
-						//Component c = components[j];
-						//System.out.println(c.getName()+","+c.getIdentifier()+": "+c.getPollData());
-					}
-					//System.out.println("--------");
-				} else {
-					Controller[] newArr = new Controller[CONTROLLERS.length-1];
-					for (int j=0;j<CONTROLLERS.length;j++) {
-						if (j!=i) {
-							newArr[(j>i?j-1:j)]=CONTROLLERS[i];
-						}
-					}
-					CONTROLLERS=newArr;
-				}
-				/*EventQueue queue = controller_list[i].getEventQueue();
-
-				while (queue.getNextEvent(event)) {
-					Component c = event.getComponent();
-					System.out.println(c.getName()+","+c.getIdentifier()+": "+c.getPollData());
-				}*/
-			}
+			handleGameControllers();
 
 			KeyBind.poll();
 
@@ -151,6 +123,23 @@ public class RabiClone{
 				if (OBJ.get(i).isMarkedForDeletion()) {
 					OBJ.remove(i--);
 				}
+			}
+		}
+	}
+
+	private static void handleGameControllers() {
+		for (int i=0;i<CONTROLLERS.length;i++) {
+			if (CONTROLLERS[i].getType()==Controller.Type.KEYBOARD||CONTROLLERS[i].getType()==Controller.Type.MOUSE) {
+				continue;
+			}
+			if (!CONTROLLERS[i].poll()) {
+				Controller[] newArr = new Controller[CONTROLLERS.length-1];
+				for (int j=0;j<CONTROLLERS.length;j++) {
+					if (j!=i) {
+						newArr[(j>i?j-1:j)]=CONTROLLERS[i];
+					}
+				}
+				CONTROLLERS=newArr;
 			}
 		}
 	}

@@ -111,13 +111,13 @@ public class KeyBind {
     }
 
     private static void emitReleaseEvent(Action a) {
-        System.out.println("Release for "+a);
+        //System.out.println("Release for "+a);
 		for (int i=0;i<RabiClone.OBJ.size();i++) {
 			RabiClone.OBJ.get(i).KeyReleased(a);
 		}
     }
     private static void emitPressEvent(Action a) {
-        System.out.println("Press for "+a);
+        //System.out.println("Press for "+a);
 		for (int i=0;i<RabiClone.OBJ.size();i++) {
 			RabiClone.OBJ.get(i).KeyPressed(a);
 		}

@@ -12,14 +12,14 @@ import sig.map.View;
 import sig.objects.actor.State;
 
 public class Player extends AnimatedObject{
-    final double GRAVITY = 1300;
-    final double NORMAL_FRICTION = 6400;
-    final double NORMAL_JUMP_VELOCITY = -300;
-    final boolean LEFT = false;
-    final boolean RIGHT = true;
-    final int jump_fall_AnimationWaitTime = 200;
-    final int slide_AnimationWaitTime = 100;
-    final int slide_duration = 700;
+    final static double GRAVITY = 1300;
+    final static double NORMAL_FRICTION = 6400;
+    final static double NORMAL_JUMP_VELOCITY = -300;
+    final static boolean LEFT = false;
+    final static boolean RIGHT = true;
+    final static int jump_fall_AnimationWaitTime = 200;
+    final static int slide_AnimationWaitTime = 100;
+    final static int slide_duration = 700;
 
     double y_acceleration = GRAVITY;
     double y_acceleration_limit = 100;
@@ -56,6 +56,9 @@ public class Player extends AnimatedObject{
     long slide_time = -1;
     int jumpHoldTime = 150;
 
+    final static int slideBufferTime = 200;
+    long slidePressed = -1;
+
     public Player(Panel panel) {
         super(Sprite.ERINA,5,panel);
         setX(RabiClone.BASE_WIDTH/2-getAnimatedSpr().getWidth()/2);
@@ -83,6 +86,11 @@ public class Player extends AnimatedObject{
                 }
                 break;
             case IDLE:
+                if (System.currentTimeMillis()-slidePressed<=slideBufferTime) {
+                    performSlide();
+                    break;
+                }
+
                 jump_velocity = NORMAL_JUMP_VELOCITY;
                 horizontal_friction = NORMAL_FRICTION;
                 jump_slide_fall_StartAnimationTimer=-1;
@@ -164,17 +172,14 @@ public class Player extends AnimatedObject{
                 break;
             case IDLE:
                 if(a==Action.SLIDE||a==Action.FALL){
-                    slide_time = System.currentTimeMillis();
-                    if(facing_direction){
-                        x_velocity=sliding_velocity;
-                    }
-                    else{
-                        x_velocity=-sliding_velocity;
-                    }
-                    state=State.SLIDE;
+                    performSlide();
                 }
                 break;
             case FALLING:
+                if (a==Action.SLIDE||a==Action.FALL) {
+                    slidePressed=System.currentTimeMillis();
+                    //System.out.println("Queue up slide.");
+                }
             case JUMP:
                 if(jumpCount>0 && spacebarReleased && (a==Action.JUMP)){
                     jumpCount=0;
@@ -212,6 +217,18 @@ public class Player extends AnimatedObject{
                 break;
             }   
         }
+    }
+
+
+    private void performSlide() {
+        slide_time = System.currentTimeMillis();
+        if(facing_direction){
+            x_velocity=sliding_velocity;
+        }
+        else{
+            x_velocity=-sliding_velocity;
+        }
+        state=State.SLIDE;
     }
 
 
@@ -340,8 +357,8 @@ public class Player extends AnimatedObject{
             }
         }
         if (y_velocity==0) {
-            Tile checked_tile_bottom_right = RabiClone.CURRENT_MAP.getTile((int)(getX()+getAnimatedSpr().getWidth()/2-4)/Tile.TILE_WIDTH, (int)(getY()+getAnimatedSpr().getHeight()/2+0.5)/Tile.TILE_HEIGHT);
-            Tile checked_tile_bottom_left = RabiClone.CURRENT_MAP.getTile((int)(getX()-getAnimatedSpr().getWidth()/2+4)/Tile.TILE_WIDTH, (int)(getY()+getAnimatedSpr().getHeight()/2+0.5)/Tile.TILE_HEIGHT);
+            Tile checked_tile_bottom_right = RabiClone.CURRENT_MAP.getTile((int)(getX()+getAnimatedSpr().getWidth()/2-4)/Tile.TILE_WIDTH, (int)(getY()+getAnimatedSpr().getHeight()/2+1)/Tile.TILE_HEIGHT);
+            Tile checked_tile_bottom_left = RabiClone.CURRENT_MAP.getTile((int)(getX()-getAnimatedSpr().getWidth()/2+4)/Tile.TILE_WIDTH, (int)(getY()+getAnimatedSpr().getHeight()/2+1)/Tile.TILE_HEIGHT);
             if (!(checked_tile_bottom_right.getCollision()==CollisionType.BLOCK||checked_tile_bottom_left.getCollision()==CollisionType.BLOCK)) {
                 groundCollision=false;
             } else {

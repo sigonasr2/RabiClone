@@ -2,7 +2,6 @@ package sig.engine;
 
 import java.util.regex.Pattern;
 
-@SuppressWarnings("unused")
 public class String{
     private StringBuilder sb;
     private Point bounds = new Point(0,1);
