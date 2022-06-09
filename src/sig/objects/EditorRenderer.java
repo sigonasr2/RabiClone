@@ -80,8 +80,12 @@ public class EditorRenderer extends LevelRenderer{
         if (messageLog.length()>0) {
             if (System.currentTimeMillis()-last_message_log>MESSAGE_TIME) {
                 last_message_log=System.currentTimeMillis();
-                int secondMarker = messageLog.indexOf("\n",messageLog.indexOf("\n")+1);
-                messageLog.replace(messageLog.indexOf("\n"), secondMarker==-1?messageLog.length():secondMarker, "");
+                if (messageLog.length()>1) {
+                    int secondMarker = messageLog.indexOf("\n",messageLog.indexOf("\n")+1);
+                    messageLog.replace(messageLog.indexOf("\n"), secondMarker==-1?messageLog.length():secondMarker, "");
+                } else {
+                    messageLog.clear();
+                }
             }
         }
     }

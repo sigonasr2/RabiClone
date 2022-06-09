@@ -57,6 +57,11 @@ public class String{
         return this.sb.indexOf(str);
     }
 
+    public void clear() {
+        this.sb.setLength(0);
+        bounds = new Point(0,1);
+    }
+
     /**
      * Returns the index within this string of the first occurrence of the
      * specified substring, starting at the specified index.
