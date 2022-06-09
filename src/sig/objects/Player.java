@@ -12,32 +12,32 @@ import sig.map.View;
 import sig.objects.actor.State;
 
 public class Player extends AnimatedObject{
-    final static double GRAVITY = 1300;
-    final static double NORMAL_FRICTION = 6400;
-    final static double NORMAL_JUMP_VELOCITY = -300;
+    final static double GRAVITY = 2600;
+    final static double NORMAL_FRICTION = 9600;
+    final static double NORMAL_JUMP_VELOCITY = -450;
     final static boolean LEFT = false;
     final static boolean RIGHT = true;
     final static int jump_fall_AnimationWaitTime = 200;
     final static int slide_AnimationWaitTime = 100;
     final static int slide_duration = 700;
 
-    final static double WALKING_SPEED_LIMIT = 164;
+    final static double WALKING_SPEED_LIMIT = 246;
 
     double y_acceleration = GRAVITY;
-    double y_acceleration_limit = 100;
+    double y_acceleration_limit = 150;
     double x_acceleration = 0;
-    double x_acceleration_limit = 100;
+    double x_acceleration_limit = 150;
     double x_velocity = 0;
-    double x_velocity_limit = 246;
-    double y_velocity = 5;
-    double y_velocity_limit = 500;
-    double sliding_velocity = 164;
-    double sliding_acceleration = 120;
+    double x_velocity_limit = 369;
+    double y_velocity = 7.5;
+    double y_velocity_limit = 750;
+    double sliding_velocity = 246;
+    double sliding_acceleration = 180;
 
-    double horizontal_drag = 2000;
+    double horizontal_drag = 3000;
     double horizontal_friction = NORMAL_FRICTION;
-    double horizontal_air_drag = 800;
-    double horizontal_air_friction = 180;
+    double horizontal_air_drag = 1200;
+    double horizontal_air_friction = 270;
 
     double jump_velocity = NORMAL_JUMP_VELOCITY;
 
@@ -366,7 +366,7 @@ public class Player extends AnimatedObject{
                     setX(((int)(getX()+getAnimatedSpr().getWidth())/Tile.TILE_WIDTH)*Tile.TILE_WIDTH-Tile.TILE_WIDTH/2-3+check_distance_x);
                 }
                 x_acceleration = 0;
-                x_velocity = 0;
+                x_velocity = Math.signum(x_velocity)*0.000001;
                 sideCollision=true;
             }
         }
