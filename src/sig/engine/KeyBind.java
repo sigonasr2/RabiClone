@@ -123,7 +123,7 @@ public class KeyBind {
 		}
     }
 
-    public String getName() {
+    public java.lang.String getName() {
         if (RabiClone.CONTROLLERS.length>port&&port!=-1) {
             return RabiClone.CONTROLLERS[port].getComponent(id).getName();
         } else

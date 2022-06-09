@@ -10,6 +10,7 @@ import sig.engine.Font;
 import sig.engine.MouseScrollValue;
 import sig.engine.PaletteColor;
 import sig.engine.Panel;
+import sig.engine.String;
 import sig.map.Background;
 import sig.map.Map;
 import sig.map.Tile;
@@ -20,11 +21,11 @@ public class EditorRenderer extends LevelRenderer{
 
     Tile selectedTile = Tile.WALL;
 
-    StringBuilder messageLog = new StringBuilder();
+    String messageLog = new String();
     final static long MESSAGE_TIME = 5000;
     long last_message_log = System.currentTimeMillis();
 
-    final static StringBuilder HELP_TEXT = new StringBuilder("(F3) Toggle Camera  (F4) Toggle Map Type  (F5) Toggle Background");
+    final static String HELP_TEXT = new String("(F3) Toggle Camera  (F4) Toggle Map Type  (F5) Toggle Background");
 
     final static char CAMERA_SPD = 512;
 
@@ -37,13 +38,7 @@ public class EditorRenderer extends LevelRenderer{
 
     private void AddMessage(Object...s) {
         messageLog.append('\n');
-        for (int i=0;i<s.length;i++) {
-            if (s[i] instanceof String) {
-                messageLog.append((String)s[i]);
-            } else if (s[i] instanceof PaletteColor) {
-                messageLog.append((PaletteColor)s[i]);
-            }
-        }
+        messageLog.append(s);
         last_message_log = System.currentTimeMillis();
     }
 
@@ -68,7 +63,7 @@ public class EditorRenderer extends LevelRenderer{
             int tileY = (int)(RabiClone.MOUSE_POS.getY()+getY())/Tile.TILE_HEIGHT;
             RabiClone.CURRENT_MAP.ModifyTile(tileX, tileY, selectedTile);
         }
-        if(KeyHeld(Action.SLIDE)||KeyHeld(Action.FALL)){
+        if(KeyHeld(Action.SLIDE)&&KeyHeld(Action.FALL)){
             AddMessage("Saving map...");
             try {
                 Map.SaveMap(RabiClone.CURRENT_MAP);
@@ -125,6 +120,7 @@ public class EditorRenderer extends LevelRenderer{
                 drawTileGrid(p,x,y);
             }
         }
+        Draw_Rect(p,PaletteColor.YELLOW,2,0,messageLog.getBounds(Font.PROFONT_12).getX(),messageLog.getBounds(Font.PROFONT_12).getY());
         Draw_Text(4,0,messageLog,Font.PROFONT_12);
         Draw_Text(4,RabiClone.BASE_HEIGHT-Font.PROFONT_12.getGlyphHeight()-4,HELP_TEXT,Font.PROFONT_12);
     }
@@ -134,7 +130,7 @@ public class EditorRenderer extends LevelRenderer{
             int xpos=(int)(x*Tile.TILE_WIDTH-getX());
             int ypos=(int)(y*Tile.TILE_HEIGHT-getY());
             Draw_Text(xpos+2,ypos+2,
-                new StringBuilder("View:").append(PaletteColor.EMERALD).append(RabiClone.CURRENT_MAP.getView(x,y))
+                new String("View:").append(PaletteColor.EMERALD).append(RabiClone.CURRENT_MAP.getView(x,y))
                 .append(PaletteColor.NORMAL).append("\nType:").append(PaletteColor.MIDNIGHT_BLUE).append(RabiClone.CURRENT_MAP.getType(x,y))
                 .append(PaletteColor.NORMAL).append("\nBackground:").append(PaletteColor.GRAPE).append(RabiClone.CURRENT_MAP.getBackground(x,y))
             ,Font.PROFONT_12);
@@ -171,8 +167,8 @@ public class EditorRenderer extends LevelRenderer{
             double tileX = x*Tile.TILE_WIDTH-this.getX();
             double tileY = y*Tile.TILE_HEIGHT-this.getY();
             DrawTransparentTile(tileX,tileY,selectedTile,Alpha.ALPHA160);
-            Draw_Text(tileX+2,tileY-Font.PROFONT_12.getGlyphHeight()-2,new StringBuilder(selectedTile.toString()),Font.PROFONT_12);
-            Draw_Text_Ext(tileX+2,tileY+Tile.TILE_HEIGHT+2,new StringBuilder(RabiClone.CURRENT_MAP.getTile(x,y).toString()),Font.PROFONT_12,Alpha.ALPHA0,PaletteColor.CRIMSON);
+            Draw_Text(tileX+2,tileY-Font.PROFONT_12.getGlyphHeight()-2,new String(selectedTile.toString()),Font.PROFONT_12);
+            Draw_Text_Ext(tileX+2,tileY+Tile.TILE_HEIGHT+2,new String(RabiClone.CURRENT_MAP.getTile(x,y).toString()),Font.PROFONT_12,Alpha.ALPHA0,PaletteColor.CRIMSON);
         }
     }
 

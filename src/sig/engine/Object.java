@@ -78,11 +78,11 @@ public abstract class Object implements GameEntity{
         DrawLoop.Draw_Animated_Sprite(x,y,sprite,frameIndex,transform);
     }
 
-	protected void Draw_Text(double x, double y, StringBuilder string, Font font){
+	protected void Draw_Text(double x, double y, String string, Font font){
         DrawLoop.Draw_Text(x,y,string,font);
     }
 
-	protected void Draw_Text_Ext(double x, double y, StringBuilder string, Font font, Alpha alpha, PaletteColor col){
+	protected void Draw_Text_Ext(double x, double y, String string, Font font, Alpha alpha, PaletteColor col){
         DrawLoop.Draw_Text_Ext(x,y,string,font,alpha,col);
     }
 

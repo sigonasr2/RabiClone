@@ -16,6 +16,7 @@ import sig.engine.KeyBind;
 import sig.engine.Object;
 import sig.engine.PaletteColor;
 import sig.engine.Panel;
+import sig.engine.String;
 
 public class ConfigureControls extends Object{
 
@@ -113,7 +114,7 @@ public class ConfigureControls extends Object{
                 Draw_Line(p,storedX,getY()+storedY+Font.PROFONT_12.getGlyphHeight()+4,storedEndX,getY()+storedY,PaletteColor.BLACK,Alpha.ALPHA32);
             }
         } else {
-            Draw_Text_Ext(4, 4, new StringBuilder("Press a key to assign to ").append(selectedAction), Font.PROFONT_12, Alpha.ALPHA0, PaletteColor.MIDNIGHT_BLUE);
+            Draw_Text_Ext(4, 4, new String("Press a key to assign to ").append(selectedAction), Font.PROFONT_12, Alpha.ALPHA0, PaletteColor.MIDNIGHT_BLUE);
         }
     }
 
@@ -132,8 +133,8 @@ public class ConfigureControls extends Object{
         }
     }
 
-    private StringBuilder DisplayActionKeys(Action a) {
-        StringBuilder sb = new StringBuilder(a.toString()).append(": ");
+    private String DisplayActionKeys(Action a) {
+        String sb = new String(a.toString()).append(": ");
         for (int i=0;i<KeyBind.KEYBINDS.get(a).size();i++) {
             KeyBind c = KeyBind.KEYBINDS.get(a).get(i);
             sb.append(c.isKeyHeld()?PaletteColor.YELLOW_GREEN:"").append(c.getName()).append(PaletteColor.MIDNIGHT_BLUE).append(i!=KeyBind.KEYBINDS.get(a).size()-1?",":"");

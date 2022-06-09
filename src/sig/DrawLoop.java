@@ -9,6 +9,7 @@ import sig.engine.PaletteColor;
 import sig.engine.Panel;
 import sig.engine.Rectangle;
 import sig.engine.Sprite;
+import sig.engine.String;
 import sig.engine.Transform;
 
 public class DrawLoop {
@@ -36,12 +37,12 @@ public class DrawLoop {
 		}
     }
 
-	public static void Draw_Text(double x, double y, StringBuilder s, Font f) {
+	public static void Draw_Text(double x, double y, String s, Font f) {
 		Draw_Text_Ext(x,y,s,f,Alpha.ALPHA0,PaletteColor.NORMAL);
 	}
 
-	public static void Draw_Text_Ext(double x, double y, StringBuilder s, Font f, Alpha alpha, PaletteColor col) {
-		String finalS = s.toString();
+	public static void Draw_Text_Ext(double x, double y, String s, Font f, Alpha alpha, PaletteColor col) {
+		java.lang.String finalS = s.toString();
 		int charCount=0;
 		int yOffset=0;
 		int xOffset=0;

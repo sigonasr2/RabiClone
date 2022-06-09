@@ -34,7 +34,7 @@ public class Point {
 	}
 
 	@Override
-	public String toString() {
+	public java.lang.String toString() {
 		return "Point(" + x + "," + y + ")";
 	}
 }

@@ -25,7 +25,7 @@ public class Edge {
 		inverse_slope=(double)(a.x-b.x)/(a.y-b.y);
 	}
 	@Override
-	public String toString() {
+	public java.lang.String toString() {
 		return "Edge [a=" + a + ", b=" + b + ", min_y=" + min_y + ", max_y=" + max_y + ", min_x=" + min_x + ", max_x="
 				+ max_x + ", x_of_min_y=" + x_of_min_y + ", inverse_slope=" + inverse_slope + "]";
 	}

@@ -7,7 +7,7 @@ import net.java.games.input.Component.Identifier;
 
 public class Key extends Identifier{
 
-    protected Key(String name) {
+    protected Key(java.lang.String name) {
 		super(name);
 	}
 

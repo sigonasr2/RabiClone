@@ -36,7 +36,7 @@ public enum PaletteColor {
     NORMAL;
 
     @Override
-    public String toString() {
+    public java.lang.String toString() {
         return Character.valueOf((char)26)+Integer.toString(ordinal())+" ";
     }
 

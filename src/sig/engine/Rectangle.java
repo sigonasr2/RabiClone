@@ -43,7 +43,7 @@ public class Rectangle {
     }
 
     @Override
-    public String toString() {
+    public java.lang.String toString() {
         return new StringBuilder("Rectangle(x=").append(x).append(",")
             .append("y=").append(y).append(",")
             .append("w=").append(w).append(",")
