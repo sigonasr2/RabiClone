@@ -2,7 +2,6 @@ package sig;
 
 import javax.swing.JFrame;
 
-import net.java.games.input.Component;
 import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
 
@@ -90,7 +89,7 @@ public class RabiClone{
 		while (true) {
 			long timePassed = System.nanoTime()-lastGameTime;
 			lastGameTime=System.nanoTime();
-			double updateMult = 1/60d;
+			double updateMult = 1/120d;
 
 
 			handleGameControllers();
