@@ -21,8 +21,13 @@ public class String{
         this.sb=new StringBuilder(Double.toString(d));
         updateBounds(Double.toString(d));
     }
+    public String append(double d) {
+        this.sb.append(d);
+        updateBounds(Double.toString(d));
+        return this;
+    }
     public String append(char c) {
-        this.sb=new StringBuilder(c);
+        this.sb.append(c);
         updateBounds(Character.toString(c));
         return this;
     }
