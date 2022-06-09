@@ -90,7 +90,7 @@ public class RabiClone{
 		while (true) {
 			long timePassed = System.nanoTime()-lastGameTime;
 			lastGameTime=System.nanoTime();
-			double updateMult = Math.min(1/60d,timePassed/1000000000d);
+			double updateMult = Math.min(1/144d,timePassed/1000000000d);
 
 
 			handleGameControllers();
