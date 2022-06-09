@@ -102,6 +102,14 @@ public class RabiClone{
 						//System.out.println(c.getName()+","+c.getIdentifier()+": "+c.getPollData());
 					}
 					//System.out.println("--------");
+				} else {
+					Controller[] newArr = new Controller[CONTROLLERS.length-1];
+					for (int j=0;j<CONTROLLERS.length;j++) {
+						if (j!=i) {
+							newArr[(j>i?j-1:j)]=CONTROLLERS[i];
+						}
+					}
+					CONTROLLERS=newArr;
 				}
 				/*EventQueue queue = controller_list[i].getEventQueue();
 
@@ -134,6 +142,7 @@ public class RabiClone{
 			}
 			if (Key.isKeyHeld(KeyEvent.VK_F5)&&System.currentTimeMillis()-lastControllerScan>5000) {
 				CONTROLLERS=ControllerEnvironment.getDefaultEnvironment().rescanControllers();
+				System.out.println(Arrays.toString(CONTROLLERS));
 				lastControllerScan=System.currentTimeMillis();
 			}
 
