@@ -89,7 +89,7 @@ public class RabiClone{
 		while (true) {
 			long timePassed = System.nanoTime()-lastGameTime;
 			lastGameTime=System.nanoTime();
-			double updateMult = 1/120d;
+			double updateMult = Math.min(1/120d,timePassed/1000000000d);
 
 
 			handleGameControllers();
@@ -127,8 +127,6 @@ public class RabiClone{
 					OBJ.remove(i--);
 				}
 			}
-
-			waitForNextFrame();
 		}
 	}
 	
@@ -168,21 +166,5 @@ public class RabiClone{
 			SIZE_MULTIPLIER++;
 		}
 		f.setSize(f.getWidth()*SIZE_MULTIPLIER,(int)((f.getWidth()*SIZE_MULTIPLIER)/1.77777777778d));
-	}
-
-	private static void waitForNextFrame() {
-		long newTime = System.nanoTime();
-		if (newTime-lastUpdate<TARGET_FRAMETIME) {
-			long timeRemaining=TARGET_FRAMETIME-(newTime-lastUpdate);
-			long millis = timeRemaining/1000000l;
-			int nanos = (int)(timeRemaining-millis*1000000l);
-			//System.out.println(timeRemaining+"/"+millis+" Nanos:"+nanos);
-			try {
-				Thread.sleep(millis,nanos);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-		lastUpdate=newTime;
 	}
 }
