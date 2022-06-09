@@ -32,7 +32,7 @@ public class Player extends AnimatedObject{
     double y_velocity = 5;
     double y_velocity_limit = 500;
     double sliding_velocity = 164;
-    double sliding_acceleration = 60;
+    double sliding_acceleration = 120;
 
     double horizontal_drag = 2000;
     double horizontal_friction = NORMAL_FRICTION;
@@ -159,7 +159,6 @@ public class Player extends AnimatedObject{
         if (KeyHeld(Action.JUMP)&&System.currentTimeMillis()-spacebarPressed<jumpHoldTime) {
             y_velocity=jump_velocity;
         }
-        //System.out.println(state);
     }
 
 
@@ -440,5 +439,12 @@ public class Player extends AnimatedObject{
 
     @Override
     public void draw(byte[] p) {}
+
+
+    @Override
+    public String toString() {
+        return "Player [facing_direction=" + (facing_direction?"RIGHT":"LEFT") + ", groundCollision=" + groundCollision + ", jumpCount="
+                + jumpCount + ", x_velocity=" + x_velocity + ", y_velocity=" + y_velocity + ", x=" + getX() + ", y=" + getY() + "]";
+    }
     
 }

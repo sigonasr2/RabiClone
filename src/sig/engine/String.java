@@ -17,8 +17,12 @@ public class String{
         this.sb=new StringBuilder(obj.toString());
         updateBounds(obj.toString());
     }
+    public String(double d) {
+        this.sb=new StringBuilder(Double.toString(d));
+        updateBounds(Double.toString(d));
+    }
     public String append(char c) {
-        this.sb.append(c);
+        this.sb=new StringBuilder(c);
         updateBounds(Character.toString(c));
         return this;
     }

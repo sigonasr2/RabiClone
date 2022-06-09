@@ -3,10 +3,12 @@ package sig.objects;
 import sig.RabiClone;
 import sig.engine.Alpha;
 import sig.engine.AnimatedObject;
+import sig.engine.Font;
 import sig.engine.Object;
 import sig.engine.Panel;
 import sig.engine.Sprite;
 import sig.engine.Transform;
+import sig.engine.String;
 import sig.map.Background;
 import sig.map.Map;
 import sig.map.Tile;
@@ -40,6 +42,7 @@ public class LevelRenderer extends Object{
         if (RabiClone.player!=null) {
             Draw_Animated_Object(RabiClone.player,RabiClone.player.facing_direction?Transform.HORIZONTAL:Transform.NONE);
         }
+        Draw_Text(4,4,new String(RabiClone.player.x_velocity),Font.PROFONT_12);
     }
 
     @Override
