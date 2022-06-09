@@ -41,8 +41,8 @@ public class LevelRenderer extends Object{
         }
         if (RabiClone.player!=null) {
             Draw_Animated_Object(RabiClone.player,RabiClone.player.facing_direction?Transform.HORIZONTAL:Transform.NONE);
+            Draw_Text(4,4,new String(RabiClone.player.x_velocity),Font.PROFONT_12);
         }
-        Draw_Text(4,4,new String(RabiClone.player.x_velocity),Font.PROFONT_12);
     }
 
     @Override
