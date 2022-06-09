@@ -27,7 +27,8 @@ public class String{
         return this;
     }
     public String append(java.lang.Object...obj) {
-        for (java.lang.Object o : obj) {
+        for (int i=0;i<obj.length;i++) {
+            java.lang.Object o = obj[i];
             this.sb.append(o.toString());
             updateBounds(o.toString());
         }

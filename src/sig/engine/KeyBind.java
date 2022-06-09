@@ -76,9 +76,11 @@ public class KeyBind {
 
     public static void poll() {
         //Polls all KeyBinds based on device.
-        for (Action a : Action.values()) {
+        for (int i=0;i<Action.values().length;i++) {
+            Action a = Action.values()[i];
             boolean held = false;
-            for (KeyBind c : KEYBINDS.get(a)) {
+            for (int j=0;j<KEYBINDS.get(a).size();j++) {
+                KeyBind c = KEYBINDS.get(a).get(j);
                 held = c.isKeyHeld();
                 if (held) {
                     break;

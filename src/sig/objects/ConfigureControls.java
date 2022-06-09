@@ -35,17 +35,18 @@ public class ConfigureControls extends Object{
     }
 
     private void updateHighlightSections() {
-        for (Action a : Action.values()) {
+        for (int i=0;i<Action.values().length;i++) {
+            Action a = Action.values()[i];
             actionHighlightSections.add(new ArrayList<Integer>());
             StringBuilder renderedText=new StringBuilder(a.toString()).append(": ");
             List<Integer> sectionList = actionHighlightSections.get(a.ordinal());
             sectionList.clear();
-            for (int i=0;i<KeyBind.KEYBINDS.get(a).size();i++) {
-                KeyBind c = KeyBind.KEYBINDS.get(a).get(i);
+            for (int j=0;j<KeyBind.KEYBINDS.get(a).size();j++) {
+                KeyBind c = KeyBind.KEYBINDS.get(a).get(j);
                 sectionList.add(renderedText.length()+1);
                 renderedText.append(c.getName());
                 sectionList.add(renderedText.length());
-                renderedText.append(i!=KeyBind.KEYBINDS.get(a).size()-1?",":"");
+                renderedText.append(j!=KeyBind.KEYBINDS.get(a).size()-1?",":"");
             }
         }
     }

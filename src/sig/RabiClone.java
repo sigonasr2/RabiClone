@@ -51,6 +51,10 @@ public class RabiClone{
 
 	public static long lastControllerScan = System.currentTimeMillis();
 
+	static long lastUpdate=System.nanoTime();
+	final static long TARGET_FRAMETIME = 8333333l;
+	static long lastReportedTime=System.currentTimeMillis();
+
 	public static void main(String[] args) {
 
 		Key.InitializeKeyConversionMap();
@@ -124,8 +128,11 @@ public class RabiClone{
 					OBJ.remove(i--);
 				}
 			}
+
+			waitForNextFrame();
 		}
 	}
+	
 
 	private static void handleGameControllers() {
 		for (int i=0;i<CONTROLLERS.length;i++) {
@@ -160,5 +167,26 @@ public class RabiClone{
 			SIZE_MULTIPLIER++;
 		}
 		f.setSize(f.getWidth()*SIZE_MULTIPLIER,(int)((f.getWidth()*SIZE_MULTIPLIER)/1.77777777778d));
+	}
+
+	private static void waitForNextFrame() {
+		long newTime = System.nanoTime();
+		if (newTime-lastUpdate<TARGET_FRAMETIME) {
+			long timeRemaining=TARGET_FRAMETIME-(newTime-lastUpdate);
+			long millis = timeRemaining/1000000l;
+			int nanos = (int)(timeRemaining-millis*1000000l);
+			//System.out.println(timeRemaining+"/"+millis+" Nanos:"+nanos);
+			try {
+				Thread.sleep(millis,nanos);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		} else {
+			if (System.currentTimeMillis()-lastReportedTime>1000) {
+				System.err.println("WARNING! Update loop is underperforming!");
+				lastReportedTime=System.currentTimeMillis();
+			}
+		}
+		lastUpdate=newTime;
 	}
 }
