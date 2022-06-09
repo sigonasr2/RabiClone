@@ -7,6 +7,7 @@ import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import sig.engine.Panel;
@@ -24,6 +25,7 @@ import sig.engine.PaletteColor;
 
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
+import java.lang.reflect.Constructor;
 
 public class RabiClone{
 	public static final String PROGRAM_NAME="RabiClone";
@@ -48,6 +50,20 @@ public class RabiClone{
 	public static Controller[] CONTROLLERS = new Controller[]{};
 
 	public static long lastControllerScan = System.currentTimeMillis();
+
+	private static ControllerEnvironment createDefaultEnvironment() throws ReflectiveOperationException {
+
+		// Find constructor (class is package private, so we can't access it directly)
+		Constructor<ControllerEnvironment> constructor = (Constructor<ControllerEnvironment>)
+			Class.forName("net.java.games.input.DefaultControllerEnvironment").getDeclaredConstructors()[0];
+	
+		// Constructor is package private, so we have to deactivate access control checks
+		constructor.setAccessible(true);
+	
+		// Create object with default constructor
+		return constructor.newInstance();
+	}
+
 	public static void main(String[] args) {
 
 		Key.InitializeKeyConversionMap();
@@ -79,7 +95,11 @@ public class RabiClone{
 
 		long lastGameTime = System.nanoTime();
 
-		CONTROLLERS = ControllerEnvironment.getDefaultEnvironment().getControllers();
+		try {
+			CONTROLLERS = createDefaultEnvironment().getControllers();
+		} catch (ReflectiveOperationException e) {
+			e.printStackTrace();
+		}
 		while (true) {
 			long timePassed = System.nanoTime()-lastGameTime;
 			lastGameTime=System.nanoTime();
@@ -87,10 +107,6 @@ public class RabiClone{
 
 
 			//System.out.println(CONTROLLERS.length);
-			CONTROLLERS = ControllerEnvironment.getDefaultEnvironment().getControllers();
-			if (System.currentTimeMillis()-lastControllerScan>=5000) {
-				CONTROLLERS = ControllerEnvironment.getDefaultEnvironment().rescanControllers();
-			}
 			for (int i=0;i<CONTROLLERS.length;i++) {
 				if (CONTROLLERS[i].getType()==Controller.Type.KEYBOARD||CONTROLLERS[i].getType()==Controller.Type.MOUSE) {
 					continue;
@@ -132,6 +148,13 @@ public class RabiClone{
 				OBJ.clear();
 				ResetGame();
 				OBJ.add(new ConfigureControls(p));
+			}
+			if (Key.isKeyHeld(KeyEvent.VK_F5)&&System.currentTimeMillis()-lastControllerScan>5000) {
+				try {
+					CONTROLLERS=createDefaultEnvironment().getControllers();
+				} catch (ReflectiveOperationException e) {
+					e.printStackTrace();
+				}
 			}
 
 			for (int i=0;i<OBJ.size();i++) {

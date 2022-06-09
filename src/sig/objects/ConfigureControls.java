@@ -3,6 +3,8 @@ package sig.objects;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
+import net.java.games.input.Component;
+import net.java.games.input.Controller;
 import net.java.games.input.Event;
 import net.java.games.input.Component.Identifier;
 import net.java.games.input.Component.POV;
@@ -29,6 +31,12 @@ public class ConfigureControls extends Object{
     public void update(double updateMult) {
         Event e = new Event();
         for (int i=0;i<RabiClone.CONTROLLERS.length;i++) {
+            Component[] components = RabiClone.CONTROLLERS[i].getComponents();
+            for (int j=0;j<components.length;j++) {
+                //Component c = components[j];
+                //System.out.println(c.getName()+","+c.getIdentifier()+": "+c.getPollData());
+            }
+            //System.out.println("--------");
             while (RabiClone.CONTROLLERS[i].getEventQueue().getNextEvent(e)) {
                 if (assigningKey) {
                     List<KeyBind> clist = KeyBind.KEYBINDS.get(selectedAction);
@@ -67,15 +75,6 @@ public class ConfigureControls extends Object{
         }
     }
 
-    public void rawKeyPressed(int keyCode) {
-        if (assigningKey) {
-            List<KeyBind> clist = KeyBind.KEYBINDS.get(selectedAction);
-            clist.add(new KeyBind(keyCode));
-            KeyBind.KEYBINDS.put(selectedAction,clist);
-            assigningKey=false;
-        }
-    }
-
     @Override
     protected void MousePressed(MouseEvent e) {
         if (e.getButton()==MouseEvent.BUTTON1) {
@@ -90,6 +89,15 @@ public class ConfigureControls extends Object{
             sb.append(c.isKeyHeld()?PaletteColor.YELLOW_GREEN:"").append(c.getName()).append(PaletteColor.MIDNIGHT_BLUE).append(i!=KeyBind.KEYBINDS.get(a).size()-1?",":"");
         }
         return sb;
+    }
+
+    public void rawKeyPressed(int keyCode) {
+        if (assigningKey) {
+            List<KeyBind> clist = KeyBind.KEYBINDS.get(selectedAction);
+            clist.add(new KeyBind(keyCode));
+            KeyBind.KEYBINDS.put(selectedAction,clist);
+            assigningKey=false;
+        }
     }
     
 }
