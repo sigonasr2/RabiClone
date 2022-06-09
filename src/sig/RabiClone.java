@@ -163,11 +163,11 @@ public class RabiClone{
 		player=null;
 		level_renderer=null;
 		control_settings_menu=null;
-		System.gc();
+		//System.gc();
 	}
 
 	private static void StartGame() {
-		System.gc();
+		//System.gc();
 		OBJ.add(player = new Player(p));
 		OBJ.add(new Erinoah(p));
 	}
