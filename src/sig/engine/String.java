@@ -95,7 +95,7 @@ public class String{
     public String replace(int start,int end,java.lang.String str) {
         this.sb.replace(start,end,str);
         bounds = new Point(0,1);
-        updateBounds(str);
+        updateBounds(this.sb.toString());
         return this;
     }
     public int length() {
