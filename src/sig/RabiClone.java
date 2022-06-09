@@ -84,48 +84,55 @@ public class RabiClone{
 		p.render();
 
 		long lastGameTime = System.nanoTime();
+		long dt = 0;
 
 		CONTROLLERS = ControllerEnvironment.getDefaultEnvironment().getControllers();
 		while (true) {
-			long timePassed = System.nanoTime()-lastGameTime;
+			dt += System.nanoTime()-lastGameTime;
 			lastGameTime=System.nanoTime();
-			double updateMult = Math.min(1/120d,timePassed/1000000000d);
 
 
-			handleGameControllers();
+			while (dt>=(1/244d)*1000000000) {
+				double updateMult = 1/244d;
+				handleGameControllers();
 
-			KeyBind.poll();
+				KeyBind.poll();
 
-			if (Key.isKeyHeld(KeyEvent.VK_F1)) {
-				if (level_renderer instanceof EditorRenderer) {
-					OBJ.remove(level_renderer);
-					OBJ.add(level_renderer=new LevelRenderer(p));
-					StartGame();
+				if (Key.isKeyHeld(KeyEvent.VK_F1)) {
+					if (level_renderer instanceof EditorRenderer) {
+						OBJ.remove(level_renderer);
+						OBJ.add(level_renderer=new LevelRenderer(p));
+						StartGame();
+					}
 				}
-			}
-			if (Key.isKeyHeld(KeyEvent.VK_F2)) {
-				if (!(level_renderer instanceof EditorRenderer)) {
+				if (Key.isKeyHeld(KeyEvent.VK_F2)) {
+					if (!(level_renderer instanceof EditorRenderer)) {
+						OBJ.clear();
+						ResetGame();
+						OBJ.add(level_renderer=new EditorRenderer(p));
+					}
+				}
+				if (Key.isKeyHeld(KeyEvent.VK_F3)) {
 					OBJ.clear();
 					ResetGame();
-					OBJ.add(level_renderer=new EditorRenderer(p));
+					OBJ.add(control_settings_menu=new ConfigureControls(p));
 				}
-			}
-			if (Key.isKeyHeld(KeyEvent.VK_F3)) {
-				OBJ.clear();
-				ResetGame();
-				OBJ.add(control_settings_menu=new ConfigureControls(p));
-			}
-			if (Key.isKeyHeld(KeyEvent.VK_F5)&&System.currentTimeMillis()-lastControllerScan>5000) {
-				CONTROLLERS=ControllerEnvironment.getDefaultEnvironment().rescanControllers();
-				System.out.println(Arrays.toString(CONTROLLERS));
-				lastControllerScan=System.currentTimeMillis();
-			}
+				if (Key.isKeyHeld(KeyEvent.VK_F5)&&System.currentTimeMillis()-lastControllerScan>5000) {
+					CONTROLLERS=ControllerEnvironment.getDefaultEnvironment().rescanControllers();
+					System.out.println(Arrays.toString(CONTROLLERS));
+					lastControllerScan=System.currentTimeMillis();
+				}
 
-			for (int i=0;i<OBJ.size();i++) {
-				OBJ.get(i).update(updateMult);
-				if (OBJ.get(i).isMarkedForDeletion()) {
-					OBJ.remove(i--);
+				for (int i=0;i<OBJ.size();i++) {
+					OBJ.get(i).update(updateMult);
+					if (OBJ.get(i).isMarkedForDeletion()) {
+						OBJ.remove(i--);
+					}
 				}
+				dt-=(1/244d)*1000000000;
+			}
+			if (dt<0) {
+				dt=0;
 			}
 		}
 	}
