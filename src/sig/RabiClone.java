@@ -155,9 +155,11 @@ public class RabiClone{
 		player=null;
 		level_renderer=null;
 		control_settings_menu=null;
+		System.gc();
 	}
 
 	private static void StartGame() {
+		System.gc();
 		OBJ.add(player = new Player(p));
 		OBJ.add(new Erinoah(p));
 	}
@@ -180,11 +182,6 @@ public class RabiClone{
 				Thread.sleep(millis,nanos);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
-			}
-		} else {
-			if (System.currentTimeMillis()-lastReportedTime>1000) {
-				System.err.println("WARNING! Update loop is underperforming!");
-				lastReportedTime=System.currentTimeMillis();
 			}
 		}
 		lastUpdate=newTime;
