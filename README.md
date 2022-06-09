@@ -37,8 +37,6 @@ Underwater / Water Dashing (Propelling motion)
 Side Roll -> Slide
 Wall Jumping
 
-Keybind Management - https://stackoverflow.com/questions/17413690/java-jinput-rescan-reload-controllers
-Sliding Key Buffer
 Movement Systems
 Collectibles
 Combat Systems

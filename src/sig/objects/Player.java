@@ -21,15 +21,18 @@ public class Player extends AnimatedObject{
     final static int slide_AnimationWaitTime = 100;
     final static int slide_duration = 700;
 
+    final static double WALKING_SPEED_LIMIT = 164;
+
     double y_acceleration = GRAVITY;
     double y_acceleration_limit = 100;
     double x_acceleration = 0;
     double x_acceleration_limit = 100;
     double x_velocity = 0;
-    double x_velocity_limit = 164;
+    double x_velocity_limit = 246;
     double y_velocity = 5;
     double y_velocity_limit = 500;
     double sliding_velocity = 164;
+    double sliding_acceleration = 60;
 
     double horizontal_drag = 2000;
     double horizontal_friction = NORMAL_FRICTION;
@@ -131,6 +134,18 @@ public class Player extends AnimatedObject{
                         facing_direction=RIGHT;
                     }
                     state=State.IDLE;
+                }
+                if (KeyHeld(Action.MOVE_LEFT)&&!KeyHeld(Action.MOVE_RIGHT)) {
+                    if (facing_direction==LEFT&&x_velocity>-sliding_velocity*1.5||
+                        facing_direction==RIGHT&&x_velocity>sliding_velocity*0.5) {
+                            x_velocity-=sliding_acceleration*updateMult;
+                        }
+                } else
+                if (KeyHeld(Action.MOVE_RIGHT)&&!KeyHeld(Action.MOVE_LEFT)) {
+                    if (facing_direction==LEFT&&x_velocity<-sliding_velocity*0.5||
+                        facing_direction==RIGHT&&x_velocity<sliding_velocity*1.5) {
+                            x_velocity+=sliding_acceleration*updateMult;
+                        }
                 }
                 break;
             case STAGGER:
@@ -407,7 +422,7 @@ public class Player extends AnimatedObject{
 
 
     private void handleKeyboardMovement(double updateMult, int movement, double friction, double drag) {
-        if (movement!=0) {
+        if (movement!=0&&Math.abs(x_velocity)<WALKING_SPEED_LIMIT) {
             x_acceleration=drag*(movement);
         } else {
             if (x_velocity!=0) {
