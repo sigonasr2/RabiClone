@@ -58,8 +58,12 @@ public abstract class Object implements GameEntity{
         DrawLoop.Draw(canvas, index, (byte)col.ordinal(), alpha);
     }
 
-    protected void Draw_Rect(byte[] p,byte col,double x,double y,double w,double h) {
-        DrawLoop.FillRect(p, col, x, y, w, h);
+    protected void Draw_Rect(byte[] p,PaletteColor col,double x,double y,double w,double h) {
+        DrawLoop.Fill_Rect(p, (byte)col.ordinal(), x, y, w, h);
+    }
+
+    protected void Draw_Line(byte[] p,double x1,double y1,double x2,double y2,PaletteColor col,Alpha alpha) {
+        DrawLoop.Draw_Line(p, (int)x1, (int)y1, (int)x2, (int)y2, (byte)col.ordinal(), alpha);
     }
 
 	protected void Draw_Sprite(double x, double y, Sprite sprite){

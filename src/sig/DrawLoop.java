@@ -67,8 +67,58 @@ public class DrawLoop {
 			}
 		}
 	}
+
+	public static void Draw_Line(byte[] canvas,int x1,int y1,int x2,int y2,byte col,Alpha alpha) {
+        int x,y,dx,dy,dx1,dy1,px,py,xe,ye;
+        dx=x2-x1;dy=y2-y1;
+        dx1=Math.abs(dx);dy1=Math.abs(dy);
+        px=2*dy1-dx1;py=2*dx1-dy1;
+        if (dy1<=dx1) {
+            if (dx>=0) {
+                x=x1;y=y1;xe=x2-1;
+            } else {
+                x=x2-1;y=y2-1;xe=x1;
+            }
+            Draw(canvas,y*RabiClone.BASE_WIDTH+x,col,alpha);
+            while (x<xe) {
+                x=x+1;
+                if (px<0) {
+                    px=px+2*dy1;
+                } else {
+                    if ((dx<0&&dy<0)||(dx>0&&dy>0)) {
+                        y=y+1;
+                    } else {
+                        y=y-1;
+                    }
+                    px=px+2*(dy1-dx1);
+                }
+				Draw(canvas,y*RabiClone.BASE_WIDTH+x,col,alpha);
+            }
+        } else {
+            if (dy>=0) {
+                x=x1;y=y1;ye=y2-1;
+            } else {
+                x=x2-1;y=y2-1;ye=y1;
+            }
+            Draw(canvas,y*RabiClone.BASE_WIDTH+x,col,alpha);
+            while (y<ye) {
+                y=y+1;
+                if (py<=0) {
+                    py=py+2*dx1;
+                } else {
+                    if ((dx<0&&dy<0)||(dx>0&&dy>0)) {
+                        x=x+1;
+                    } else {
+                        x=x-1;
+                    }
+                    py=py+2*(dx1-dy1);
+                }
+				Draw(canvas,y*RabiClone.BASE_WIDTH+x,col,alpha);
+            }
+        }
+    }
     
-    public static void FillRect(byte[] p,byte col,double x,double y,double w,double h) {
+    public static void Fill_Rect(byte[] p,byte col,double x,double y,double w,double h) {
     	for (int xx=0;xx<w;xx++) {
         	for (int yy=0;yy<h;yy++) {
         		int index = ((int)y+yy)*RabiClone.BASE_WIDTH+(int)x+xx;
