@@ -51,19 +51,6 @@ public class RabiClone{
 
 	public static long lastControllerScan = System.currentTimeMillis();
 
-	private static ControllerEnvironment createDefaultEnvironment() throws ReflectiveOperationException {
-
-		// Find constructor (class is package private, so we can't access it directly)
-		Constructor<ControllerEnvironment> constructor = (Constructor<ControllerEnvironment>)
-			Class.forName("net.java.games.input.DefaultControllerEnvironment").getDeclaredConstructors()[0];
-	
-		// Constructor is package private, so we have to deactivate access control checks
-		constructor.setAccessible(true);
-	
-		// Create object with default constructor
-		return constructor.newInstance();
-	}
-
 	public static void main(String[] args) {
 
 		Key.InitializeKeyConversionMap();
@@ -95,11 +82,7 @@ public class RabiClone{
 
 		long lastGameTime = System.nanoTime();
 
-		try {
-			CONTROLLERS = createDefaultEnvironment().getControllers();
-		} catch (ReflectiveOperationException e) {
-			e.printStackTrace();
-		}
+		CONTROLLERS = ControllerEnvironment.getDefaultEnvironment().getControllers();
 		while (true) {
 			long timePassed = System.nanoTime()-lastGameTime;
 			lastGameTime=System.nanoTime();
@@ -150,11 +133,8 @@ public class RabiClone{
 				OBJ.add(new ConfigureControls(p));
 			}
 			if (Key.isKeyHeld(KeyEvent.VK_F5)&&System.currentTimeMillis()-lastControllerScan>5000) {
-				try {
-					CONTROLLERS=createDefaultEnvironment().getControllers();
-				} catch (ReflectiveOperationException e) {
-					e.printStackTrace();
-				}
+				CONTROLLERS=ControllerEnvironment.getDefaultEnvironment().rescanControllers();
+				lastControllerScan=System.currentTimeMillis();
 			}
 
 			for (int i=0;i<OBJ.size();i++) {
