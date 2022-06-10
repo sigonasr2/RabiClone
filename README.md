@@ -69,3 +69,5 @@ Storyboarding / Event Systems
 
 `resource` to suppress warnings relative to usage of resources of type Closeable
 `sync-override` to suppress warnings because of missing synchronize when overriding a synchronized method
+
+http://www.magicandlove.com/blog/2012/05/01/opencl-particles-system-example-in-processing/
