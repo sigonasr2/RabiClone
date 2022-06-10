@@ -26,6 +26,9 @@ import java.awt.event.KeyEvent;
 
 public class RabiClone {
 	public static final String PROGRAM_NAME = "RabiClone";
+	public static final int UPDATE_LOOP_FRAMERATE = 244;
+	public static final long UPDATE_LOOP_NANOTIME = (long)((1d/UPDATE_LOOP_FRAMERATE)*1000000000l);
+	public static final double UPDATE_MULT = 1d / UPDATE_LOOP_FRAMERATE;
 	public static String BLANK = "\0";
 
 	public static int UPCOUNT = 0;
@@ -92,8 +95,7 @@ public class RabiClone {
 			dt += System.nanoTime() - lastGameTime;
 			lastGameTime = System.nanoTime();
 
-			while (dt >= (1 / 244d) * 1000000000l) {
-				final double updateMult = 1 / 244d;
+			while (dt >= UPDATE_LOOP_NANOTIME) {
 				handleGameControllers();
 
 				KeyBind.poll();
@@ -124,30 +126,32 @@ public class RabiClone {
 				}
 
 				for (int i = 0; i < OBJ.size(); i++) {
-					OBJ.get(i).update(updateMult);
+					OBJ.get(i).update(UPDATE_MULT);
 					if (OBJ.get(i).isMarkedForDeletion()) {
 						OBJ.remove(i--);
 					}
 				}
-				dt -= (1 / 244d) * 1000000000l;
-				TIME += (1 / 244d) * 1000000000l;
+				dt -= UPDATE_LOOP_NANOTIME;
+				TIME += UPDATE_LOOP_NANOTIME;
 				// System.out.println(TIME);
 			}
-			if (dt < (1 / 244d) * 1000000000l) {
+			gameUpdateLoopStabilizer(dt); //This is hackish. Removing this slows down the game by about 30%. The timer runs slower. ??? 
+		}
+	}
+
+	private static void gameUpdateLoopStabilizer(long dt) {
+		if (dt < UPDATE_LOOP_NANOTIME) {
+			lastReportedTime = System.currentTimeMillis();
+		} else {
+			if (System.currentTimeMillis() - lastReportedTime > 5000) {
+				System.out.println("WARNING! Game is lagging behind! Frames Behind: " + (dt / UPDATE_LOOP_NANOTIME));
 				lastReportedTime = System.currentTimeMillis();
-			} else {
-				if (System.currentTimeMillis() - lastReportedTime > 5000) {
-					System.out.println(
-							"WARNING! Game is lagging behind! Frames Behind: " + (dt / ((1 / 244d) * 1000000000l)));
-					lastReportedTime = System.currentTimeMillis();
-				}
 			}
-			try {
-				Thread.sleep(4);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			//System.out.print(BLANK); //This is hackish. Removing this slows down the game by about 30%. The timer runs slower. ???
+		}
+		try {
+			Thread.sleep(4);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 	}
 
