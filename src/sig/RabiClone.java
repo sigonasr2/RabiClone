@@ -26,7 +26,7 @@ import java.awt.event.KeyEvent;
 
 public class RabiClone {
 	public static final String PROGRAM_NAME = "RabiClone";
-	public static final String BLANK = "\0";
+	public static String BLANK = "\0";
 
 	public static int UPCOUNT = 0;
 	public static Panel p;
@@ -142,7 +142,12 @@ public class RabiClone {
 					lastReportedTime = System.currentTimeMillis();
 				}
 			}
-			System.out.print(BLANK); //This is hackish. Removing this slows down the game by about 30%. The timer runs slower. ???
+			try {
+				Thread.sleep(4);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			//System.out.print(BLANK); //This is hackish. Removing this slows down the game by about 30%. The timer runs slower. ???
 		}
 	}
 
