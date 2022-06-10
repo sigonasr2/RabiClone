@@ -8,8 +8,6 @@ import net.java.games.input.ControllerEnvironment;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.awt.image.BufferStrategy;
-import java.awt.BufferCapabilities;
 
 import sig.engine.Panel;
 import sig.engine.Point;
@@ -25,7 +23,6 @@ import sig.engine.PaletteColor;
 
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
-import java.lang.reflect.Constructor;
 
 public class RabiClone {
 	public static final String PROGRAM_NAME = "RabiClone";
@@ -62,6 +59,9 @@ public class RabiClone {
 	public static long TIME = 0;
 
 	public static void main(String[] args) {
+		System.setProperty("sun.java2d.transaccel", "True");
+		System.setProperty("sun.java2d.d3d", "True");
+		System.setProperty("sun.java2d.ddforcevram", "True");
 
 		Key.InitializeKeyConversionMap();
 
@@ -83,29 +83,7 @@ public class RabiClone {
 				(int) ((Toolkit.getDefaultToolkit().getScreenSize().getHeight() - f.getHeight()) / 2));
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setVisible(true);
-		BufferStrategy bf = f.getBufferStrategy();
-		if (bf != null) {
-			BufferCapabilities caps = bf.getCapabilities();
-			try {
-				Class ebcClass = Class.forName(
-					"sun.java2d.pipe.hw.ExtendedBufferCapabilities");
-				Class vstClass = Class.forName(
-					"sun.java2d.pipe.hw.ExtendedBufferCapabilities$VSyncType");
-	
-				Constructor ebcConstructor = ebcClass.getConstructor(
-					new Class[] { BufferCapabilities.class, vstClass });
-				java.lang.Object vSyncType = vstClass.getField("VSYNC_ON").get(null);
-	
-				BufferCapabilities newCaps = (BufferCapabilities)ebcConstructor.newInstance(
-					new java.lang.Object[] { caps, vSyncType });
-	
-				f.createBufferStrategy(2, newCaps);
-			}
-			catch (Throwable t) {
-				// Ignore
-				t.printStackTrace();
-			}
-		}
+		f.createBufferStrategy(2);
 
 		OBJ.add(level_renderer = new LevelRenderer(p));
 		StartGame();
