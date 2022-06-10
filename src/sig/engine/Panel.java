@@ -375,6 +375,7 @@ public class Panel extends JPanel implements Runnable,KeyListener {
 						}
 					} while (RabiClone.f.getBufferStrategy().contentsRestored());
 					RabiClone.f.getBufferStrategy().show();
+					Toolkit.getDefaultToolkit().sync();
 				} while (RabiClone.f.getBufferStrategy().contentsLost());
 			}
 			updateFPSCounter();
