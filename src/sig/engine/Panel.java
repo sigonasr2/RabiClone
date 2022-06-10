@@ -194,21 +194,9 @@ public class Panel extends JPanel implements Runnable,KeyListener {
 
     @Override
     public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		do {
-			do {
-				Graphics g2 = RabiClone.f.getBufferStrategy().getDrawGraphics();
-				// perform draws on pixels
-				render();
-				// ask ImageProducer to update image
-				mImageProducer.newPixels();  
-				// draw it on panel          
-				g2.drawImage(this.imageBuffer,0,0,getWidth(),getHeight(),0,0,RabiClone.BASE_WIDTH,RabiClone.BASE_HEIGHT,this);
-				g2.dispose();
-			} while (RabiClone.f.getBufferStrategy().contentsRestored());
-			RabiClone.f.getBufferStrategy().show();
-		} while (RabiClone.f.getBufferStrategy().contentsLost());
-		updateFPSCounter();
+		//super.paintComponent(g);
+		// perform draws on pixels
+		g.drawImage(this.imageBuffer,0,0,getWidth(),getHeight(),0,0,RabiClone.BASE_WIDTH,RabiClone.BASE_HEIGHT,this);
     }
     
     /**
@@ -369,7 +357,27 @@ public class Panel extends JPanel implements Runnable,KeyListener {
 	public void run() {
 		while (true) {
             // request a JPanel re-drawing
-            repaint();       
+            //repaint();      
+			render();
+			mImageProducer.newPixels();
+			if (RabiClone.f!=null&&RabiClone.f.getBufferStrategy()!=null) {
+				do {
+					do {
+						if (RabiClone.f.getBufferStrategy()!=null) {
+							Graphics g2 = RabiClone.f.getBufferStrategy().getDrawGraphics();
+							if (g2!=null) {
+								try {      
+									paintComponent(g2);
+								} finally {
+									g2.dispose();
+								}
+							}
+						}
+					} while (RabiClone.f.getBufferStrategy().contentsRestored());
+					RabiClone.f.getBufferStrategy().show();
+				} while (RabiClone.f.getBufferStrategy().contentsLost());
+			}
+			updateFPSCounter();
             //System.out.println("Repaint "+frameCount++);
 			waitForNextFrame();
         }
