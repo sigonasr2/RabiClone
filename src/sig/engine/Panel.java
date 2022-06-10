@@ -194,13 +194,13 @@ public class Panel extends JPanel implements Runnable,KeyListener {
 
     @Override
     public void paintComponent(Graphics g) {
-        super.paintComponent(g);
+        super.paintComponent(RabiClone.f.getBufferStrategy().getDrawGraphics());
         // perform draws on pixels
         render();
         // ask ImageProducer to update image
         mImageProducer.newPixels();  
         // draw it on panel          
-		g.drawImage(this.imageBuffer,0,0,getWidth(),getHeight(),0,0,RabiClone.BASE_WIDTH,RabiClone.BASE_HEIGHT,this);
+		RabiClone.f.getBufferStrategy().getDrawGraphics().drawImage(this.imageBuffer,0,0,getWidth(),getHeight(),0,0,RabiClone.BASE_WIDTH,RabiClone.BASE_HEIGHT,this);
 		updateFPSCounter();
     }
     

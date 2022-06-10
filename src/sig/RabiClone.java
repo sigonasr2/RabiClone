@@ -80,6 +80,7 @@ public class RabiClone {
 				(int) ((Toolkit.getDefaultToolkit().getScreenSize().getHeight() - f.getHeight()) / 2));
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setVisible(true);
+		f.createBufferStrategy(2);
 
 		OBJ.add(level_renderer = new LevelRenderer(p));
 		StartGame();
