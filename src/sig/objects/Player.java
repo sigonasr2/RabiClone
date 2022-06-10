@@ -10,34 +10,35 @@ import sig.map.Map;
 import sig.map.Tile;
 import sig.map.View;
 import sig.objects.actor.State;
+import sig.utils.TimeUtils;
 
 public class Player extends AnimatedObject{
-    final static double GRAVITY = 2600;
-    final static double NORMAL_FRICTION = 9600;
-    final static double NORMAL_JUMP_VELOCITY = -450;
+    final static double GRAVITY = 1300;
+    final static double NORMAL_FRICTION = 6400;
+    final static double NORMAL_JUMP_VELOCITY = -300;
     final static boolean LEFT = false;
     final static boolean RIGHT = true;
-    final static int jump_fall_AnimationWaitTime = 200;
-    final static int slide_AnimationWaitTime = 100;
-    final static int slide_duration = 700;
+    final static long jump_fall_AnimationWaitTime = TimeUtils.millisToNanos(200);
+    final static long slide_AnimationWaitTime = TimeUtils.millisToNanos(100);
+    final static long slide_duration = TimeUtils.millisToNanos(700);
 
-    final static double WALKING_SPEED_LIMIT = 246;
+    final static double WALKING_SPEED_LIMIT = 164;
 
     double y_acceleration = GRAVITY;
-    double y_acceleration_limit = 150;
+    double y_acceleration_limit = 100;
     double x_acceleration = 0;
-    double x_acceleration_limit = 150;
+    double x_acceleration_limit = 100;
     double x_velocity = 0;
-    double x_velocity_limit = 369;
-    double y_velocity = 7.5;
-    double y_velocity_limit = 750;
-    double sliding_velocity = 246;
-    double sliding_acceleration = 180;
+    double x_velocity_limit = 246;
+    double y_velocity = 5;
+    double y_velocity_limit = 500;
+    double sliding_velocity = 164;
+    double sliding_acceleration = 120;
 
-    double horizontal_drag = 3000;
+    double horizontal_drag = 2000;
     double horizontal_friction = NORMAL_FRICTION;
-    double horizontal_air_drag = 1200;
-    double horizontal_air_friction = 270;
+    double horizontal_air_drag = 800;
+    double horizontal_air_friction = 180;
 
     double jump_velocity = NORMAL_JUMP_VELOCITY;
 
@@ -54,12 +55,14 @@ public class Player extends AnimatedObject{
     boolean spacebarReleased = true;
     boolean facing_direction = RIGHT;
 
-    long spacebarPressed = System.currentTimeMillis();
+    long spacebarPressed = RabiClone.TIME;
     long jump_slide_fall_StartAnimationTimer = -1;
     long slide_time = -1;
-    int jumpHoldTime = 150;
+    long slide_time2 = -1;
+    long slide_time3 = 0;
+    long jumpHoldTime = TimeUtils.millisToNanos(150);
 
-    final static int slideBufferTime = 200;
+    final static long slideBufferTime = TimeUtils.millisToNanos(200);
     long slidePressed = -1;
 
     public Player(Panel panel) {
@@ -80,16 +83,16 @@ public class Player extends AnimatedObject{
                 break;
             case FALLING:
                 if(prvState!=State.FALLING){
-                    jump_slide_fall_StartAnimationTimer = System.currentTimeMillis();
+                    jump_slide_fall_StartAnimationTimer = RabiClone.TIME;
                     setAnimatedSpr(Sprite.ERINA_JUMP_FALL1);
                 }
-                if(System.currentTimeMillis()-jump_slide_fall_StartAnimationTimer>jump_fall_AnimationWaitTime){
+                if(RabiClone.TIME-jump_slide_fall_StartAnimationTimer>jump_fall_AnimationWaitTime){
                     setAnimatedSpr(Sprite.ERINA_JUMP_FALL);
                     jump_slide_fall_StartAnimationTimer=-1;
                 }
                 break;
             case IDLE:
-                if (System.currentTimeMillis()-slidePressed<=slideBufferTime) {
+                if (RabiClone.TIME-slidePressed<=slideBufferTime) {
                     performSlide();
                     break;
                 }
@@ -116,23 +119,23 @@ public class Player extends AnimatedObject{
                     //jump_velocity=-500;
                 }
                 if(jump_slide_fall_StartAnimationTimer==-1){
-                    jump_slide_fall_StartAnimationTimer = System.currentTimeMillis();
+                    jump_slide_fall_StartAnimationTimer = RabiClone.TIME;
                     setAnimatedSpr(Sprite.ERINA_JUMP_RISE1);
                 }
-                if(System.currentTimeMillis()-jump_slide_fall_StartAnimationTimer>jump_fall_AnimationWaitTime){
+                if(RabiClone.TIME-jump_slide_fall_StartAnimationTimer>jump_fall_AnimationWaitTime){
                     setAnimatedSpr(Sprite.ERINA_JUMP_RISE);
                 }
                 break;
             case SLIDE:
                 horizontal_friction=0;
                 if(jump_slide_fall_StartAnimationTimer==-1){
-                    jump_slide_fall_StartAnimationTimer = System.currentTimeMillis();
+                    jump_slide_fall_StartAnimationTimer = RabiClone.TIME;
                     setAnimatedSpr(Sprite.ERINA_SLIDE1);
                 }
-                if(System.currentTimeMillis()-jump_slide_fall_StartAnimationTimer>slide_AnimationWaitTime){
+                if(RabiClone.TIME-jump_slide_fall_StartAnimationTimer>slide_AnimationWaitTime){
                     setAnimatedSpr(Sprite.ERINA_SLIDE);
                 }
-                if(System.currentTimeMillis()-slide_time>slide_duration){
+                if(RabiClone.TIME-slide_time>slide_duration){
                     if(KeyHeld(Action.MOVE_LEFT)){
                         facing_direction=LEFT;
                     }
@@ -140,6 +143,7 @@ public class Player extends AnimatedObject{
                         facing_direction=RIGHT;
                     }
                     state=State.IDLE;
+                    slide_time3 = (System.nanoTime()-slide_time2);
                 }
                 if (KeyHeld(Action.MOVE_LEFT)&&!KeyHeld(Action.MOVE_RIGHT)) {
                     if (facing_direction==LEFT&&x_velocity>-sliding_velocity*1.5||
@@ -162,7 +166,7 @@ public class Player extends AnimatedObject{
                 break;
         }
         prvState = state;
-        if (KeyHeld(Action.JUMP)&&System.currentTimeMillis()-spacebarPressed<jumpHoldTime) {
+        if (KeyHeld(Action.JUMP)&&RabiClone.TIME-spacebarPressed<jumpHoldTime) {
             y_velocity=jump_velocity;
         }
     }
@@ -197,7 +201,7 @@ public class Player extends AnimatedObject{
                 break;
             case FALLING:
                 if (a==Action.SLIDE||a==Action.FALL) {
-                    slidePressed=System.currentTimeMillis();
+                    slidePressed=RabiClone.TIME;
                     //System.out.println("Queue up slide.");
                 }
             case JUMP:
@@ -205,7 +209,7 @@ public class Player extends AnimatedObject{
                     jumpCount=0;
                     y_velocity = jump_velocity;
                     spacebarReleased=false;
-                    spacebarPressed=System.currentTimeMillis();
+                    spacebarPressed=RabiClone.TIME;
                 }
                 break;
             case SLIDE:
@@ -223,7 +227,7 @@ public class Player extends AnimatedObject{
                 jumpCount--;
                 y_velocity = jump_velocity;
                 spacebarReleased=false;
-                spacebarPressed=System.currentTimeMillis();
+                spacebarPressed=RabiClone.TIME;
                 //System.out.println("Jump");
             }
         }
@@ -241,7 +245,8 @@ public class Player extends AnimatedObject{
 
 
     private void performSlide() {
-        slide_time = System.currentTimeMillis();
+        slide_time = RabiClone.TIME;
+        slide_time2 = System.nanoTime();
         if(facing_direction){
             x_velocity=sliding_velocity;
         }
