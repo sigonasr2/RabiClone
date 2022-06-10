@@ -62,8 +62,6 @@ public class RabiClone {
 	public static long TIME = 0;
 
 	public static void main(String[] args) {
-		System.setProperty("sun.java2d.transaccel", "True");
-		System.setProperty("sun.java2d.ddforcevram", "True");
 
 		Key.InitializeKeyConversionMap();
 
