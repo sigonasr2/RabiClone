@@ -6,4 +6,4 @@ printf "\n\n\nRunning Program...\n\n"
 ORIGINAL_LOC=$(pwd)
 cd $OUT_DIR
 java ${CUSTOM_PARAMS} -cp ".;../lib/bin/ " "-Djava.library.path=${LIBRARY_PATH}" ${MAIN_CLASS} "$@"
-#${ORIGINAL_LOC}/${LANGUAGE}/scripts/clean.sh
+${ORIGINAL_LOC}/${LANGUAGE}/scripts/clean.sh

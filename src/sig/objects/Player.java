@@ -375,16 +375,15 @@ public class Player extends AnimatedObject{
             if(checked_tile_top_right.getCollision()==CollisionType.BLOCK||checked_tile_top_left.getCollision()==CollisionType.BLOCK){
                 //System.out.println(checked_tile_top_right.getCollision()+"//"+checked_tile_top_left.getCollision());
                 if(checked_tile_bottom_center.getCollision()==CollisionType.SLOPE){
-                }else{
-
-                if (checked_tile_top_right.getCollision()==CollisionType.BLOCK) {
-                    setX(((int)(getX()-getAnimatedSpr().getWidth()/2)/Tile.TILE_WIDTH)*Tile.TILE_WIDTH+Tile.TILE_WIDTH/2+3+check_distance_x);
                 } else {
-                    setX(((int)(getX()+getAnimatedSpr().getWidth())/Tile.TILE_WIDTH)*Tile.TILE_WIDTH-Tile.TILE_WIDTH/2-3+check_distance_x);
-                }
-                x_acceleration = 0;
-                x_velocity = Math.signum(x_velocity)*0.000001;
-                sideCollision=true;
+                    if (checked_tile_top_right.getCollision()==CollisionType.BLOCK) {
+                        setX(((int)(getX()-getAnimatedSpr().getWidth()/2)/Tile.TILE_WIDTH)*Tile.TILE_WIDTH+Tile.TILE_WIDTH/2+3+check_distance_x);
+                    } else {
+                        setX(((int)(getX()+getAnimatedSpr().getWidth())/Tile.TILE_WIDTH)*Tile.TILE_WIDTH-Tile.TILE_WIDTH/2-3+check_distance_x);
+                    }
+                    x_acceleration = 0;
+                    x_velocity = Math.signum(x_velocity)*0.000001;
+                    sideCollision=true;
                 }
             }
         }
@@ -399,7 +398,7 @@ public class Player extends AnimatedObject{
                 groundCollision=false;
             } else {
                 if(checked_tile_bottom_center.getCollision()==CollisionType.SLOPE){
-                    setY(-(getX()%Tile.TILE_WIDTH)+(int)(getY()+getAnimatedSpr().getHeight()/2)/Tile.TILE_HEIGHT*Tile.TILE_HEIGHT+(getAnimatedSpr().getHeight()/2-4));
+                    moveUpSlope(checked_tile_bottom_center);
                 }
                 groundCollision=true;
                 jumpCount=maxJumpCount;
@@ -414,9 +413,9 @@ public class Player extends AnimatedObject{
                 Tile checked_tile_bottom_left = RabiClone.CURRENT_MAP.getTile((int)(getX()-getAnimatedSpr().getWidth()/2+4)/Tile.TILE_WIDTH, (int)(getY()+getAnimatedSpr().getHeight()/2+check_distance_y)/Tile.TILE_HEIGHT);
                 Tile checked_tile_bottom_center = RabiClone.CURRENT_MAP.getTile((int)(getX())/Tile.TILE_WIDTH, (int)(getY()+getAnimatedSpr().getHeight()/2)/Tile.TILE_HEIGHT);
                 if(checked_tile_bottom_center.getCollision()==CollisionType.SLOPE
-                && getY()+check_distance_y>(-(getX()%Tile.TILE_WIDTH)+(int)(getY()+getAnimatedSpr().getHeight()/2)/Tile.TILE_HEIGHT*Tile.TILE_HEIGHT+(getAnimatedSpr().getHeight()/2-4)))
+                && getY()+check_distance_y>ySlopeCollisionPoint(checked_tile_bottom_center))
                 {
-                    setY(-(getX()%Tile.TILE_WIDTH)+(int)(getY()+getAnimatedSpr().getHeight()/2)/Tile.TILE_HEIGHT*Tile.TILE_HEIGHT+(getAnimatedSpr().getHeight()/2-4));
+                    moveUpSlope(checked_tile_bottom_center);
                     collisionOccured = groundCollision(check_distance_y);
                     System.out.println(checked_tile_bottom_center);
                     break;
@@ -447,6 +446,35 @@ public class Player extends AnimatedObject{
                 this.setX(this.getX()+displacement_x);
             }
         }
+    }
+
+
+    private double ySlopeCollisionPoint(Tile tile) {
+        switch(tile){
+            case BIG_SLOPE_LEFT1:
+            return 0;
+
+            case BIG_SLOPE_LEFT2:
+            return 0;
+
+            case BIG_SLOPE_RIGHT1:
+            return 0;
+
+            case BIG_SLOPE_RIGHT2:
+            return 0;
+
+            case SMALL_SLOPE_LEFT:
+            return -(getX()%Tile.TILE_WIDTH)+(int)(getY()+getAnimatedSpr().getHeight()/2)/Tile.TILE_HEIGHT*Tile.TILE_HEIGHT+(getAnimatedSpr().getHeight()/2-4);
+            
+            case SMALL_SLOPE_RIGHT:
+            return Tile.TILE_WIDTH-(getX()%Tile.TILE_WIDTH)+(int)(getY()+getAnimatedSpr().getHeight()/2)/Tile.TILE_HEIGHT*Tile.TILE_HEIGHT+(getAnimatedSpr().getHeight()/2-4);
+        }
+        return 0;
+    }
+
+
+    private void moveUpSlope(Tile checked_tile_bottom_center) {
+        setY(ySlopeCollisionPoint(checked_tile_bottom_center));
     }
 
 
