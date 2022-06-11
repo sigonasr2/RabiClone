@@ -169,7 +169,7 @@ public class Player extends AnimatedObject{
         if (KeyHeld(Action.JUMP)&&RabiClone.TIME-spacebarPressed<jumpHoldTime) {
             y_velocity=jump_velocity;
         }
-        System.out.println(state);
+        //System.out.println(state);
     }
 
 
@@ -417,7 +417,6 @@ public class Player extends AnimatedObject{
                 {
                     moveUpSlope(checked_tile_bottom_center);
                     collisionOccured = groundCollision(check_distance_y);
-                    System.out.println(checked_tile_bottom_center);
                     break;
                 }
                 //System.out.println((int)getX()/Tile.TILE_WIDTH);
@@ -433,7 +432,7 @@ public class Player extends AnimatedObject{
         if (!groundCollision){
             this.setY(this.getY()+displacement_y);
             y_acceleration = GRAVITY;
-            if(y_velocity>0){
+            if(y_velocity>0 && state!=State.SLIDE){
                 state = State.FALLING;
             }
             if (!sideCollision) {
@@ -442,8 +441,22 @@ public class Player extends AnimatedObject{
             }
         } else {
             if (!sideCollision) {
+                Tile checked_tile_bottom_center = RabiClone.CURRENT_MAP.getTile((int)(getX())/Tile.TILE_WIDTH, (int)(getY()+getAnimatedSpr().getHeight()/2)/Tile.TILE_HEIGHT);
                 handleKeyboardMovement(updateMult, right-left, horizontal_friction, horizontal_drag);
                 this.setX(this.getX()+displacement_x);
+                if(displacement_x>0){
+                    if(checked_tile_bottom_center==Tile.SMALL_SLOPE_RIGHT){
+                        setY(getY()+displacement_x);
+                        System.out.println("We're in RIGHT.");
+                    }
+                }
+                else{
+                    if(checked_tile_bottom_center==Tile.SMALL_SLOPE_LEFT){
+                        setY(getY()-displacement_x);
+                        System.out.println("We're in it for LEFT.");
+
+                    }
+                }
             }
         }
     }
@@ -452,16 +465,16 @@ public class Player extends AnimatedObject{
     private double ySlopeCollisionPoint(Tile tile) {
         switch(tile){
             case BIG_SLOPE_LEFT1:
-            return 0;
+            return -(getX()%Tile.TILE_WIDTH/2)+(int)(getY()+getAnimatedSpr().getHeight()/2)/Tile.TILE_HEIGHT*Tile.TILE_HEIGHT+(getAnimatedSpr().getHeight()/2-4);
 
             case BIG_SLOPE_LEFT2:
-            return 0;
+            return -(getX()%Tile.TILE_WIDTH/2)+(int)(getY()+getAnimatedSpr().getHeight()/2)/Tile.TILE_HEIGHT*Tile.TILE_HEIGHT+(getAnimatedSpr().getHeight()/2-4)-Tile.TILE_WIDTH/2;
 
             case BIG_SLOPE_RIGHT1:
-            return 0;
+            return (getX()%Tile.TILE_WIDTH/2)+(int)(getY()+getAnimatedSpr().getHeight()/2)/Tile.TILE_HEIGHT*Tile.TILE_HEIGHT+(getAnimatedSpr().getHeight()/2-4)-Tile.TILE_WIDTH;
 
             case BIG_SLOPE_RIGHT2:
-            return 0;
+            return (getX()%Tile.TILE_WIDTH/2)+(int)(getY()+getAnimatedSpr().getHeight()/2)/Tile.TILE_HEIGHT*Tile.TILE_HEIGHT+(getAnimatedSpr().getHeight()/2-4)-Tile.TILE_WIDTH+Tile.TILE_WIDTH/2;
 
             case SMALL_SLOPE_LEFT:
             return -(getX()%Tile.TILE_WIDTH)+(int)(getY()+getAnimatedSpr().getHeight()/2)/Tile.TILE_HEIGHT*Tile.TILE_HEIGHT+(getAnimatedSpr().getHeight()/2-4);
@@ -477,7 +490,6 @@ public class Player extends AnimatedObject{
         setY(ySlopeCollisionPoint(checked_tile_bottom_center));
     }
 
-
     private boolean groundCollision(double check_distance_y) {
         boolean collisionOccured;
         setY((getY()-check_distance_y));
@@ -485,7 +497,9 @@ public class Player extends AnimatedObject{
         y_velocity = 0;
         groundCollision=true;
         collisionOccured=true;
-        state = State.IDLE;
+        if(state!=State.SLIDE){
+            state = State.IDLE;
+        }
         return collisionOccured;
     }
 
