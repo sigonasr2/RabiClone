@@ -467,7 +467,7 @@ public class Player extends AnimatedObject{
             return -(getX()%Tile.TILE_WIDTH)+(int)(getY()+getAnimatedSpr().getHeight()/2)/Tile.TILE_HEIGHT*Tile.TILE_HEIGHT+(getAnimatedSpr().getHeight()/2-4);
             
             case SMALL_SLOPE_RIGHT:
-            return Tile.TILE_WIDTH-(getX()%Tile.TILE_WIDTH)+(int)(getY()+getAnimatedSpr().getHeight()/2)/Tile.TILE_HEIGHT*Tile.TILE_HEIGHT+(getAnimatedSpr().getHeight()/2-4);
+            return (getX()%Tile.TILE_WIDTH)+(int)(getY()+getAnimatedSpr().getHeight()/2)/Tile.TILE_HEIGHT*Tile.TILE_HEIGHT+(getAnimatedSpr().getHeight()/2-4)-Tile.TILE_WIDTH;
         }
         return 0;
     }
