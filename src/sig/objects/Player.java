@@ -2,9 +2,9 @@ package sig.objects;
 
 import sig.RabiClone;
 import sig.engine.Action;
-import sig.engine.AnimatedObject;
 import sig.engine.Panel;
 import sig.engine.Sprite;
+import sig.engine.objects.AnimatedObject;
 import sig.map.CollisionType;
 import sig.map.Map;
 import sig.map.Tile;
@@ -171,7 +171,7 @@ public class Player extends AnimatedObject {
     }
 
     @Override
-    protected void KeyReleased(Action a) {
+    public void KeyReleased(Action a) {
         if (a == Action.JUMP) {
             spacebarPressed = 0;
             spacebarReleased = true;
@@ -187,7 +187,7 @@ public class Player extends AnimatedObject {
 
     @Override
     @SuppressWarnings("incomplete-switch")
-    protected void KeyPressed(Action a) {
+    public void KeyPressed(Action a) {
         switch (state) {
             case ATTACK:
                 break;
@@ -472,6 +472,8 @@ public class Player extends AnimatedObject {
                 return (getX() % Tile.TILE_WIDTH)
                         + (int) (getY() + getAnimatedSpr().getHeight() / 2) / Tile.TILE_HEIGHT * Tile.TILE_HEIGHT
                         + (getAnimatedSpr().getHeight() / 2 - 4) - Tile.TILE_WIDTH;
+            default:
+                break;
         }
         return 0;
     }

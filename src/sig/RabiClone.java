@@ -11,6 +11,7 @@ import java.util.List;
 
 import sig.engine.Panel;
 import sig.engine.Point;
+import sig.engine.objects.Object;
 import sig.map.Maps;
 import sig.objects.ConfigureControls;
 import sig.objects.EditorRenderer;
@@ -18,7 +19,6 @@ import sig.objects.LevelRenderer;
 import sig.objects.Player;
 import sig.engine.Key;
 import sig.engine.KeyBind;
-import sig.engine.Object;
 import sig.engine.PaletteColor;
 
 import java.awt.Toolkit;

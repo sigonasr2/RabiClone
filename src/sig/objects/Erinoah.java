@@ -1,8 +1,8 @@
 package sig.objects;
 
-import sig.engine.AnimatedObject;
 import sig.engine.Panel;
 import sig.engine.Sprite;
+import sig.engine.objects.AnimatedObject;
 
 public class Erinoah extends AnimatedObject{
 

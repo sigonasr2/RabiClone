@@ -87,7 +87,7 @@ public class EditorRenderer extends LevelRenderer{
     }
 
     @Override
-    protected void MouseScrolled(MouseScrollValue scrolled) {
+    public void MouseScrolled(MouseScrollValue scrolled) {
         int up = scrolled==MouseScrollValue.UP?1:0;
         int down = scrolled==MouseScrollValue.DOWN?1:0;
         int tempIndex = selectedTile.ordinal()+down-up;
@@ -174,7 +174,7 @@ public class EditorRenderer extends LevelRenderer{
 
     @Override
     @SuppressWarnings("incomplete-switch")
-    protected void KeyPressed(Action a) {
+    public void KeyPressed(Action a) {
         int tileX = (int)(RabiClone.MOUSE_POS.getX()+getX())/Tile.TILE_WIDTH;
         int tileY = (int)(RabiClone.MOUSE_POS.getY()+getY())/Tile.TILE_HEIGHT;
         switch (a) {

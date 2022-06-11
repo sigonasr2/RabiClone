@@ -1,4 +1,7 @@
-package sig.engine;
+package sig.engine.objects;
+
+import sig.engine.AnimatedSprite;
+import sig.engine.Panel;
 
 public abstract class AnimatedObject extends Object{
 

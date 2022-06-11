@@ -13,10 +13,10 @@ import sig.engine.Action;
 import sig.engine.Alpha;
 import sig.engine.Font;
 import sig.engine.KeyBind;
-import sig.engine.Object;
 import sig.engine.PaletteColor;
 import sig.engine.Panel;
 import sig.engine.String;
+import sig.engine.objects.Object;
 
 public class ConfigureControls extends Object{
 
@@ -120,7 +120,7 @@ public class ConfigureControls extends Object{
     }
 
     @Override
-    protected void MousePressed(MouseEvent e) {
+    public void MousePressed(MouseEvent e) {
         if ((e.getButton()==MouseEvent.BUTTON3||e.getButton()==MouseEvent.BUTTON1)&&selectedKeybind!=null) {
             //Remove that keybind.
             List<KeyBind> keybinds = KeyBind.KEYBINDS.get(selectedAction);

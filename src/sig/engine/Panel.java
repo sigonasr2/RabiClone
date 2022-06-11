@@ -22,6 +22,7 @@ import java.awt.event.KeyListener;
 
 import sig.DrawLoop;
 import sig.RabiClone;
+import sig.engine.objects.Object;
 
 public class Panel extends JPanel implements Runnable,KeyListener {
 	JFrame window;

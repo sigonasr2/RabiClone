@@ -1,7 +1,19 @@
-package sig.engine;
+package sig.engine.objects;
 
 import java.awt.event.MouseEvent;
 import sig.DrawLoop;
+import sig.engine.Action;
+import sig.engine.Alpha;
+import sig.engine.AnimatedSprite;
+import sig.engine.Font;
+import sig.engine.GameEntity;
+import sig.engine.KeyBind;
+import sig.engine.MouseScrollValue;
+import sig.engine.PaletteColor;
+import sig.engine.Panel;
+import sig.engine.Sprite;
+import sig.engine.String;
+import sig.engine.Transform;
 
 public abstract class Object implements GameEntity{
     double x,y;
@@ -102,16 +114,16 @@ public abstract class Object implements GameEntity{
 		return KeyBind.isKeyHeld(a);
 	}
 
-	protected void KeyPressed(Action a) {
+	public void KeyPressed(Action a) {
 	}
 
-	protected void KeyReleased(Action a) {
+	public void KeyReleased(Action a) {
 	}
 
-	protected void MousePressed(MouseEvent e) {
+	public void MousePressed(MouseEvent e) {
 	}
 
-	protected void MouseReleased(MouseEvent e) {
+	public void MouseReleased(MouseEvent e) {
 	}
 
     protected boolean MouseHeld(int mb) {
@@ -122,6 +134,6 @@ public abstract class Object implements GameEntity{
      * @param scrolled -1 is UP, 1 is DOWN
      * @return
      */
-    protected void MouseScrolled(MouseScrollValue scrolled) {
+    public void MouseScrolled(MouseScrollValue scrolled) {
 	}
 }

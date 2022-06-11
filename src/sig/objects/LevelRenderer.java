@@ -4,13 +4,13 @@ import java.util.Arrays;
 
 import sig.RabiClone;
 import sig.engine.Alpha;
-import sig.engine.AnimatedObject;
 import sig.engine.Font;
-import sig.engine.Object;
 import sig.engine.PaletteColor;
 import sig.engine.Panel;
 import sig.engine.Sprite;
 import sig.engine.Transform;
+import sig.engine.objects.AnimatedObject;
+import sig.engine.objects.Object;
 import sig.engine.String;
 import sig.map.Background;
 import sig.map.CollisionType;
@@ -79,6 +79,11 @@ public class LevelRenderer extends Object{
             Draw_Text(4,4,new String(RabiClone.player.x_velocity),Font.PROFONT_12);
             Draw_Text(4,4+Font.PROFONT_12.getGlyphHeight(),new String(RabiClone.player.slide_time3),Font.PROFONT_12);
         }
+        //RenderCollisionGrid(p);
+    }
+
+    @SuppressWarnings("unused")
+    private void RenderCollisionGrid(byte[] p) {
         for (int y=0;y<RabiClone.BASE_HEIGHT;y++) {
             for (int x=0;x<RabiClone.BASE_WIDTH;x++) {
                 if (RabiClone.COLLISION[y*RabiClone.BASE_WIDTH+x]) {
