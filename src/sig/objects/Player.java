@@ -3,8 +3,10 @@ package sig.objects;
 import sig.RabiClone;
 import sig.engine.Action;
 import sig.engine.Panel;
+import sig.engine.Rectangle;
 import sig.engine.Sprite;
 import sig.engine.objects.AnimatedObject;
+import sig.engine.objects.CollisionEntity;
 import sig.map.CollisionType;
 import sig.map.Map;
 import sig.map.Tile;
@@ -12,7 +14,7 @@ import sig.map.View;
 import sig.objects.actor.State;
 import sig.utils.TimeUtils;
 
-public class Player extends AnimatedObject {
+public class Player extends AnimatedObject implements CollisionEntity {
     final static double GRAVITY = 1300;
     final static double NORMAL_FRICTION = 6400;
     final static double NORMAL_JUMP_VELOCITY = -300;
@@ -71,6 +73,7 @@ public class Player extends AnimatedObject {
         super(Sprite.ERINA, 5, panel);
         setX(RabiClone.BASE_WIDTH / 2 - getAnimatedSpr().getWidth() / 2);
         setY(RabiClone.BASE_HEIGHT * (2 / 3d) - getAnimatedSpr().getHeight() / 2);
+        setCollisionBounds(new Rectangle(2,2,28,28));
     }
 
     @Override
@@ -522,6 +525,16 @@ public class Player extends AnimatedObject {
                 + groundCollision + ", jumpCount="
                 + jumpCount + ", x_velocity=" + x_velocity + ", y_velocity=" + y_velocity + ", x=" + getX() + ", y="
                 + getY() + "]";
+    }
+
+    @Override
+    public Rectangle getCollisionBounds() {
+        return getCollisionBox();
+    }
+
+    @Override
+    public void setCollisionBounds(Rectangle bounds) {
+        setCollisionBox(bounds);
     }
 
 }

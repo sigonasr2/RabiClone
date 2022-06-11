@@ -31,6 +31,19 @@ public class LevelRenderer extends Object{
     }
 
     private void CreateCollisionGrid() {
+        for (int i=0;i<RabiClone.OBJ.size();i++) {
+            Object o = RabiClone.OBJ.get(i);
+            if (o.getCollisionBox()!=null) {
+                for (int yy=o.getCollisionBox().getY();yy<o.getCollisionBox().getY2();yy++) {
+                    for (int xx=o.getCollisionBox().getX();xx<o.getCollisionBox().getX2();xx++) {
+                        int xpos=(int)(o.getX()-o.getSprite().getWidth()/2-this.getX()+xx),ypos=(int)(o.getY()-o.getSprite().getHeight()/2-this.getY()+yy);
+                        if (xpos>=0&&xpos<RabiClone.BASE_WIDTH&&ypos>=0&&ypos<RabiClone.BASE_HEIGHT) {
+                            RabiClone.COLLISION[ypos*RabiClone.BASE_WIDTH+xpos]=true;
+                        }
+                    }
+                }
+            }
+        }
         for (int y=(int)(this.getY()/Tile.TILE_HEIGHT);y<(int)(RabiClone.BASE_HEIGHT/Tile.TILE_HEIGHT+this.getY()/Tile.TILE_HEIGHT+1);y++) {
             if (y<0||y>Map.MAP_HEIGHT) {
                 continue;
@@ -79,10 +92,9 @@ public class LevelRenderer extends Object{
             Draw_Text(4,4,new String(RabiClone.player.x_velocity),Font.PROFONT_12);
             Draw_Text(4,4+Font.PROFONT_12.getGlyphHeight(),new String(RabiClone.player.slide_time3),Font.PROFONT_12);
         }
-        //RenderCollisionGrid(p);
+        RenderCollisionGrid(p);
     }
 
-    @SuppressWarnings("unused")
     private void RenderCollisionGrid(byte[] p) {
         for (int y=0;y<RabiClone.BASE_HEIGHT;y++) {
             for (int x=0;x<RabiClone.BASE_WIDTH;x++) {

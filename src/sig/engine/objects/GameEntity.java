@@ -1,4 +1,4 @@
-package sig.engine;
+package sig.engine.objects;
 
 public interface GameEntity {
     public void update(double updateMult);

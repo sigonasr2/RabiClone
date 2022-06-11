@@ -14,12 +14,20 @@ public class Rectangle {
         return x;
     }
 
+    public int getX2() {
+        return x+w;
+    }
+
     public void setX(int x) {
         this.x = x;
     }
 
     public int getY() {
         return y;
+    }
+
+    public int getY2() {
+        return y+h;
     }
 
     public void setY(int y) {

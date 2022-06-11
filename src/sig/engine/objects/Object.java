@@ -6,11 +6,11 @@ import sig.engine.Action;
 import sig.engine.Alpha;
 import sig.engine.AnimatedSprite;
 import sig.engine.Font;
-import sig.engine.GameEntity;
 import sig.engine.KeyBind;
 import sig.engine.MouseScrollValue;
 import sig.engine.PaletteColor;
 import sig.engine.Panel;
+import sig.engine.Rectangle;
 import sig.engine.Sprite;
 import sig.engine.String;
 import sig.engine.Transform;
@@ -19,6 +19,16 @@ public abstract class Object implements GameEntity{
     double x,y;
     Sprite spr;
     Panel panel;
+    Rectangle collisionBox;
+    
+    public Rectangle getCollisionBox() {
+        return collisionBox;
+    }
+
+    public void setCollisionBox(Rectangle collisionBox) {
+        this.collisionBox = collisionBox;
+    }
+
     public Panel getPanel() {
         return panel;
     }
