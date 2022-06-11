@@ -58,6 +58,8 @@ public class RabiClone {
 	static long lastReportedTime = System.currentTimeMillis();
 	public static long TIME = 0;
 
+	public static boolean COLLISION[] = new boolean[BASE_WIDTH*BASE_HEIGHT];
+
 	public static void main(String[] args) {
 		System.setProperty("sun.java2d.transaccel", "True");
 		System.setProperty("sun.java2d.d3d", "True");

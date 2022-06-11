@@ -12,7 +12,7 @@ import sig.map.View;
 import sig.objects.actor.State;
 import sig.utils.TimeUtils;
 
-public class Player extends AnimatedObject{
+public class Player extends AnimatedObject {
     final static double GRAVITY = 1300;
     final static double NORMAL_FRICTION = 6400;
     final static double NORMAL_JUMP_VELOCITY = -300;
@@ -42,13 +42,13 @@ public class Player extends AnimatedObject{
 
     double jump_velocity = NORMAL_JUMP_VELOCITY;
 
-    int maxJumpCount=2;
-    int jumpCount=maxJumpCount;
+    int maxJumpCount = 2;
+    int jumpCount = maxJumpCount;
     State state = State.IDLE;
     State prvState = state;
 
-    final double viewBoundaryX=RabiClone.BASE_WIDTH/3;
-    final double viewBoundaryY=RabiClone.BASE_HEIGHT/3;
+    final double viewBoundaryX = RabiClone.BASE_WIDTH / 3;
+    final double viewBoundaryY = RabiClone.BASE_HEIGHT / 3;
     View lastCameraView = View.FIXED;
 
     boolean groundCollision = false;
@@ -65,12 +65,13 @@ public class Player extends AnimatedObject{
     final static long slideBufferTime = TimeUtils.millisToNanos(200);
     long slidePressed = -1;
 
-    public Player(Panel panel) {
-        super(Sprite.ERINA,5,panel);
-        setX(RabiClone.BASE_WIDTH/2-getAnimatedSpr().getWidth()/2);
-        setY(RabiClone.BASE_HEIGHT*(2/3d)-getAnimatedSpr().getHeight()/2);
-    }
+    boolean onSlope = false;
 
+    public Player(Panel panel) {
+        super(Sprite.ERINA, 5, panel);
+        setX(RabiClone.BASE_WIDTH / 2 - getAnimatedSpr().getWidth() / 2);
+        setY(RabiClone.BASE_HEIGHT * (2 / 3d) - getAnimatedSpr().getHeight() / 2);
+    }
 
     @Override
     public void update(double updateMult) {
@@ -78,84 +79,81 @@ public class Player extends AnimatedObject{
         handleMovementPhysics(updateMult);
         handleCameraRoomMovement();
 
-        switch(state){
+        switch (state) {
             case ATTACK:
                 break;
             case FALLING:
-                if(prvState!=State.FALLING){
+                if (prvState != State.FALLING) {
                     jump_slide_fall_StartAnimationTimer = RabiClone.TIME;
                     setAnimatedSpr(Sprite.ERINA_JUMP_FALL1);
                 }
-                if(RabiClone.TIME-jump_slide_fall_StartAnimationTimer>jump_fall_AnimationWaitTime){
+                if (RabiClone.TIME - jump_slide_fall_StartAnimationTimer > jump_fall_AnimationWaitTime) {
                     setAnimatedSpr(Sprite.ERINA_JUMP_FALL);
-                    jump_slide_fall_StartAnimationTimer=-1;
+                    jump_slide_fall_StartAnimationTimer = -1;
                 }
                 break;
             case IDLE:
-                if (RabiClone.TIME-slidePressed<=slideBufferTime) {
+                if (RabiClone.TIME - slidePressed <= slideBufferTime) {
                     performSlide();
                     break;
                 }
 
                 jump_velocity = NORMAL_JUMP_VELOCITY;
                 horizontal_friction = NORMAL_FRICTION;
-                jump_slide_fall_StartAnimationTimer=-1;
+                jump_slide_fall_StartAnimationTimer = -1;
 
-                if(x_velocity!=0){
+                if (x_velocity != 0) {
                     setAnimatedSpr(Sprite.ERINA_WALK);
-                    if (x_velocity>0) {
-                        facing_direction=RIGHT;
-                    } else 
-                    if (x_velocity<0) {
-                        facing_direction=LEFT;
+                    if (x_velocity > 0) {
+                        facing_direction = RIGHT;
+                    } else if (x_velocity < 0) {
+                        facing_direction = LEFT;
                     }
-                }
-                else{
+                } else {
                     setAnimatedSpr(Sprite.ERINA);
                 }
                 break;
             case JUMP:
-                if(prvState==State.SLIDE){
-                    //jump_velocity=-500;
+                if (prvState == State.SLIDE) {
+                    // jump_velocity=-500;
                 }
-                if(jump_slide_fall_StartAnimationTimer==-1){
+                if (jump_slide_fall_StartAnimationTimer == -1) {
                     jump_slide_fall_StartAnimationTimer = RabiClone.TIME;
                     setAnimatedSpr(Sprite.ERINA_JUMP_RISE1);
                 }
-                if(RabiClone.TIME-jump_slide_fall_StartAnimationTimer>jump_fall_AnimationWaitTime){
+                if (RabiClone.TIME - jump_slide_fall_StartAnimationTimer > jump_fall_AnimationWaitTime) {
                     setAnimatedSpr(Sprite.ERINA_JUMP_RISE);
                 }
                 break;
             case SLIDE:
-                horizontal_friction=0;
-                if(jump_slide_fall_StartAnimationTimer==-1){
+                horizontal_friction = 0;
+                if (jump_slide_fall_StartAnimationTimer == -1) {
                     jump_slide_fall_StartAnimationTimer = RabiClone.TIME;
                     setAnimatedSpr(Sprite.ERINA_SLIDE1);
                 }
-                if(RabiClone.TIME-jump_slide_fall_StartAnimationTimer>slide_AnimationWaitTime){
+                if (RabiClone.TIME - jump_slide_fall_StartAnimationTimer > slide_AnimationWaitTime) {
                     setAnimatedSpr(Sprite.ERINA_SLIDE);
                 }
-                if(RabiClone.TIME-slide_time>slide_duration){
-                    if(KeyHeld(Action.MOVE_LEFT)){
-                        facing_direction=LEFT;
+                if (RabiClone.TIME - slide_time > slide_duration) {
+                    if (KeyHeld(Action.MOVE_LEFT)) {
+                        facing_direction = LEFT;
                     }
-                    if(KeyHeld(Action.MOVE_RIGHT)){
-                        facing_direction=RIGHT;
+                    if (KeyHeld(Action.MOVE_RIGHT)) {
+                        facing_direction = RIGHT;
                     }
-                    state=State.IDLE;
-                    slide_time3 = (System.nanoTime()-slide_time2);
+                    state = State.IDLE;
+                    slide_time3 = (System.nanoTime() - slide_time2);
                 }
-                if (KeyHeld(Action.MOVE_LEFT)&&!KeyHeld(Action.MOVE_RIGHT)) {
-                    if (facing_direction==LEFT&&x_velocity>-sliding_velocity*1.5||
-                        facing_direction==RIGHT&&x_velocity>sliding_velocity*0.5) {
-                            x_velocity-=sliding_acceleration*updateMult;
-                        }
-                } else
-                if (KeyHeld(Action.MOVE_RIGHT)&&!KeyHeld(Action.MOVE_LEFT)) {
-                    if (facing_direction==LEFT&&x_velocity<-sliding_velocity*0.5||
-                        facing_direction==RIGHT&&x_velocity<sliding_velocity*1.5) {
-                            x_velocity+=sliding_acceleration*updateMult;
-                        }
+                if (KeyHeld(Action.MOVE_LEFT) && !KeyHeld(Action.MOVE_RIGHT)) {
+                    if (facing_direction == LEFT && x_velocity > -sliding_velocity * 1.5 ||
+                            facing_direction == RIGHT && x_velocity > sliding_velocity * 0.5) {
+                        x_velocity -= sliding_acceleration * updateMult;
+                    }
+                } else if (KeyHeld(Action.MOVE_RIGHT) && !KeyHeld(Action.MOVE_LEFT)) {
+                    if (facing_direction == LEFT && x_velocity < -sliding_velocity * 0.5 ||
+                            facing_direction == RIGHT && x_velocity < sliding_velocity * 1.5) {
+                        x_velocity += sliding_acceleration * updateMult;
+                    }
                 }
                 break;
             case STAGGER:
@@ -166,25 +164,23 @@ public class Player extends AnimatedObject{
                 break;
         }
         prvState = state;
-        if (KeyHeld(Action.JUMP)&&RabiClone.TIME-spacebarPressed<jumpHoldTime) {
-            y_velocity=jump_velocity;
+        if (KeyHeld(Action.JUMP) && RabiClone.TIME - spacebarPressed < jumpHoldTime) {
+            y_velocity = jump_velocity;
         }
-        //System.out.println(state);
+        // System.out.println(state);
     }
-
 
     @Override
     protected void KeyReleased(Action a) {
-        if (a==Action.JUMP) {
-            spacebarPressed=0;
-            spacebarReleased=true;
+        if (a == Action.JUMP) {
+            spacebarPressed = 0;
+            spacebarReleased = true;
         }
-        if(state!=State.SLIDE){
-            if((a==Action.MOVE_LEFT)&&(KeyHeld(Action.MOVE_RIGHT))){
-                facing_direction=RIGHT;
-            } else
-            if((a==Action.MOVE_RIGHT)&&(KeyHeld(Action.MOVE_LEFT))){
-                facing_direction=LEFT;
+        if (state != State.SLIDE) {
+            if ((a == Action.MOVE_LEFT) && (KeyHeld(Action.MOVE_RIGHT))) {
+                facing_direction = RIGHT;
+            } else if ((a == Action.MOVE_RIGHT) && (KeyHeld(Action.MOVE_LEFT))) {
+                facing_direction = LEFT;
             }
         }
     }
@@ -192,25 +188,25 @@ public class Player extends AnimatedObject{
     @Override
     @SuppressWarnings("incomplete-switch")
     protected void KeyPressed(Action a) {
-        switch(state){
+        switch (state) {
             case ATTACK:
                 break;
             case IDLE:
-                if(a==Action.SLIDE||a==Action.FALL){
+                if (a == Action.SLIDE || a == Action.FALL) {
                     performSlide();
                 }
                 break;
             case FALLING:
-                if (a==Action.SLIDE||a==Action.FALL) {
-                    slidePressed=RabiClone.TIME;
-                    //System.out.println("Queue up slide.");
+                if (a == Action.SLIDE || a == Action.FALL) {
+                    slidePressed = RabiClone.TIME;
+                    // System.out.println("Queue up slide.");
                 }
             case JUMP:
-                if(jumpCount>0 && spacebarReleased && (a==Action.JUMP)){
-                    jumpCount=0;
+                if (jumpCount > 0 && spacebarReleased && (a == Action.JUMP)) {
+                    jumpCount = 0;
                     y_velocity = jump_velocity;
-                    spacebarReleased=false;
-                    spacebarPressed=RabiClone.TIME;
+                    spacebarReleased = false;
+                    spacebarPressed = RabiClone.TIME;
                 }
                 break;
             case SLIDE:
@@ -223,129 +219,126 @@ public class Player extends AnimatedObject{
                 break;
         }
         if (groundCollision) {
-            if (spacebarReleased&&(a==Action.JUMP)&&jumpCount>0) {
+            if (spacebarReleased && (a == Action.JUMP) && jumpCount > 0) {
                 state = State.JUMP;
                 jumpCount--;
                 y_velocity = jump_velocity;
-                spacebarReleased=false;
-                spacebarPressed=RabiClone.TIME;
-                //System.out.println("Jump");
+                spacebarReleased = false;
+                spacebarPressed = RabiClone.TIME;
+                // System.out.println("Jump");
             }
         }
-        if(state!=State.SLIDE){
-            switch(a){
+        if (state != State.SLIDE) {
+            switch (a) {
                 case MOVE_LEFT:
-                    facing_direction=LEFT;
-                break;
+                    facing_direction = LEFT;
+                    break;
                 case MOVE_RIGHT:
-                    facing_direction=RIGHT;
-                break;
-            }   
+                    facing_direction = RIGHT;
+                    break;
+            }
         }
     }
-
 
     private void performSlide() {
         slide_time = RabiClone.TIME;
         slide_time2 = System.nanoTime();
-        if(facing_direction){
-            x_velocity=sliding_velocity;
+        if (facing_direction) {
+            x_velocity = sliding_velocity;
+        } else {
+            x_velocity = -sliding_velocity;
         }
-        else{
-            x_velocity=-sliding_velocity;
-        }
-        state=State.SLIDE;
+        state = State.SLIDE;
     }
-
 
     private void handleCameraRoomMovement() {
-        int tileX = (int)(getX())/Tile.TILE_WIDTH;
-        int tileY = (int)(getY())/Tile.TILE_HEIGHT;
-        double newX=RabiClone.level_renderer.getX(),newY=RabiClone.level_renderer.getY(); //By default we use a fixed view.
+        int tileX = (int) (getX()) / Tile.TILE_WIDTH;
+        int tileY = (int) (getY()) / Tile.TILE_HEIGHT;
+        double newX = RabiClone.level_renderer.getX(), newY = RabiClone.level_renderer.getY(); // By default we use a
+                                                                                               // fixed view.
         View currentView = RabiClone.CURRENT_MAP.getView(tileX, tileY);
-        if (currentView!=lastCameraView) {
-            lastCameraView=currentView;
-            newX=(tileX/Tile.TILE_SCREEN_COUNT_X)*Map.MAP_WIDTH;
-            newY=(tileY/Tile.TILE_SCREEN_COUNT_Y)*Map.MAP_HEIGHT;
+        if (currentView != lastCameraView) {
+            lastCameraView = currentView;
+            newX = (tileX / Tile.TILE_SCREEN_COUNT_X) * Map.MAP_WIDTH;
+            newY = (tileY / Tile.TILE_SCREEN_COUNT_Y) * Map.MAP_HEIGHT;
         } else
-        switch (currentView) {
-            case LIGHT_FOLLOW:
-                if (getX()-RabiClone.level_renderer.getX()<viewBoundaryX) {
-                    newX=getX()-viewBoundaryX;
-                    int newTileX = (int)(newX)/Tile.TILE_WIDTH;
-                    View newView = RabiClone.CURRENT_MAP.getView(newTileX, tileY);
-                    if (newView!=currentView) {
-                        newX=(tileX/Tile.TILE_SCREEN_COUNT_X)*Map.MAP_WIDTH;
+            switch (currentView) {
+                case LIGHT_FOLLOW:
+                    if (getX() - RabiClone.level_renderer.getX() < viewBoundaryX) {
+                        newX = getX() - viewBoundaryX;
+                        int newTileX = (int) (newX) / Tile.TILE_WIDTH;
+                        View newView = RabiClone.CURRENT_MAP.getView(newTileX, tileY);
+                        if (newView != currentView) {
+                            newX = (tileX / Tile.TILE_SCREEN_COUNT_X) * Map.MAP_WIDTH;
+                        }
+                    } else if (getX() - RabiClone.level_renderer.getX() > RabiClone.BASE_WIDTH - viewBoundaryX) {
+                        newX = getX() - (RabiClone.BASE_WIDTH - viewBoundaryX);
+                        int newTileX = (int) (getX() + viewBoundaryX) / Tile.TILE_WIDTH;
+                        View newView = RabiClone.CURRENT_MAP.getView(newTileX, tileY);
+                        if (newView != currentView) {
+                            newX = (tileX / Tile.TILE_SCREEN_COUNT_X) * Map.MAP_WIDTH;
+                        }
                     }
-                } else if (getX()-RabiClone.level_renderer.getX()>RabiClone.BASE_WIDTH-viewBoundaryX) {
-                    newX=getX()-(RabiClone.BASE_WIDTH-viewBoundaryX);
-                    int newTileX = (int)(getX()+viewBoundaryX)/Tile.TILE_WIDTH;
-                    View newView = RabiClone.CURRENT_MAP.getView(newTileX, tileY);
-                    if (newView!=currentView) {
-                        newX=(tileX/Tile.TILE_SCREEN_COUNT_X)*Map.MAP_WIDTH;
+                    if (getY() - RabiClone.level_renderer.getY() < viewBoundaryY) {
+                        newY = getY() - viewBoundaryY;
+                        int newTileY = (int) (getY() - viewBoundaryY) / Tile.TILE_HEIGHT;
+                        View newView = RabiClone.CURRENT_MAP.getView(tileX, newTileY);
+                        if (newView != currentView) {
+                            newY = (tileY / Tile.TILE_SCREEN_COUNT_Y) * Map.MAP_HEIGHT;
+                        }
+                    } else if (getY() - RabiClone.level_renderer.getY() > RabiClone.BASE_HEIGHT - viewBoundaryY) {
+                        newY = getY() - (RabiClone.BASE_HEIGHT - viewBoundaryY);
+                        int newTileY = (int) (getY() + viewBoundaryY) / Tile.TILE_HEIGHT;
+                        View newView = RabiClone.CURRENT_MAP.getView(tileX, newTileY);
+                        if (newView != currentView) {
+                            newY = (tileY / Tile.TILE_SCREEN_COUNT_Y) * Map.MAP_HEIGHT;
+                        }
                     }
-                }
-                if (getY()-RabiClone.level_renderer.getY()<viewBoundaryY) {
-                    newY=getY()-viewBoundaryY;
-                    int newTileY = (int)(getY()-viewBoundaryY)/Tile.TILE_HEIGHT;
-                    View newView = RabiClone.CURRENT_MAP.getView(tileX, newTileY);
-                    if (newView!=currentView) {
-                        newY=(tileY/Tile.TILE_SCREEN_COUNT_Y)*Map.MAP_HEIGHT;
+                    break;
+                case LIGHT_HORIZONTAL_FOLLOW:
+                    if (getX() - RabiClone.level_renderer.getX() < viewBoundaryX) {
+                        newX = getX() - viewBoundaryX;
+                        int newTileX = (int) (newX) / Tile.TILE_WIDTH;
+                        View newView = RabiClone.CURRENT_MAP.getView(newTileX, tileY);
+                        if (newView != currentView) {
+                            newX = (tileX / Tile.TILE_SCREEN_COUNT_X) * Map.MAP_WIDTH;
+                        }
+                    } else if (getX() - RabiClone.level_renderer.getX() > RabiClone.BASE_WIDTH - viewBoundaryX) {
+                        newX = getX() - (RabiClone.BASE_WIDTH - viewBoundaryX);
+                        int newTileX = (int) (getX() + viewBoundaryX) / Tile.TILE_WIDTH;
+                        View newView = RabiClone.CURRENT_MAP.getView(newTileX, tileY);
+                        if (newView != currentView) {
+                            newX = (tileX / Tile.TILE_SCREEN_COUNT_X) * Map.MAP_WIDTH;
+                        }
                     }
-                } else if (getY()-RabiClone.level_renderer.getY()>RabiClone.BASE_HEIGHT-viewBoundaryY) {
-                    newY=getY()-(RabiClone.BASE_HEIGHT-viewBoundaryY);
-                    int newTileY = (int)(getY()+viewBoundaryY)/Tile.TILE_HEIGHT;
-                    View newView = RabiClone.CURRENT_MAP.getView(tileX, newTileY);
-                    if (newView!=currentView) {
-                        newY=(tileY/Tile.TILE_SCREEN_COUNT_Y)*Map.MAP_HEIGHT;
+                    newY = (tileY / Tile.TILE_SCREEN_COUNT_Y) * Map.MAP_HEIGHT;
+                    break;
+                case LIGHT_VERTICAL_FOLLOW:
+                    newX = (tileX / Tile.TILE_SCREEN_COUNT_X) * Map.MAP_WIDTH;
+                    if (getY() - RabiClone.level_renderer.getY() < viewBoundaryY) {
+                        newY = getY() - viewBoundaryY;
+                        int newTileY = (int) (getY() - viewBoundaryY) / Tile.TILE_HEIGHT;
+                        View newView = RabiClone.CURRENT_MAP.getView(tileX, newTileY);
+                        if (newView != currentView) {
+                            newY = (tileY / Tile.TILE_SCREEN_COUNT_Y) * Map.MAP_HEIGHT;
+                        }
+                    } else if (getY() - RabiClone.level_renderer.getY() > RabiClone.BASE_HEIGHT - viewBoundaryY) {
+                        newY = getY() - (RabiClone.BASE_HEIGHT - viewBoundaryY);
+                        int newTileY = (int) (getY() + viewBoundaryY) / Tile.TILE_HEIGHT;
+                        View newView = RabiClone.CURRENT_MAP.getView(tileX, newTileY);
+                        if (newView != currentView) {
+                            newY = (tileY / Tile.TILE_SCREEN_COUNT_Y) * Map.MAP_HEIGHT;
+                        }
                     }
-                }
-                break;
-            case LIGHT_HORIZONTAL_FOLLOW:
-                if (getX()-RabiClone.level_renderer.getX()<viewBoundaryX) {
-                    newX=getX()-viewBoundaryX;
-                    int newTileX = (int)(newX)/Tile.TILE_WIDTH;
-                    View newView = RabiClone.CURRENT_MAP.getView(newTileX, tileY);
-                    if (newView!=currentView) {
-                        newX=(tileX/Tile.TILE_SCREEN_COUNT_X)*Map.MAP_WIDTH;
-                    }
-                } else if (getX()-RabiClone.level_renderer.getX()>RabiClone.BASE_WIDTH-viewBoundaryX) {
-                    newX=getX()-(RabiClone.BASE_WIDTH-viewBoundaryX);
-                    int newTileX = (int)(getX()+viewBoundaryX)/Tile.TILE_WIDTH;
-                    View newView = RabiClone.CURRENT_MAP.getView(newTileX, tileY);
-                    if (newView!=currentView) {
-                        newX=(tileX/Tile.TILE_SCREEN_COUNT_X)*Map.MAP_WIDTH;
-                    }
-                }
-                newY=(tileY/Tile.TILE_SCREEN_COUNT_Y)*Map.MAP_HEIGHT;
-                break;
-            case LIGHT_VERTICAL_FOLLOW:
-                newX=(tileX/Tile.TILE_SCREEN_COUNT_X)*Map.MAP_WIDTH;
-                if (getY()-RabiClone.level_renderer.getY()<viewBoundaryY) {
-                    newY=getY()-viewBoundaryY;
-                    int newTileY = (int)(getY()-viewBoundaryY)/Tile.TILE_HEIGHT;
-                    View newView = RabiClone.CURRENT_MAP.getView(tileX, newTileY);
-                    if (newView!=currentView) {
-                        newY=(tileY/Tile.TILE_SCREEN_COUNT_Y)*Map.MAP_HEIGHT;
-                    }
-                } else if (getY()-RabiClone.level_renderer.getY()>RabiClone.BASE_HEIGHT-viewBoundaryY) {
-                    newY=getY()-(RabiClone.BASE_HEIGHT-viewBoundaryY);
-                    int newTileY = (int)(getY()+viewBoundaryY)/Tile.TILE_HEIGHT;
-                    View newView = RabiClone.CURRENT_MAP.getView(tileX, newTileY);
-                    if (newView!=currentView) {
-                        newY=(tileY/Tile.TILE_SCREEN_COUNT_Y)*Map.MAP_HEIGHT;
-                    }
-                }
-                break;
-            case FIXED:
-                break;
-            default:
-                break;
-        }
-        RabiClone.level_renderer.setX(newX<0?0:newX);
-        RabiClone.level_renderer.setY(newY<0?0:newY);
+                    break;
+                case FIXED:
+                    break;
+                default:
+                    break;
+            }
+        RabiClone.level_renderer.setX(newX < 0 ? 0 : newX);
+        RabiClone.level_renderer.setY(newY < 0 ? 0 : newY);
     }
-
 
     private void handleMovementPhysics(double updateMult) {
         int right = KeyHeld(Action.MOVE_RIGHT)?1:0;
@@ -364,6 +357,7 @@ public class Player extends AnimatedObject{
                 :y_velocity+y_acceleration*updateMult;
         double displacement_y = y_velocity*updateMult;
         double displacement_x = x_velocity*updateMult;
+
         boolean sideCollision = false;
         for(int i=0;i<4;i++){
             double check_distance_x = (displacement_x/4)*(i+1);
@@ -406,28 +400,28 @@ public class Player extends AnimatedObject{
         } else {
             //System.out.println(x_velocity);
             //System.out.println(((int)(getX()+getAnimatedSpr().getWidth()/2+displacement_x)/Tile.TILE_WIDTH)+"//"+((int)(getY()+getAnimatedSpr().getHeight()/2)/Tile.TILE_HEIGHT));
-            boolean collisionOccured=false;
-            for(int i=0;i<4;i++){
-                double check_distance_y = (displacement_y/4)*(i+1);
-                Tile checked_tile_bottom_right = RabiClone.CURRENT_MAP.getTile((int)(getX()+getAnimatedSpr().getWidth()/2-4)/Tile.TILE_WIDTH, (int)(getY()+getAnimatedSpr().getHeight()/2+check_distance_y)/Tile.TILE_HEIGHT);
-                Tile checked_tile_bottom_left = RabiClone.CURRENT_MAP.getTile((int)(getX()-getAnimatedSpr().getWidth()/2+4)/Tile.TILE_WIDTH, (int)(getY()+getAnimatedSpr().getHeight()/2+check_distance_y)/Tile.TILE_HEIGHT);
-                Tile checked_tile_bottom_center = RabiClone.CURRENT_MAP.getTile((int)(getX())/Tile.TILE_WIDTH, (int)(getY()+getAnimatedSpr().getHeight()/2)/Tile.TILE_HEIGHT);
-                if(checked_tile_bottom_center.getCollision()==CollisionType.SLOPE
-                && getY()+check_distance_y>ySlopeCollisionPoint(checked_tile_bottom_center))
-                {
-                    moveUpSlope(checked_tile_bottom_center);
-                    collisionOccured = groundCollision(check_distance_y);
-                    break;
+                boolean collisionOccured=false;
+                for(int i=0;i<4;i++){
+                    double check_distance_y = (displacement_y/4)*(i+1);
+                    Tile checked_tile_bottom_right = RabiClone.CURRENT_MAP.getTile((int)(getX()+getAnimatedSpr().getWidth()/2-4)/Tile.TILE_WIDTH, (int)(getY()+getAnimatedSpr().getHeight()/2+check_distance_y)/Tile.TILE_HEIGHT);
+                    Tile checked_tile_bottom_left = RabiClone.CURRENT_MAP.getTile((int)(getX()-getAnimatedSpr().getWidth()/2+4)/Tile.TILE_WIDTH, (int)(getY()+getAnimatedSpr().getHeight()/2+check_distance_y)/Tile.TILE_HEIGHT);
+                    Tile checked_tile_bottom_center = RabiClone.CURRENT_MAP.getTile((int)(getX())/Tile.TILE_WIDTH, (int)(getY()+getAnimatedSpr().getHeight()/2)/Tile.TILE_HEIGHT);
+                    if(checked_tile_bottom_center.getCollision()==CollisionType.SLOPE
+                    && getY()+check_distance_y>ySlopeCollisionPoint(checked_tile_bottom_center))
+                    {
+                        moveUpSlope(checked_tile_bottom_center);
+                        collisionOccured = groundCollision(0);
+                        break;
+                    }
+                    //System.out.println((int)getX()/Tile.TILE_WIDTH);
+                    if(checked_tile_bottom_right.getCollision()==CollisionType.BLOCK||checked_tile_bottom_left.getCollision()==CollisionType.BLOCK){
+                        collisionOccured = groundCollision(check_distance_y);
+                        break;
+                    }
                 }
-                //System.out.println((int)getX()/Tile.TILE_WIDTH);
-                if(checked_tile_bottom_right.getCollision()==CollisionType.BLOCK||checked_tile_bottom_left.getCollision()==CollisionType.BLOCK){
-                    collisionOccured = groundCollision(check_distance_y);
-                    break;
+                if (!collisionOccured) {
+                    groundCollision=false;
                 }
-            }
-            if (!collisionOccured) {
-                groundCollision=false;
-            }
         }
         if (!groundCollision){
             this.setY(this.getY()+displacement_y);
@@ -441,50 +435,46 @@ public class Player extends AnimatedObject{
             }
         } else {
             if (!sideCollision) {
-                Tile checked_tile_bottom_center = RabiClone.CURRENT_MAP.getTile((int)(getX())/Tile.TILE_WIDTH, (int)(getY()+getAnimatedSpr().getHeight()/2)/Tile.TILE_HEIGHT);
                 handleKeyboardMovement(updateMult, right-left, horizontal_friction, horizontal_drag);
                 this.setX(this.getX()+displacement_x);
-                if(displacement_x>0){
-                    if(checked_tile_bottom_center==Tile.SMALL_SLOPE_RIGHT){
-                        setY(getY()+displacement_x);
-                        System.out.println("We're in RIGHT.");
-                    }
-                }
-                else{
-                    if(checked_tile_bottom_center==Tile.SMALL_SLOPE_LEFT){
-                        setY(getY()-displacement_x);
-                        System.out.println("We're in it for LEFT.");
-
-                    }
-                }
             }
         }
     }
 
-
     private double ySlopeCollisionPoint(Tile tile) {
-        switch(tile){
+        switch (tile) {
             case BIG_SLOPE_LEFT1:
-            return -(getX()%Tile.TILE_WIDTH/2)+(int)(getY()+getAnimatedSpr().getHeight()/2)/Tile.TILE_HEIGHT*Tile.TILE_HEIGHT+(getAnimatedSpr().getHeight()/2-4);
+                return -(getX() % Tile.TILE_WIDTH / 2)
+                        + (int) (getY() + getAnimatedSpr().getHeight() / 2) / Tile.TILE_HEIGHT * Tile.TILE_HEIGHT
+                        + (getAnimatedSpr().getHeight() / 2 - 4);
 
             case BIG_SLOPE_LEFT2:
-            return -(getX()%Tile.TILE_WIDTH/2)+(int)(getY()+getAnimatedSpr().getHeight()/2)/Tile.TILE_HEIGHT*Tile.TILE_HEIGHT+(getAnimatedSpr().getHeight()/2-4)-Tile.TILE_WIDTH/2;
+                return -(getX() % Tile.TILE_WIDTH / 2)
+                        + (int) (getY() + getAnimatedSpr().getHeight() / 2) / Tile.TILE_HEIGHT * Tile.TILE_HEIGHT
+                        + (getAnimatedSpr().getHeight() / 2 - 4) - Tile.TILE_WIDTH / 2;
 
             case BIG_SLOPE_RIGHT1:
-            return (getX()%Tile.TILE_WIDTH/2)+(int)(getY()+getAnimatedSpr().getHeight()/2)/Tile.TILE_HEIGHT*Tile.TILE_HEIGHT+(getAnimatedSpr().getHeight()/2-4)-Tile.TILE_WIDTH;
+                return (getX() % Tile.TILE_WIDTH / 2)
+                        + (int) (getY() + getAnimatedSpr().getHeight() / 2) / Tile.TILE_HEIGHT * Tile.TILE_HEIGHT
+                        + (getAnimatedSpr().getHeight() / 2 - 4) - Tile.TILE_WIDTH;
 
             case BIG_SLOPE_RIGHT2:
-            return (getX()%Tile.TILE_WIDTH/2)+(int)(getY()+getAnimatedSpr().getHeight()/2)/Tile.TILE_HEIGHT*Tile.TILE_HEIGHT+(getAnimatedSpr().getHeight()/2-4)-Tile.TILE_WIDTH+Tile.TILE_WIDTH/2;
+                return (getX() % Tile.TILE_WIDTH / 2)
+                        + (int) (getY() + getAnimatedSpr().getHeight() / 2) / Tile.TILE_HEIGHT * Tile.TILE_HEIGHT
+                        + (getAnimatedSpr().getHeight() / 2 - 4) - Tile.TILE_WIDTH + Tile.TILE_WIDTH / 2;
 
             case SMALL_SLOPE_LEFT:
-            return -(getX()%Tile.TILE_WIDTH)+(int)(getY()+getAnimatedSpr().getHeight()/2)/Tile.TILE_HEIGHT*Tile.TILE_HEIGHT+(getAnimatedSpr().getHeight()/2-4);
-            
+                return -(getX() % Tile.TILE_WIDTH)
+                        + (int) (getY() + getAnimatedSpr().getHeight() / 2) / Tile.TILE_HEIGHT * Tile.TILE_HEIGHT
+                        + (getAnimatedSpr().getHeight() / 2 - 4);
+
             case SMALL_SLOPE_RIGHT:
-            return (getX()%Tile.TILE_WIDTH)+(int)(getY()+getAnimatedSpr().getHeight()/2)/Tile.TILE_HEIGHT*Tile.TILE_HEIGHT+(getAnimatedSpr().getHeight()/2-4)-Tile.TILE_WIDTH;
+                return (getX() % Tile.TILE_WIDTH)
+                        + (int) (getY() + getAnimatedSpr().getHeight() / 2) / Tile.TILE_HEIGHT * Tile.TILE_HEIGHT
+                        + (getAnimatedSpr().getHeight() / 2 - 4) - Tile.TILE_WIDTH;
         }
         return 0;
     }
-
 
     private void moveUpSlope(Tile checked_tile_bottom_center) {
         setY(ySlopeCollisionPoint(checked_tile_bottom_center));
@@ -492,43 +482,44 @@ public class Player extends AnimatedObject{
 
     private boolean groundCollision(double check_distance_y) {
         boolean collisionOccured;
-        setY((getY()-check_distance_y));
+        setY((getY() - check_distance_y));
         y_acceleration = 0;
         y_velocity = 0;
-        groundCollision=true;
-        collisionOccured=true;
-        if(state!=State.SLIDE){
+        groundCollision = true;
+        collisionOccured = true;
+        if (state != State.SLIDE) {
             state = State.IDLE;
         }
         return collisionOccured;
     }
 
-
     private void handleKeyboardMovement(double updateMult, int movement, double friction, double drag) {
-        if (movement!=0&&Math.abs(x_velocity)<WALKING_SPEED_LIMIT) {
-            x_acceleration=drag*(movement);
+        if (movement != 0 && Math.abs(x_velocity) < WALKING_SPEED_LIMIT) {
+            x_acceleration = drag * (movement);
         } else {
-            if (x_velocity!=0) {
-                x_velocity=x_velocity>0
-                    ?x_velocity-friction*updateMult>0
-                        ?x_velocity-friction*updateMult
-                        :0
-                    :x_velocity+friction*updateMult<0
-                        ?x_velocity+friction*updateMult
-                        :0;
+            if (x_velocity != 0) {
+                x_velocity = x_velocity > 0
+                        ? x_velocity - friction * updateMult > 0
+                                ? x_velocity - friction * updateMult
+                                : 0
+                        : x_velocity + friction * updateMult < 0
+                                ? x_velocity + friction * updateMult
+                                : 0;
             }
-            x_acceleration=0;
+            x_acceleration = 0;
         }
     }
 
     @Override
-    public void draw(byte[] p) {}
-
+    public void draw(byte[] p) {
+    }
 
     @Override
     public String toString() {
-        return "Player [facing_direction=" + (facing_direction?"RIGHT":"LEFT") + ", groundCollision=" + groundCollision + ", jumpCount="
-                + jumpCount + ", x_velocity=" + x_velocity + ", y_velocity=" + y_velocity + ", x=" + getX() + ", y=" + getY() + "]";
+        return "Player [facing_direction=" + (facing_direction ? "RIGHT" : "LEFT") + ", groundCollision="
+                + groundCollision + ", jumpCount="
+                + jumpCount + ", x_velocity=" + x_velocity + ", y_velocity=" + y_velocity + ", x=" + getX() + ", y="
+                + getY() + "]";
     }
-    
+
 }
