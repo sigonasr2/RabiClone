@@ -169,6 +169,7 @@ public class Player extends AnimatedObject{
         if (KeyHeld(Action.JUMP)&&RabiClone.TIME-spacebarPressed<jumpHoldTime) {
             y_velocity=jump_velocity;
         }
+        System.out.println(state);
     }
 
 
@@ -384,9 +385,16 @@ public class Player extends AnimatedObject{
         if (y_velocity==0) {
             Tile checked_tile_bottom_right = RabiClone.CURRENT_MAP.getTile((int)(getX()+getAnimatedSpr().getWidth()/2-4)/Tile.TILE_WIDTH, (int)(getY()+getAnimatedSpr().getHeight()/2+1)/Tile.TILE_HEIGHT);
             Tile checked_tile_bottom_left = RabiClone.CURRENT_MAP.getTile((int)(getX()-getAnimatedSpr().getWidth()/2+4)/Tile.TILE_WIDTH, (int)(getY()+getAnimatedSpr().getHeight()/2+1)/Tile.TILE_HEIGHT);
-            if (!(checked_tile_bottom_right.getCollision()==CollisionType.BLOCK||checked_tile_bottom_left.getCollision()==CollisionType.BLOCK)) {
+            Tile checked_tile_bottom_center = RabiClone.CURRENT_MAP.getTile((int)(getX())/Tile.TILE_WIDTH, (int)(getY()+getAnimatedSpr().getHeight()/2)/Tile.TILE_HEIGHT);
+
+            if (!(checked_tile_bottom_right.getCollision()==CollisionType.BLOCK
+            ||checked_tile_bottom_left.getCollision()==CollisionType.BLOCK
+            ||checked_tile_bottom_center.getCollision()==CollisionType.SLOPE)) {
                 groundCollision=false;
             } else {
+                if(checked_tile_bottom_center.getCollision()==CollisionType.SLOPE){
+                    setY(-(getX()%Tile.TILE_WIDTH)+(int)(getY()+getAnimatedSpr().getHeight()/2)/Tile.TILE_HEIGHT*Tile.TILE_HEIGHT+(getAnimatedSpr().getHeight()/2-4));
+                }
                 groundCollision=true;
                 jumpCount=maxJumpCount;
             }
@@ -398,14 +406,18 @@ public class Player extends AnimatedObject{
                 double check_distance_y = (displacement_y/4)*(i+1);
                 Tile checked_tile_bottom_right = RabiClone.CURRENT_MAP.getTile((int)(getX()+getAnimatedSpr().getWidth()/2-4)/Tile.TILE_WIDTH, (int)(getY()+getAnimatedSpr().getHeight()/2+check_distance_y)/Tile.TILE_HEIGHT);
                 Tile checked_tile_bottom_left = RabiClone.CURRENT_MAP.getTile((int)(getX()-getAnimatedSpr().getWidth()/2+4)/Tile.TILE_WIDTH, (int)(getY()+getAnimatedSpr().getHeight()/2+check_distance_y)/Tile.TILE_HEIGHT);
+                Tile checked_tile_bottom_center = RabiClone.CURRENT_MAP.getTile((int)(getX())/Tile.TILE_WIDTH, (int)(getY()+getAnimatedSpr().getHeight()/2)/Tile.TILE_HEIGHT);
+                if(checked_tile_bottom_center.getCollision()==CollisionType.SLOPE
+                && getY()+check_distance_y>(-(getX()%Tile.TILE_WIDTH)+(int)(getY()+getAnimatedSpr().getHeight()/2)/Tile.TILE_HEIGHT*Tile.TILE_HEIGHT+(getAnimatedSpr().getHeight()/2-4)))
+                {
+                    setY(-(getX()%Tile.TILE_WIDTH)+(int)(getY()+getAnimatedSpr().getHeight()/2)/Tile.TILE_HEIGHT*Tile.TILE_HEIGHT+(getAnimatedSpr().getHeight()/2-4));
+                    collisionOccured = groundCollision(check_distance_y);
+                    System.out.println(checked_tile_bottom_center);
+                    break;
+                }
                 //System.out.println((int)getX()/Tile.TILE_WIDTH);
                 if(checked_tile_bottom_right.getCollision()==CollisionType.BLOCK||checked_tile_bottom_left.getCollision()==CollisionType.BLOCK){
-                    setY((getY()-check_distance_y));
-                    y_acceleration = 0;
-                    y_velocity = 0;
-                    groundCollision=true;
-                    collisionOccured=true;
-                    state = State.IDLE;
+                    collisionOccured = groundCollision(check_distance_y);
                     break;
                 }
             }
@@ -429,6 +441,18 @@ public class Player extends AnimatedObject{
                 this.setX(this.getX()+displacement_x);
             }
         }
+    }
+
+
+    private boolean groundCollision(double check_distance_y) {
+        boolean collisionOccured;
+        setY((getY()-check_distance_y));
+        y_acceleration = 0;
+        y_velocity = 0;
+        groundCollision=true;
+        collisionOccured=true;
+        state = State.IDLE;
+        return collisionOccured;
     }
 
 

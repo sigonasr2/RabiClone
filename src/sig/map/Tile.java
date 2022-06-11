@@ -7,12 +7,12 @@ public enum Tile {
     PLATFORM_LEDGE(2,0,CollisionType.BLOCK),
     INVISIBLE_WALL(0,0,true,CollisionType.BLOCK),
     HIGHLIGHTED_TILE(3,0,CollisionType.BLOCK),
-    SMALL_SLOPE_LEFT(0,1,CollisionType.BLOCK),
-    SMALL_SLOPE_RIGHT(1,1,CollisionType.BLOCK),
-    BIG_SLOPE_LEFT1(2,1,CollisionType.BLOCK),
-    BIG_SLOPE_LEFT2(3,1,CollisionType.BLOCK),
-    BIG_SLOPE_RIGHT1(0,2,CollisionType.BLOCK),
-    BIG_SLOPE_RIGHT2(1,2,CollisionType.BLOCK),
+    SMALL_SLOPE_LEFT(0,1,CollisionType.SLOPE),
+    SMALL_SLOPE_RIGHT(1,1,CollisionType.SLOPE),
+    BIG_SLOPE_LEFT1(2,1,CollisionType.SLOPE),
+    BIG_SLOPE_LEFT2(3,1,CollisionType.SLOPE),
+    BIG_SLOPE_RIGHT1(0,2,CollisionType.SLOPE),
+    BIG_SLOPE_RIGHT2(1,2,CollisionType.SLOPE),
     ;
 
     final public static int TILE_WIDTH=32;
