@@ -45,7 +45,15 @@ public class Map {
             while (stream.available()!=0) {
                 switch (readingData) {
                     case MAP_DATA:
-                        newMap.tiles[marker++]=stream.readChar();
+                        char tileValue = stream.readChar();
+                        newMap.tiles[marker++]=tileValue;
+                        int ypos=marker/Map.MAP_WIDTH;
+                        int xpos=marker%Map.MAP_WIDTH;
+                        for (int y=0;y<Tile.TILE_HEIGHT;y++) {
+                            for (int x=0;x<Tile.TILE_WIDTH;x++) {
+                                RabiClone.COLLISION[(ypos*Tile.TILE_HEIGHT)*(Map.MAP_WIDTH*Tile.TILE_WIDTH)+xpos*Tile.TILE_WIDTH]=Tile.values()[tileValue].getCollision()==CollisionType.SOLID;
+                            }
+                        }
                     break;
                     case VIEW_DATA:
                         newMap.views[marker++]=stream.readByte();
@@ -106,7 +114,7 @@ public class Map {
         if (prevIsCollisionTile!=newIsCollisionTile) {
             for (int yy=0;yy<Tile.TILE_HEIGHT;yy++) {
                 for (int xx=0;xx<Tile.TILE_WIDTH;xx++) {
-                    RabiClone.COLLISION[(y*Tile.TILE_HEIGHT*Map.MAP_HEIGHT+yy)*Map.MAP_WIDTH+(x*Tile.TILE_WIDTH*Map.MAP_WIDTH+xx)]=newIsCollisionTile;
+                    RabiClone.COLLISION[(y*Tile.TILE_HEIGHT+yy)*(Map.MAP_WIDTH*Tile.TILE_WIDTH)+(x*Tile.TILE_WIDTH+xx)]=newIsCollisionTile;
                 }
             }
         }
