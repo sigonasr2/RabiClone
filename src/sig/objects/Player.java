@@ -376,6 +376,18 @@ public class Player extends AnimatedObject implements CollisionEntity {
                     setX(x-1);
                 }       
             }
+        } else {
+            for (int x=(int)getX();x>startingX+displacement_x;x--) {
+                if (x==getX()) {
+                    continue;
+                }
+                if (RabiClone.COLLISION[(int)((getY()-RabiClone.level_renderer.getY())*RabiClone.BASE_WIDTH+(x-RabiClone.level_renderer.getX()+getCollisionBox().getX()-getSprite().getWidth()/2))]) {
+                    x_acceleration = 0;
+                    x_velocity = Math.signum(x_velocity)*0.000001;
+                    sideCollision=true;
+                    setX(x+1);
+                }       
+            }
         }
         groundCollision=true;
         if (!groundCollision){
