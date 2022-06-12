@@ -121,7 +121,7 @@ public class RabiClone {
 						OBJ.add(level_renderer = new EditorRenderer(p));
 					}
 				}
-				if (Key.isKeyHeld(KeyEvent.VK_F3)) {
+				if (Key.isKeyHeld(KeyEvent.VK_F6)) {
 					OBJ.clear();
 					ResetGame();
 					OBJ.add(control_settings_menu = new ConfigureControls(p));
