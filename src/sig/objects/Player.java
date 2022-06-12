@@ -369,7 +369,7 @@ public class Player extends AnimatedObject implements CollisionEntity {
                 if (x==getX()) {
                     continue;
                 }
-                if (RabiClone.COLLISION[(int)((getY()-RabiClone.level_renderer.getY())*RabiClone.BASE_WIDTH+(x-RabiClone.level_renderer.getX()+getCollisionBox().getX2()-getSprite().getWidth()/2))]) {
+                if (RabiClone.COLLISION[(int)((getY()-RabiClone.level_renderer.getY()-getSprite().getHeight()/2)*RabiClone.BASE_WIDTH+(x-RabiClone.level_renderer.getX()+getCollisionBox().getX2()-getSprite().getWidth()/2))]) {
                     x_acceleration = 0;
                     x_velocity = Math.signum(x_velocity)*0.000001;
                     sideCollision=true;
@@ -381,7 +381,7 @@ public class Player extends AnimatedObject implements CollisionEntity {
                 if (x==getX()) {
                     continue;
                 }
-                if (RabiClone.COLLISION[(int)((getY()-RabiClone.level_renderer.getY())*RabiClone.BASE_WIDTH+(x-RabiClone.level_renderer.getX()+getCollisionBox().getX()-getSprite().getWidth()/2))]) {
+                if (RabiClone.COLLISION[(int)((getY()-RabiClone.level_renderer.getY()-getSprite().getHeight()/2)*RabiClone.BASE_WIDTH+(x-RabiClone.level_renderer.getX()+getCollisionBox().getX()-getSprite().getWidth()/2))]) {
                     x_acceleration = 0;
                     x_velocity = Math.signum(x_velocity)*0.000001;
                     sideCollision=true;
