@@ -364,37 +364,39 @@ public class Player extends AnimatedObject implements CollisionEntity {
         boolean sideCollision = false;
 
         double startingX=getX();
-        if (Math.abs(displacement_x)>0.00001) {
-            if (displacement_x>0) {
-                for (int x=(int)getX();x<startingX+displacement_x;x++) {
-                    if (x==getX()) {
-                        continue;
-                    }
-                    if (checkCollision(x-RabiClone.level_renderer.getX()+getCollisionBox().getX2()-getSprite().getWidth()/2,(getY()-RabiClone.level_renderer.getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()))) {
-                        x_acceleration = 0;
-                        x_velocity = 0.000001;
-                        sideCollision=true;
-                        setX(x-0.1);
-                        break;
-                    }       
+        if (displacement_x>0.00001) {
+            for (int x=(int)getX();x<startingX+displacement_x;x++) {
+                if (x==getX()) {
+                    continue;
                 }
-            } else {
-                for (int x=(int)getX();x>startingX+displacement_x;x--) {
-                    if (x==getX()) {
-                        continue;
-                    }
-                    if (checkCollision((x-RabiClone.level_renderer.getX()+getCollisionBox().getX()-getSprite().getWidth()/2),getY()-RabiClone.level_renderer.getY()-getSprite().getHeight()/2+getCollisionBounds().getY2())) {
-                        x_acceleration = 0;
-                        x_velocity = -0.000001;
-                        sideCollision=true;
-                        setX(x+0.1);
-                        break;
-                    }       
+                if (checkCollision(x-RabiClone.level_renderer.getX()+getCollisionBox().getX2()-getSprite().getWidth()/2,(getY()-RabiClone.level_renderer.getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()))||
+                checkCollision(x-RabiClone.level_renderer.getX()+getCollisionBox().getX2()-getSprite().getWidth()/2,(getY()-RabiClone.level_renderer.getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()))) {
+                    x_acceleration = 0;
+                    x_velocity = 0.000001;
+                    sideCollision=true;
+                    setX(x-0.1);
+                    break;
+                }       
+            }
+        } else 
+        if (displacement_x<-0.00001) {
+            for (int x=(int)getX();x>startingX+displacement_x;x--) {
+                if (x==getX()) {
+                    continue;
                 }
+                if (checkCollision((x-RabiClone.level_renderer.getX()+getCollisionBox().getX()-getSprite().getWidth()/2),getY()-RabiClone.level_renderer.getY()-getSprite().getHeight()/2+getCollisionBounds().getY2())||
+                checkCollision((x-RabiClone.level_renderer.getX()+getCollisionBox().getX()-getSprite().getWidth()/2),getY()-RabiClone.level_renderer.getY()-getSprite().getHeight()/2+getCollisionBounds().getY())) {
+                    x_acceleration = 0;
+                    x_velocity = -0.000001;
+                    sideCollision=true;
+                    setX(x+0.1);
+                    break;
+                }       
             }
         }
         if (y_velocity==0) {
-            if (!checkCollision(getX()-RabiClone.level_renderer.getX()+getCollisionBox().getX()-getSprite().getWidth()/2,getY()-RabiClone.level_renderer.getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()+1)) {
+            if (!(checkCollision(getX()-RabiClone.level_renderer.getX()+getCollisionBox().getX()-getSprite().getWidth()/2+getCollisionBox().getX2(),getY()-RabiClone.level_renderer.getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()+1)||
+            checkCollision(getX()-RabiClone.level_renderer.getX()+getCollisionBox().getX()-getSprite().getWidth()/2+getCollisionBox().getX(),getY()-RabiClone.level_renderer.getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()+1))) {
                 groundCollision=false;
             } else {
                 groundCollision=true;
@@ -408,8 +410,10 @@ public class Player extends AnimatedObject implements CollisionEntity {
                     if (y==getY()) {
                         continue;
                     }
-                    if (checkCollision(getX()-RabiClone.level_renderer.getX(),y-RabiClone.level_renderer.getY()+getCollisionBox().getY2()-getSprite().getHeight()/2)) {
+                    if (checkCollision(getX()-RabiClone.level_renderer.getX()-getSprite().getWidth()/2+getCollisionBox().getX2()-1,y-RabiClone.level_renderer.getY()+getCollisionBox().getY2()-getSprite().getHeight()/2)||
+                    checkCollision(getX()-RabiClone.level_renderer.getX()-getSprite().getWidth()/2+getCollisionBox().getX()+1,y-RabiClone.level_renderer.getY()+getCollisionBox().getY2()-getSprite().getHeight()/2)) {
                         setY(y-0.1);
+                        //System.out.println("Running"+System.currentTimeMillis());
                         y_acceleration = 0;
                         y_velocity = 0;
                         groundCollision = true;
@@ -424,7 +428,8 @@ public class Player extends AnimatedObject implements CollisionEntity {
                     if (y==getY()) {
                         continue;
                     }
-                    if (checkCollision(getX()-RabiClone.level_renderer.getX(),y-RabiClone.level_renderer.getY()+getCollisionBox().getY()-getSprite().getHeight()/2)) {
+                    if (checkCollision(getX()-RabiClone.level_renderer.getX()-getSprite().getWidth()/2+getCollisionBox().getX2()-1,y-RabiClone.level_renderer.getY()+getCollisionBox().getY2()-getSprite().getHeight()/2)||
+                    checkCollision(getX()-RabiClone.level_renderer.getX()-getSprite().getWidth()/2+getCollisionBox().getX()+1,y-RabiClone.level_renderer.getY()+getCollisionBox().getY2()-getSprite().getHeight()/2)) {
                         setY(y+1);
                         y_acceleration = 0;
                         y_velocity = 0;
