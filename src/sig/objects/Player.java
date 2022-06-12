@@ -400,37 +400,39 @@ public class Player extends AnimatedObject implements CollisionEntity {
                 groundCollision=true;
                 jumpCount=maxJumpCount;
             }
-        }
-        double startingY=getY();
-        if (displacement_y>0) {
-            for (int y=(int)getY();y<startingY+displacement_y;y++) {
-                if (y==getY()) {
-                    continue;
-                }
-                if (checkCollision(getX()-RabiClone.level_renderer.getX(),y-RabiClone.level_renderer.getY()+getCollisionBox().getY2()-getSprite().getHeight()/2)) {
-                    setY(y-0.1);
-                    y_acceleration = 0;
-                    y_velocity = 0;
-                    groundCollision = true;
-                    if (state != State.SLIDE) {
-                        state = State.IDLE;
+        } else {
+            double startingY=getY();
+            groundCollision=false;
+            if (displacement_y>0) {
+                for (int y=(int)getY();y<startingY+displacement_y;y++) {
+                    if (y==getY()) {
+                        continue;
                     }
-                    break;
-                }       
-            }
-        }/* else {
-            for (int x=(int)getX();x>startingX+displacement_x;x--) {
-                if (x==getX()) {
-                    continue;
+                    if (checkCollision(getX()-RabiClone.level_renderer.getX(),y-RabiClone.level_renderer.getY()+getCollisionBox().getY2()-getSprite().getHeight()/2)) {
+                        setY(y-0.1);
+                        y_acceleration = 0;
+                        y_velocity = 0;
+                        groundCollision = true;
+                        if (state != State.SLIDE) {
+                            state = State.IDLE;
+                        }
+                        break;
+                    }       
                 }
-                if (checkCollision((x-RabiClone.level_renderer.getX()+getCollisionBox().getX()-getSprite().getWidth()/2),getY()-RabiClone.level_renderer.getY()-getSprite().getHeight()/2+getCollisionBounds().getY2())) {
-                    x_acceleration = 0;
-                    x_velocity = Math.signum(x_velocity)*0.000001;
-                    sideCollision=true;
-                    setX(x+1);
-                }       
+            } else {
+                for (int y=(int)getY();y>startingY+displacement_y;y--) {
+                    if (y==getY()) {
+                        continue;
+                    }
+                    if (checkCollision(getX()-RabiClone.level_renderer.getX(),y-RabiClone.level_renderer.getY()+getCollisionBox().getY()-getSprite().getHeight()/2)) {
+                        setY(y+1);
+                        y_acceleration = 0;
+                        y_velocity = 0;
+                        break;
+                    }       
+                }
             }
-        }*/
+        }
         if (!groundCollision){
             this.setY(this.getY()+displacement_y);
             y_acceleration = GRAVITY;
