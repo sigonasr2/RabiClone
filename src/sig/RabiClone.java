@@ -38,6 +38,7 @@ public class RabiClone {
 	public static JFrame f;
 
 	public static List<Object> OBJ = new ArrayList<Object>();
+	public static boolean COLLISION[] = new boolean[(Tile.TILE_WIDTH*Map.MAP_WIDTH)*(Tile.TILE_HEIGHT*Map.MAP_HEIGHT)];
 
 	public static int BASE_WIDTH = 512;
 	public static int BASE_HEIGHT = 288;
@@ -59,8 +60,6 @@ public class RabiClone {
 	final static long TARGET_FRAMETIME = 8333333l;
 	static long lastReportedTime = System.currentTimeMillis();
 	public static long TIME = 0;
-
-	public static boolean COLLISION[] = new boolean[(Tile.TILE_WIDTH*Map.MAP_WIDTH)*(Tile.TILE_HEIGHT*Map.MAP_HEIGHT)];
 
 	public static void main(String[] args) {
 		System.setProperty("sun.java2d.transaccel", "True");

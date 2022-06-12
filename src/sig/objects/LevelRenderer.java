@@ -1,7 +1,5 @@
 package sig.objects;
 
-import java.util.Arrays;
-
 import sig.RabiClone;
 import sig.engine.Alpha;
 import sig.engine.Font;
@@ -25,7 +23,6 @@ public class LevelRenderer extends Object{
 
    @Override 
     public void update(double updateMult) {
-        Arrays.fill(RabiClone.COLLISION, false);
     }
 
     @Override
@@ -49,13 +46,12 @@ public class LevelRenderer extends Object{
             Draw_Text(4,4,new String(RabiClone.player.y_velocity),Font.PROFONT_12);
             Draw_Text(4,4+Font.PROFONT_12.getGlyphHeight(),new String(RabiClone.player.slide_time3),Font.PROFONT_12);
         }
-        RenderCollisionGrid(p);
     }
 
     private void RenderCollisionGrid(byte[] p) {
         for (int y=0;y<RabiClone.BASE_HEIGHT;y++) {
             for (int x=0;x<RabiClone.BASE_WIDTH;x++) {
-                if (RabiClone.COLLISION[((int)getY()+y)*RabiClone.BASE_WIDTH+(x+(int)getX())]) {
+                if (RabiClone.COLLISION[((int)getY()+y)*RabiClone.BASE_WIDTH*Tile.TILE_WIDTH+((int)getX()+x)]) {
                     p[y*RabiClone.BASE_WIDTH+x]=(byte)PaletteColor.CRIMSON.ordinal();
                 }
             }
@@ -75,6 +71,11 @@ public class LevelRenderer extends Object{
                 ];
             }
         }
+    }
+
+    @Override
+    public void drawOverlay(byte[] p) {
+        //RenderCollisionGrid(p);
     }
 
     protected void drawMapTileForEditorMode(int x, int y) {}

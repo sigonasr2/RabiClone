@@ -457,7 +457,7 @@ public class Player extends AnimatedObject implements CollisionEntity {
     }
 
     private boolean checkCollision(double x,double y) {
-        int index = (int)y*RabiClone.BASE_WIDTH+(int)x;
+        int index = (int)y*RabiClone.BASE_WIDTH*Tile.TILE_WIDTH+(int)x;
         if (index>=0&&index<RabiClone.COLLISION.length) {
             return RabiClone.COLLISION[index];
         } else {

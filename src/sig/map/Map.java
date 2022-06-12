@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import sig.RabiClone;
+import sig.engine.Sprite;
 
 public class Map {
     //Maps contain 512x288 tiles, allowing for 16384x9216 pixels of action per map.
@@ -46,12 +47,16 @@ public class Map {
                 switch (readingData) {
                     case MAP_DATA:
                         char tileValue = stream.readChar();
-                        newMap.tiles[marker++]=tileValue;
                         int ypos=marker/Map.MAP_WIDTH;
                         int xpos=marker%Map.MAP_WIDTH;
-                        for (int y=0;y<Tile.TILE_HEIGHT;y++) {
-                            for (int x=0;x<Tile.TILE_WIDTH;x++) {
-                                RabiClone.COLLISION[(ypos*Tile.TILE_HEIGHT)*(Map.MAP_WIDTH*Tile.TILE_WIDTH)+xpos*Tile.TILE_WIDTH]=Tile.values()[tileValue].getCollision()==CollisionType.SOLID;
+                        newMap.tiles[marker++]=tileValue;
+                        if (Tile.values()[tileValue].getCollision()==CollisionType.SOLID) {
+                            for (int y=0;y<Tile.TILE_HEIGHT;y++) {
+                                for (int x=0;x<Tile.TILE_WIDTH;x++) {
+                                    if (Sprite.TILE_SHEET.getBi_array()[(Tile.values()[tileValue].getSpriteSheetY()*Tile.TILE_HEIGHT+y)*Sprite.TILE_SHEET.getCanvasHeight()+Tile.values()[tileValue].getSpriteSheetX()*Tile.TILE_WIDTH+x]!=(byte)32) {
+                                        RabiClone.COLLISION[(ypos*Tile.TILE_HEIGHT+y)*(Map.MAP_WIDTH*Tile.TILE_WIDTH)+xpos*Tile.TILE_WIDTH+x]=true;
+                                    }
+                                }
                             }
                         }
                     break;
