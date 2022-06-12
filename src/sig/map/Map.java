@@ -6,6 +6,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import sig.RabiClone;
+
 public class Map {
     //Maps contain 512x288 tiles, allowing for 16384x9216 pixels of action per map.
     //Since a screen normally fits 16x9 tiles, you get 32x32 (1024) screens of gameplay per world.
@@ -98,6 +100,16 @@ public class Map {
     }
 
     public void ModifyTile(int x,int y,Tile t) {
+        Tile prevTile = Tile.values()[tiles[y*Map.MAP_WIDTH+x]];
+        boolean prevIsCollisionTile=prevTile.getCollision()==CollisionType.SOLID;
+        boolean newIsCollisionTile=t.getCollision()==CollisionType.SOLID;
+        if (prevIsCollisionTile!=newIsCollisionTile) {
+            for (int yy=0;yy<Tile.TILE_HEIGHT;yy++) {
+                for (int xx=0;xx<Tile.TILE_WIDTH;xx++) {
+                    RabiClone.COLLISION[(y*Tile.TILE_HEIGHT*Map.MAP_HEIGHT+yy)*Map.MAP_WIDTH+(x*Tile.TILE_WIDTH*Map.MAP_WIDTH+xx)]=newIsCollisionTile;
+                }
+            }
+        }
         tiles[y*Map.MAP_WIDTH+x]=(char)(t.ordinal());
         //System.out.println("Tile "+(y*MAP_WIDTH+x)+" is now "+tiles[y*MAP_WIDTH+x]+".");
     }

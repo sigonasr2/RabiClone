@@ -73,7 +73,7 @@ public class Player extends AnimatedObject implements CollisionEntity {
         super(Sprite.ERINA, 5, panel);
         setX(RabiClone.BASE_WIDTH / 2 - getAnimatedSpr().getWidth() / 2);
         setY(RabiClone.BASE_HEIGHT * (2 / 3d) - getAnimatedSpr().getHeight() / 2);
-        setCollisionBounds(new Rectangle(2,2,28,28));
+        setCollisionBounds(new Rectangle(10,2,12,27));
     }
 
     @Override
@@ -395,8 +395,8 @@ public class Player extends AnimatedObject implements CollisionEntity {
             }
         }
         if (y_velocity==0) {
-            if (!(checkCollision(getX()-RabiClone.level_renderer.getX()+getCollisionBox().getX()-getSprite().getWidth()/2+getCollisionBox().getX2(),getY()-RabiClone.level_renderer.getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()+1)||
-            checkCollision(getX()-RabiClone.level_renderer.getX()+getCollisionBox().getX()-getSprite().getWidth()/2+getCollisionBox().getX(),getY()-RabiClone.level_renderer.getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()+1))) {
+            if (!(checkCollision(getX()-RabiClone.level_renderer.getX()-getSprite().getWidth()/2+getCollisionBox().getX2(),getY()-RabiClone.level_renderer.getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()+1)||
+            checkCollision(getX()-RabiClone.level_renderer.getX()-getSprite().getWidth()/2+getCollisionBox().getX(),getY()-RabiClone.level_renderer.getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()+1))) {
                 groundCollision=false;
             } else {
                 groundCollision=true;
@@ -428,11 +428,12 @@ public class Player extends AnimatedObject implements CollisionEntity {
                     if (y==getY()) {
                         continue;
                     }
-                    if (checkCollision(getX()-RabiClone.level_renderer.getX()-getSprite().getWidth()/2+getCollisionBox().getX2()-1,y-RabiClone.level_renderer.getY()+getCollisionBox().getY2()-getSprite().getHeight()/2)||
-                    checkCollision(getX()-RabiClone.level_renderer.getX()-getSprite().getWidth()/2+getCollisionBox().getX()+1,y-RabiClone.level_renderer.getY()+getCollisionBox().getY2()-getSprite().getHeight()/2)) {
+                    if (checkCollision(getX()-RabiClone.level_renderer.getX()-getSprite().getWidth()/2+getCollisionBox().getX2()-1,y-RabiClone.level_renderer.getY()+getCollisionBox().getY()-getSprite().getHeight()/2)||
+                    checkCollision(getX()-RabiClone.level_renderer.getX()-getSprite().getWidth()/2+getCollisionBox().getX()+1,y-RabiClone.level_renderer.getY()+getCollisionBox().getY()-getSprite().getHeight()/2)) {
                         setY(y+1);
                         y_acceleration = 0;
                         y_velocity = 0;
+                        groundCollision = true;
                         break;
                     }       
                 }
@@ -454,69 +455,6 @@ public class Player extends AnimatedObject implements CollisionEntity {
                 this.setX(this.getX()+displacement_x);
             }
         }
-    }
-
-    private boolean checkCollision(double x,double y) {
-        int index = (int)y*RabiClone.BASE_WIDTH+(int)x;
-        if (index>=0&&index<RabiClone.COLLISION.length) {
-            return RabiClone.COLLISION[index];
-        } else {
-            return false;
-        }
-    }
-
-    private double ySlopeCollisionPoint(Tile tile) {
-        switch (tile) {
-            case BIG_SLOPE_LEFT1:
-                return -(getX() % Tile.TILE_WIDTH / 2)
-                        + (int) (getY() + getAnimatedSpr().getHeight() / 2) / Tile.TILE_HEIGHT * Tile.TILE_HEIGHT
-                        + (getAnimatedSpr().getHeight() / 2 - 4);
-
-            case BIG_SLOPE_LEFT2:
-                return -(getX() % Tile.TILE_WIDTH / 2)
-                        + (int) (getY() + getAnimatedSpr().getHeight() / 2) / Tile.TILE_HEIGHT * Tile.TILE_HEIGHT
-                        + (getAnimatedSpr().getHeight() / 2 - 4) - Tile.TILE_WIDTH / 2;
-
-            case BIG_SLOPE_RIGHT1:
-                return (getX() % Tile.TILE_WIDTH / 2)
-                        + (int) (getY() + getAnimatedSpr().getHeight() / 2) / Tile.TILE_HEIGHT * Tile.TILE_HEIGHT
-                        + (getAnimatedSpr().getHeight() / 2 - 4) - Tile.TILE_WIDTH;
-
-            case BIG_SLOPE_RIGHT2:
-                return (getX() % Tile.TILE_WIDTH / 2)
-                        + (int) (getY() + getAnimatedSpr().getHeight() / 2) / Tile.TILE_HEIGHT * Tile.TILE_HEIGHT
-                        + (getAnimatedSpr().getHeight() / 2 - 4) - Tile.TILE_WIDTH + Tile.TILE_WIDTH / 2;
-
-            case SMALL_SLOPE_LEFT:
-                return -(getX() % Tile.TILE_WIDTH)
-                        + (int) (getY() + getAnimatedSpr().getHeight() / 2) / Tile.TILE_HEIGHT * Tile.TILE_HEIGHT
-                        + (getAnimatedSpr().getHeight() / 2 - 4);
-
-            case SMALL_SLOPE_RIGHT:
-                return (getX() % Tile.TILE_WIDTH)
-                        + (int) (getY() + getAnimatedSpr().getHeight() / 2) / Tile.TILE_HEIGHT * Tile.TILE_HEIGHT
-                        + (getAnimatedSpr().getHeight() / 2 - 4) - Tile.TILE_WIDTH;
-            default:
-                break;
-        }
-        return 0;
-    }
-
-    private void moveUpSlope(Tile checked_tile_bottom_center) {
-        setY(ySlopeCollisionPoint(checked_tile_bottom_center));
-    }
-
-    private boolean groundCollision(double check_distance_y) {
-        boolean collisionOccured;
-        setY((getY() - check_distance_y));
-        y_acceleration = 0;
-        y_velocity = 0;
-        groundCollision = true;
-        collisionOccured = true;
-        if (state != State.SLIDE) {
-            state = State.IDLE;
-        }
-        return collisionOccured;
     }
 
     private void handleKeyboardMovement(double updateMult, int movement, double friction, double drag) {

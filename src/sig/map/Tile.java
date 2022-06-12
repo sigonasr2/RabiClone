@@ -2,17 +2,17 @@ package sig.map;
 
 public enum Tile {
     VOID(0,0,true,CollisionType.NONE), //File is populated by 0s by default. This represents the void.
-    WALL(0,0,CollisionType.BLOCK),
-    FLOOR(1,0,CollisionType.BLOCK),
-    PLATFORM_LEDGE(2,0,CollisionType.BLOCK),
+    WALL(0,0,CollisionType.SOLID),
+    FLOOR(1,0,CollisionType.SOLID),
+    PLATFORM_LEDGE(2,0,CollisionType.SOLID),
     INVISIBLE_WALL(0,0,true,CollisionType.NONE),
     HIGHLIGHTED_TILE(3,0,CollisionType.NONE),
-    SMALL_SLOPE_LEFT(0,1,CollisionType.SLOPE),
-    SMALL_SLOPE_RIGHT(1,1,CollisionType.SLOPE),
-    BIG_SLOPE_LEFT1(2,1,CollisionType.SLOPE),
-    BIG_SLOPE_LEFT2(3,1,CollisionType.SLOPE),
-    BIG_SLOPE_RIGHT1(0,2,CollisionType.SLOPE),
-    BIG_SLOPE_RIGHT2(1,2,CollisionType.SLOPE),
+    SMALL_SOLID_LEFT(0,1,CollisionType.SOLID),
+    SMALL_SOLID_RIGHT(1,1,CollisionType.SOLID),
+    BIG_SOLID_LEFT1(2,1,CollisionType.SOLID),
+    BIG_SOLID_LEFT2(3,1,CollisionType.SOLID),
+    BIG_SOLID_RIGHT1(0,2,CollisionType.SOLID),
+    BIG_SOLID_RIGHT2(1,2,CollisionType.SOLID),
     ;
 
     final public static int TILE_WIDTH=32;

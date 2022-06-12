@@ -12,7 +12,9 @@ import java.util.List;
 import sig.engine.Panel;
 import sig.engine.Point;
 import sig.engine.objects.Object;
+import sig.map.Map;
 import sig.map.Maps;
+import sig.map.Tile;
 import sig.objects.ConfigureControls;
 import sig.objects.EditorRenderer;
 import sig.objects.LevelRenderer;
@@ -58,7 +60,7 @@ public class RabiClone {
 	static long lastReportedTime = System.currentTimeMillis();
 	public static long TIME = 0;
 
-	public static boolean COLLISION[] = new boolean[BASE_WIDTH*BASE_HEIGHT];
+	public static boolean COLLISION[] = new boolean[(Tile.TILE_WIDTH*Map.MAP_WIDTH)*(Tile.TILE_HEIGHT*Map.MAP_HEIGHT)];
 
 	public static void main(String[] args) {
 		System.setProperty("sun.java2d.transaccel", "True");
