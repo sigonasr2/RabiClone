@@ -114,14 +114,18 @@ public class Map {
 
     public void ModifyTile(int x,int y,Tile t) {
         Tile prevTile = Tile.values()[tiles[y*Map.MAP_WIDTH+x]];
-        boolean prevIsCollisionTile=prevTile.getCollision()==CollisionType.SOLID;
-        boolean newIsCollisionTile=t.getCollision()==CollisionType.SOLID;
-        if (prevIsCollisionTile!=newIsCollisionTile) {
+        if (prevTile!=t) {
+            byte[] tilesheet = Sprite.TILE_SHEET.getBi_array();
+            boolean setSolid = t.getCollision()==CollisionType.SOLID;
             for (int yy=0;yy<Tile.TILE_HEIGHT;yy++) {
                 for (int xx=0;xx<Tile.TILE_WIDTH;xx++) {
-                    RabiClone.COLLISION[(y*Tile.TILE_HEIGHT+yy)*(Map.MAP_WIDTH*Tile.TILE_WIDTH)+(x*Tile.TILE_WIDTH+xx)]=newIsCollisionTile;
+                    if (tilesheet[(t.getSpriteSheetY()*Tile.TILE_HEIGHT+yy)*Sprite.TILE_SHEET.getCanvasWidth()+t.getSpriteSheetX()*Tile.TILE_WIDTH+xx]!=(byte)32) {
+                        RabiClone.COLLISION[(y*Tile.TILE_HEIGHT+yy)*(Map.MAP_WIDTH*Tile.TILE_WIDTH)+(x*Tile.TILE_WIDTH+xx)]=setSolid;
+                    } else {
+                        RabiClone.COLLISION[(y*Tile.TILE_HEIGHT+yy)*(Map.MAP_WIDTH*Tile.TILE_WIDTH)+(x*Tile.TILE_WIDTH+xx)]=false;
+                    }
                 }
-            }
+            } 
         }
         tiles[y*Map.MAP_WIDTH+x]=(char)(t.ordinal());
         //System.out.println("Tile "+(y*MAP_WIDTH+x)+" is now "+tiles[y*MAP_WIDTH+x]+".");

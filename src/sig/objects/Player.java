@@ -369,13 +369,25 @@ public class Player extends AnimatedObject implements CollisionEntity {
                     continue;
                 }
                 if (checkCollision(x+getCollisionBox().getX2()-getSprite().getWidth()/2,(getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()))||
-                checkCollision(x+getCollisionBox().getX2()-getSprite().getWidth()/2,(getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()))) {
-                    x_acceleration = 0;
-                    x_velocity = 0.000001;
-                    sideCollision=true;
-                    setX(x-0.1);
-                    break;
-                }       
+                checkCollision(x+getCollisionBox().getX2()-getSprite().getWidth()/2,(getY()-getSprite().getHeight()/2+getCollisionBounds().getY()))) {
+                    if (!(checkCollision(x+getCollisionBox().getX2()-getSprite().getWidth()/2,(getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()-1))&&
+                    checkCollision(x+getCollisionBox().getX2()-getSprite().getWidth()/2,(getY()-getSprite().getHeight()/2+getCollisionBounds().getY()-1)))) {
+                        setY(getY()-1);
+                    } else {
+                        x_acceleration = 0;
+                        x_velocity = 0.000001;
+                        sideCollision=true;
+                        setX(x-0.1);
+                        break;
+                    }
+                } else {
+                    if (!checkCollision(x+getCollisionBox().getX()-getSprite().getWidth()/2,(getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()+1))&&
+                    checkCollision(x+getCollisionBox().getX()-getSprite().getWidth()/2,(getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()+2))) {
+                        //System.out.println("Performs check."+System.currentTimeMillis());
+                        setY(getY()+1);
+                        //x_velocity = ;
+                    }
+                } 
             }
         } else 
         if (displacement_x<-0.00001) {
@@ -385,17 +397,29 @@ public class Player extends AnimatedObject implements CollisionEntity {
                 }
                 if (checkCollision((x+getCollisionBox().getX()-getSprite().getWidth()/2),getY()-getSprite().getHeight()/2+getCollisionBounds().getY2())||
                 checkCollision((x+getCollisionBox().getX()-getSprite().getWidth()/2),getY()-getSprite().getHeight()/2+getCollisionBounds().getY())) {
-                    x_acceleration = 0;
-                    x_velocity = -0.000001;
-                    sideCollision=true;
-                    setX(x+0.1);
-                    break;
-                }       
+                    if (!(checkCollision(x+getCollisionBox().getX()-getSprite().getWidth()/2,(getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()-1))&&
+                    checkCollision(x+getCollisionBox().getX()-getSprite().getWidth()/2,(getY()-getSprite().getHeight()/2+getCollisionBounds().getY()-1)))) {
+                        setY(getY()-1);
+                    } else {
+                        x_acceleration = 0;
+                        x_velocity = -0.000001;
+                        sideCollision=true;
+                        setX(x+0.1);
+                        break;
+                    }
+                } else {
+                    if (!checkCollision(x+getCollisionBox().getX2()-getSprite().getWidth()/2,(getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()+1))&&
+                    checkCollision(x+getCollisionBox().getX2()-getSprite().getWidth()/2,(getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()+2))) {
+                        //System.out.println("Performs check."+System.currentTimeMillis());
+                        setY(getY()+1);
+                        //x_velocity = ;
+                    }
+                } 
             }
         }
         if (y_velocity==0) {
-            if (!(checkCollision(getX()-getSprite().getWidth()/2+getCollisionBox().getX2(),getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()+1)||
-            checkCollision(getX()-getSprite().getWidth()/2+getCollisionBox().getX(),getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()+1))) {
+            if (!(checkCollision(getX()-getSprite().getWidth()/2+getCollisionBox().getX2(),getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()+2)||
+            checkCollision(getX()-getSprite().getWidth()/2+getCollisionBox().getX(),getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()+2))) {
                 groundCollision=false;
             } else {
                 groundCollision=true;
