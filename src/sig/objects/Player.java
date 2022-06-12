@@ -361,62 +361,7 @@ public class Player extends AnimatedObject implements CollisionEntity {
         double displacement_x = x_velocity*updateMult;
 
         boolean sideCollision = false;
-
-        double startingX=getX();
-        if (displacement_x>0.00001) {
-            for (int x=(int)getX();x<startingX+displacement_x;x++) {
-                if (x==getX()) {
-                    continue;
-                }
-                if (checkCollision(x+getCollisionBox().getX2()-getSprite().getWidth()/2,(getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()))||
-                checkCollision(x+getCollisionBox().getX2()-getSprite().getWidth()/2,(getY()-getSprite().getHeight()/2+getCollisionBounds().getY()))) {
-                    if (!(checkCollision(x+getCollisionBox().getX2()-getSprite().getWidth()/2,(getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()-1))&&
-                    checkCollision(x+getCollisionBox().getX2()-getSprite().getWidth()/2,(getY()-getSprite().getHeight()/2+getCollisionBounds().getY()-1)))) {
-                        setY(getY()-1);
-                    } else {
-                        x_acceleration = 0;
-                        x_velocity = 0.000001;
-                        sideCollision=true;
-                        setX(x-0.1);
-                        break;
-                    }
-                } else {
-                    if (!checkCollision(x+getCollisionBox().getX()-getSprite().getWidth()/2,(getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()+1))&&
-                    checkCollision(x+getCollisionBox().getX()-getSprite().getWidth()/2,(getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()+2))) {
-                        //System.out.println("Performs check."+System.currentTimeMillis());
-                        setY(getY()+1);
-                        //x_velocity = ;
-                    }
-                } 
-            }
-        } else 
-        if (displacement_x<-0.00001) {
-            for (int x=(int)getX();x>startingX+displacement_x;x--) {
-                if (x==getX()) {
-                    continue;
-                }
-                if (checkCollision((x+getCollisionBox().getX()-getSprite().getWidth()/2),getY()-getSprite().getHeight()/2+getCollisionBounds().getY2())||
-                checkCollision((x+getCollisionBox().getX()-getSprite().getWidth()/2),getY()-getSprite().getHeight()/2+getCollisionBounds().getY())) {
-                    if (!(checkCollision(x+getCollisionBox().getX()-getSprite().getWidth()/2,(getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()-1))&&
-                    checkCollision(x+getCollisionBox().getX()-getSprite().getWidth()/2,(getY()-getSprite().getHeight()/2+getCollisionBounds().getY()-1)))) {
-                        setY(getY()-1);
-                    } else {
-                        x_acceleration = 0;
-                        x_velocity = -0.000001;
-                        sideCollision=true;
-                        setX(x+0.1);
-                        break;
-                    }
-                } else {
-                    if (!checkCollision(x+getCollisionBox().getX2()-getSprite().getWidth()/2,(getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()+1))&&
-                    checkCollision(x+getCollisionBox().getX2()-getSprite().getWidth()/2,(getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()+2))) {
-                        //System.out.println("Performs check."+System.currentTimeMillis());
-                        setY(getY()+1);
-                        //x_velocity = ;
-                    }
-                } 
-            }
-        }
+        boolean hitAbove=false;
         if (y_velocity==0) {
             if (!(checkCollision(getX()-getSprite().getWidth()/2+getCollisionBox().getX2(),getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()+2)||
             checkCollision(getX()-getSprite().getWidth()/2+getCollisionBox().getX(),getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()+2))) {
@@ -454,12 +399,72 @@ public class Player extends AnimatedObject implements CollisionEntity {
                     if (checkCollision(getX()-getSprite().getWidth()/2+getCollisionBox().getX2()-1,y+getCollisionBox().getY()-getSprite().getHeight()/2)||
                     checkCollision(getX()-getSprite().getWidth()/2+getCollisionBox().getX()+1,y+getCollisionBox().getY()-getSprite().getHeight()/2)) {
                         setY(y+1);
+                        hitAbove=true;
+                        spacebarPressed=0;
+                        state=State.FALLING;
                         y_acceleration = 0;
                         y_velocity = 0;
-                        groundCollision = true;
+                        displacement_y=0;
+                        //groundCollision = true;
                         break;
                     }       
                 }
+            }
+        }
+
+        double startingX=getX();
+        if (displacement_x>0.00001) {
+            for (int x=(int)getX();x<startingX+displacement_x;x++) {
+                if (x==getX()) {
+                    continue;
+                }
+                if (checkCollision(x+getCollisionBox().getX2()-getSprite().getWidth()/2,(getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()))||
+                checkCollision(x+getCollisionBox().getX2()-getSprite().getWidth()/2,(getY()-getSprite().getHeight()/2+getCollisionBounds().getY()))) {
+                    if (!(checkCollision(x+getCollisionBox().getX2()-getSprite().getWidth()/2,(getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()-2))||
+                    checkCollision(x+getCollisionBox().getX2()-getSprite().getWidth()/2,(getY()-getSprite().getHeight()/2+getCollisionBounds().getY()-2)))) {
+                        setY(getY()-1);
+                    } else {
+                        x_acceleration = 0;
+                        x_velocity = 0.000001;
+                        sideCollision=true;
+                        setX(x-0.1);
+                        break;
+                    }
+                } else {
+                    if (!hitAbove&&!checkCollision(x+getCollisionBox().getX()-getSprite().getWidth()/2,(getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()+1))&&
+                    checkCollision(x+getCollisionBox().getX()-getSprite().getWidth()/2,(getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()+2))) {
+                        //System.out.println("Performs check."+System.currentTimeMillis());
+                        setY(getY()+1);
+                        //x_velocity = ;
+                    }
+                } 
+            }
+        } else 
+        if (displacement_x<-0.00001) {
+            for (int x=(int)getX();x>startingX+displacement_x;x--) {
+                if (x==getX()) {
+                    continue;
+                }
+                if (checkCollision((x+getCollisionBox().getX()-getSprite().getWidth()/2),getY()-getSprite().getHeight()/2+getCollisionBounds().getY2())||
+                checkCollision((x+getCollisionBox().getX()-getSprite().getWidth()/2),getY()-getSprite().getHeight()/2+getCollisionBounds().getY())) {
+                    if (!(checkCollision(x+getCollisionBox().getX()-getSprite().getWidth()/2,(getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()-2))||
+                    checkCollision(x+getCollisionBox().getX()-getSprite().getWidth()/2,(getY()-getSprite().getHeight()/2+getCollisionBounds().getY()-2)))) {
+                        setY(getY()-1);
+                    } else {
+                        x_acceleration = 0;
+                        x_velocity = -0.000001;
+                        sideCollision=true;
+                        setX(x+0.1);
+                        break;
+                    }
+                } else {
+                    if (!hitAbove&&!checkCollision(x+getCollisionBox().getX2()-getSprite().getWidth()/2,(getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()+1))&&
+                    checkCollision(x+getCollisionBox().getX2()-getSprite().getWidth()/2,(getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()+2))) {
+                        //System.out.println("Performs check."+System.currentTimeMillis());
+                        setY(getY()+1);
+                        //x_velocity = ;
+                    }
+                } 
             }
         }
         if (!groundCollision){
