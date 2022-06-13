@@ -5,6 +5,7 @@ import sig.engine.Action;
 import sig.engine.Panel;
 import sig.engine.Rectangle;
 import sig.engine.Sprite;
+import sig.engine.Transform;
 import sig.engine.objects.AnimatedObject;
 import sig.engine.objects.CollisionEntity;
 import sig.map.Map;
@@ -530,4 +531,8 @@ public class Player extends AnimatedObject implements CollisionEntity,RenderedOb
         setCollisionBox(bounds);
     }
 
+    @Override
+    public Transform getSpriteTransform() {
+        return facing_direction?Transform.HORIZONTAL:Transform.NONE;
+    }
 }

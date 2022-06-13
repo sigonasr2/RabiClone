@@ -13,12 +13,17 @@ public enum DataTile {
     BUN4(new SpawnEvent("Spawns a red bun",Erinoah.class));
 
     String description;
+    Event event;
 
     DataTile(){}
     DataTile(Event e) {
         this.description=e.getDescription();
+        this.event=e;
     }
     public String getDescription() {
         return description;
+    }
+    public boolean perform(int x, int y) {
+        return event.perform(x, y);
     }
 }

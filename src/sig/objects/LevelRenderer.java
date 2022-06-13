@@ -38,7 +38,9 @@ public class LevelRenderer extends Object{
                     continue;
                 }
                 if (RabiClone.CURRENT_MAP.getDataTile(x,y)!=DataTile.NULL) {
-                    
+                    if (!RabiClone.CURRENT_MAP.getDataTile(x,y).perform(x*Tile.TILE_WIDTH,y*Tile.TILE_HEIGHT)) {
+                        RabiClone.CURRENT_MAP.ModifyDataTile(x, y, DataTile.NULL);
+                    }
                 }
             }
         }
@@ -67,9 +69,9 @@ public class LevelRenderer extends Object{
             Object o = RabiClone.OBJ.get(i);
             if (o instanceof RenderedObject) {
                 if (o instanceof AnimatedObject) {
-                    Draw_Animated_Object((AnimatedObject)o,RabiClone.player.facing_direction?Transform.HORIZONTAL:Transform.NONE);
+                    Draw_Animated_Object((AnimatedObject)o,o.getSpriteTransform());
                 } else {
-                    Draw_Object(o,RabiClone.player.facing_direction?Transform.HORIZONTAL:Transform.NONE);
+                    Draw_Object(o,o.getSpriteTransform());
                 }
             }
         }
@@ -158,4 +160,8 @@ public class LevelRenderer extends Object{
         }
     }
     
+    @Override
+    public Transform getSpriteTransform() {
+        return Transform.NONE;
+    }
 }
