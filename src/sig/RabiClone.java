@@ -16,7 +16,6 @@ import sig.map.Map;
 import sig.map.Maps;
 import sig.map.Tile;
 import sig.objects.ConfigureControls;
-import sig.objects.EditorRenderer;
 import sig.objects.LevelRenderer;
 import sig.objects.Player;
 import sig.engine.Key;

@@ -1,7 +1,6 @@
 package sig.engine;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.image.ColorModel;
 import java.awt.image.MemoryImageSource;
@@ -372,7 +371,7 @@ public class Panel extends JPanel implements Runnable,KeyListener {
 							Graphics2D g2 = (Graphics2D)RabiClone.f.getBufferStrategy().getDrawGraphics();
 							g2.setRenderingHints(RabiClone.RENDERHINTS);
 							if (g2!=null) {
-								try {      
+								try {
 									paintComponent(g2);
 								} finally {
 									g2.dispose();

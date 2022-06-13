@@ -52,6 +52,7 @@ public class LevelRenderer extends Object{
         }
     }
 
+    @SuppressWarnings("unused")
     private void RenderCollisionGrid(byte[] p) {
         for (int y=0;y<RabiClone.BASE_HEIGHT;y++) {
             for (int x=0;x<RabiClone.BASE_WIDTH;x++) {
