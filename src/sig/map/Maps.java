@@ -13,7 +13,7 @@ public enum Maps {
     
     Maps(String filename) {
         file=new File(new File("..",MAPS_DIR),filename);
-        this.map=Map.LoadMap(this);
+        //this.map=Map.LoadMap(this); //We don't necessarily have to load the map right away.
     }
 
     public File getFile() {

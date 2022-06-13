@@ -51,7 +51,7 @@ public class RabiClone {
 	public static ConfigureControls control_settings_menu;
 	public static Player player;
 
-	public static Maps CURRENT_MAP = Maps.WORLD1;
+	public static Maps CURRENT_MAP;
 	public static Controller[] CONTROLLERS = new Controller[] {};
 
 	public static long lastControllerScan = System.currentTimeMillis();
@@ -73,6 +73,8 @@ public class RabiClone {
 		f.setUndecorated(true);
 		f.setSize(BASE_WIDTH, BASE_HEIGHT); // 1024x576 (64x64)
 		ChooseBestRatio();
+		
+		Map.LoadMap(Maps.WORLD1);
 
 		p = new Panel(f);
 
@@ -118,6 +120,7 @@ public class RabiClone {
 					if (!(level_renderer instanceof EditorRenderer)) {
 						OBJ.clear();
 						ResetGame();
+						Map.LoadMap(Maps.WORLD1,CURRENT_MAP.getMap());
 						OBJ.add(level_renderer = new EditorRenderer(p));
 					}
 				}
