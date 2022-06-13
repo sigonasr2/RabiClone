@@ -170,7 +170,16 @@ public class Map {
                 }
             }
         }
+        stream.writeInt(eventCounter);
+        saveIntData(stream,eventData);
         stream.close();
+    }
+
+    private static void saveIntData(DataOutputStream stream, int[] a) throws IOException {
+        int marker = 0;
+        while (marker<a.length) {
+            stream.writeInt(a[marker++]);
+        }
     }
 
     private static void saveCharData(DataOutputStream stream, char[] a) throws IOException {
