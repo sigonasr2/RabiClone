@@ -2,8 +2,6 @@ package sig.objects;
 
 import java.awt.event.KeyEvent;
 
-import javax.xml.crypto.Data;
-
 import sig.RabiClone;
 import sig.engine.Action;
 import sig.engine.Alpha;
@@ -31,11 +29,11 @@ public class LevelRenderer extends Object{
 
    @Override 
     public void update(double updateMult) {
-        for (int y=(int)(this.getY()/Tile.TILE_HEIGHT);y<(int)(RabiClone.BASE_HEIGHT/Tile.TILE_HEIGHT+this.getY()/Tile.TILE_HEIGHT+1);y++) {
+        for (int y=(int)(this.getY()/Tile.TILE_HEIGHT)-RabiClone.EVENT_BOUNDARY_RANGE;y<(int)(RabiClone.BASE_HEIGHT/Tile.TILE_HEIGHT+this.getY()/Tile.TILE_HEIGHT+1+RabiClone.EVENT_BOUNDARY_RANGE);y++) {
             if (y<0||y>Map.MAP_HEIGHT) {
                 continue;
             }
-            for (int x=(int)(0+this.getX()/Tile.TILE_WIDTH);x<(int)(RabiClone.BASE_WIDTH/Tile.TILE_WIDTH+this.getX()/Tile.TILE_WIDTH+1);x++) {
+            for (int x=(int)(0+this.getX()/Tile.TILE_WIDTH)-RabiClone.EVENT_BOUNDARY_RANGE;x<(int)(RabiClone.BASE_WIDTH/Tile.TILE_WIDTH+this.getX()/Tile.TILE_WIDTH+1+RabiClone.EVENT_BOUNDARY_RANGE);x++) {
                 if (x<0||x>Map.MAP_WIDTH) {
                     continue;
                 }

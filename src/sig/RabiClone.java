@@ -42,6 +42,7 @@ public class RabiClone {
 
 	public static int BASE_WIDTH = 512;
 	public static int BASE_HEIGHT = 288;
+	public static int EVENT_BOUNDARY_RANGE = 8;
 	public static int SIZE_MULTIPLIER = 1;
 	public static Point MOUSE_POS;
 
