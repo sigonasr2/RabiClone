@@ -27,12 +27,14 @@ public class Map {
 
     final public static int MAP_WIDTH=512;
     final public static int MAP_HEIGHT=288;
+    final public static int MAP_SCREENS_X=32;
+    final public static int MAP_SCREENS_Y=32;
 
     char[] tiles = new char[MAP_WIDTH*MAP_HEIGHT];
-    byte[] views = new byte[(MAP_WIDTH/Tile.TILE_WIDTH)*(MAP_HEIGHT/Tile.TILE_HEIGHT)];
-    byte[] backgrounds = new byte[(MAP_WIDTH/Tile.TILE_WIDTH)*(MAP_HEIGHT/Tile.TILE_HEIGHT)];
-    byte[] colors = new byte[(MAP_WIDTH/Tile.TILE_WIDTH)*(MAP_HEIGHT/Tile.TILE_HEIGHT)];
-    byte[] types = new byte[(MAP_WIDTH/Tile.TILE_WIDTH)*(MAP_HEIGHT/Tile.TILE_HEIGHT)];
+    byte[] views = new byte[MAP_SCREENS_X*MAP_SCREENS_Y];
+    byte[] backgrounds = new byte[MAP_SCREENS_X*MAP_SCREENS_Y];
+    byte[] colors = new byte[MAP_SCREENS_X*MAP_SCREENS_Y];
+    byte[] types = new byte[MAP_SCREENS_X*MAP_SCREENS_Y];
     char[] data = new char[MAP_WIDTH*MAP_HEIGHT];
 
     int eventTileCount=0;
@@ -100,13 +102,15 @@ public class Map {
                     case EVENT_DATA_COUNT:
                         newMap.eventTileCount=stream.readInt();
                         readingData=EVENT_DATA;
-                        iterationCount=newMap.eventTileCount;
+                        iterationCount=newMap.eventTileCount+1; //It gets decreased by one after the loop.
+                        System.out.println("Event tile count is "+(iterationCount-1));
                     break;
                     case EVENT_DATA:
                         int dataPacket = stream.readInt();
                         //First 14 bits are event info. Last 18 bits are index info.
                         char event = (char)(dataPacket>>>18);
                         int index = dataPacket&0b00000000000000111111111111111111;
+                        System.out.println("Unpacked: "+((int)event)+" // x:"+(index%Map.MAP_WIDTH)+", y:"+(index/Map.MAP_WIDTH));
                         newMap.data[index]=event;
                     break;
                 }
@@ -114,7 +118,7 @@ public class Map {
                 if (iterationCount<=0) {
                     readingData++;
                     marker=0;
-                    iterationCount=(MAP_WIDTH/Tile.TILE_WIDTH)*(MAP_HEIGHT/Tile.TILE_HEIGHT);
+                    iterationCount=MAP_SCREENS_X*MAP_SCREENS_Y;
                 }
             }
             stream.close();
@@ -139,11 +143,13 @@ public class Map {
             
             map.getMap().eventTileCount=stream.readInt();
             int remainingCount = map.getMap().eventTileCount;
+            System.out.println("Found "+remainingCount+" events.");
             while (remainingCount-->0) {
                 int dataPacket = stream.readInt();
                 //First 14 bits are event info. Last 18 bits are index info.
                 char event = (char)(dataPacket>>>18);
                 int index = dataPacket&0b00000000000000111111111111111111;
+                System.out.println("Unpacked: "+((int)event)+" // x:"+(index%Map.MAP_WIDTH)+", y:"+(index/Map.MAP_WIDTH));
                 map.getMap().data[index]=event;
             }
             stream.close();

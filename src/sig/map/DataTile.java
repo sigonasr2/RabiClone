@@ -15,7 +15,9 @@ public enum DataTile {
     String description;
     Event event;
 
-    DataTile(){}
+    DataTile(){
+        this.description=new String("");
+    }
     DataTile(Event e) {
         this.description=e.getDescription();
         this.event=e;

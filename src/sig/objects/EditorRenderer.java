@@ -122,6 +122,9 @@ public class EditorRenderer extends LevelRenderer{
                 }
                 if (dataTileView) {
                     drawMapTileForDataTileMode(p,x,y);
+                    if (RabiClone.CURRENT_MAP.getDataTile(x, y)!=DataTile.NULL) {
+                        DrawDataTile(p,x*Tile.TILE_WIDTH-this.getX(),y*Tile.TILE_HEIGHT-this.getY(),RabiClone.CURRENT_MAP.getDataTile(x, y));
+                    }
                 } else {
                     drawMapTileForEditorMode(x,y);
                 }
@@ -196,17 +199,15 @@ public class EditorRenderer extends LevelRenderer{
             double tileX = x*Tile.TILE_WIDTH-this.getX();
             double tileY = y*Tile.TILE_HEIGHT-this.getY();
             DrawTransparentDataTile(p,tileX,tileY,selectedDataTile,PaletteColor.GRAPE);
-            Draw_Text(tileX+2,tileY-Font.PROFONT_12.getGlyphHeight()-2,new String(selectedTile.toString()),Font.PROFONT_12);
-            Draw_Text_Ext(tileX+2,tileY+Tile.TILE_HEIGHT+2,new String(RabiClone.CURRENT_MAP.getTile(x,y).toString()),Font.PROFONT_12,Alpha.ALPHA0,PaletteColor.CRIMSON);
+            Draw_Text_Ext(tileX+2,tileY+Tile.TILE_HEIGHT+2,selectedDataTile.getDescription(),Font.PROFONT_12,Alpha.ALPHA0,PaletteColor.CRIMSON);
         }
     }
 
     protected void DrawTransparentDataTile(byte[] p, double x, double y, DataTile tile,PaletteColor col) {
         Draw_Rect(p,col,x,y,Tile.TILE_WIDTH,Tile.TILE_HEIGHT);
-        Draw_Text_Ext(x+2,y+2,RabiClone.CURRENT_MAP.getDataTile((int)x,(int)y).getDescription(),Font.PROFONT_12,Alpha.ALPHA0,PaletteColor.WHITE);
+        Draw_Text_Ext(x+2,y+2,new String(tile.toString()),Font.PROFONT_12,Alpha.ALPHA0,PaletteColor.WHITE);
     }
 
-    @Override
     protected void DrawDataTile(byte[] p, double x, double y, DataTile tile) {
         DrawTransparentDataTile(p,x,y,tile,PaletteColor.MIDNIGHT_BLUE);
     }
@@ -235,5 +236,7 @@ public class EditorRenderer extends LevelRenderer{
                 RabiClone.CURRENT_MAP.setBackground(tileX,tileY,Background.values()[(RabiClone.CURRENT_MAP.getBackground(tileX, tileY).ordinal()+1)%Background.values().length]);
             }break;
         }
-    }    
+    } 
+
+    
 }

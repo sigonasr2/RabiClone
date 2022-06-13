@@ -21,7 +21,6 @@ public class Erinoah extends AnimatedObject implements RenderedObject{
 
     @Override
     public void draw(byte[] p) {
-        Draw_Animated_Sprite(16, 16, getAnimatedSpr(), getCurrentFrame());
     }
 
     @Override

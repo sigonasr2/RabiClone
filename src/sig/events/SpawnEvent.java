@@ -24,7 +24,7 @@ public class SpawnEvent implements Event{
     @Override
     public boolean perform(int x, int y) {
         try {
-            RabiClone.OBJ.add((Object)entity.getDeclaredConstructor(new Class<?>[]{Double.class,Double.class}).newInstance(x,y));
+            RabiClone.OBJ.add((Object)entity.getDeclaredConstructor(new Class<?>[]{double.class,double.class}).newInstance(x,y));
         } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
                 | NoSuchMethodException | SecurityException e) {
             e.printStackTrace();

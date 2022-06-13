@@ -122,8 +122,10 @@ public class DrawLoop {
     public static void Fill_Rect(byte[] p,byte col,double x,double y,double w,double h) {
     	for (int xx=0;xx<w;xx++) {
         	for (int yy=0;yy<h;yy++) {
-        		int index = ((int)y+yy)*RabiClone.BASE_WIDTH+(int)x+xx;
-				Draw(p,index,col, Alpha.ALPHA0);
+				if (x+xx>=0&&y+yy>=0&&x+xx<RabiClone.BASE_WIDTH&&y+yy<RabiClone.BASE_HEIGHT) {
+					int index = ((int)y+yy)*RabiClone.BASE_WIDTH+(int)x+xx;
+					Draw(p,index,col, Alpha.ALPHA0);
+				}
         	}	
     	}
     }

@@ -2,6 +2,8 @@ package sig.objects;
 
 import java.awt.event.KeyEvent;
 
+import javax.xml.crypto.Data;
+
 import sig.RabiClone;
 import sig.engine.Action;
 import sig.engine.Alpha;
@@ -59,9 +61,6 @@ public class LevelRenderer extends Object{
                 if (RabiClone.CURRENT_MAP.getTile(x,y)!=Tile.VOID) {
                     DrawTile(x*Tile.TILE_WIDTH-this.getX(),y*Tile.TILE_HEIGHT-this.getY(),RabiClone.CURRENT_MAP.getTile(x,y));
                     //System.out.println((x*Tile.TILE_WIDTH+(this.getX()%Tile.TILE_WIDTH) )+","+(y*Tile.TILE_HEIGHT+(this.getY()%Tile.TILE_HEIGHT)));
-                }
-                if (RabiClone.CURRENT_MAP.getDataTile(x,y)!=DataTile.NULL) {
-                    DrawDataTile(p,x*Tile.TILE_WIDTH-this.getX(),y*Tile.TILE_HEIGHT-this.getY(),RabiClone.CURRENT_MAP.getDataTile(x,y));
                 }
             }
         }
@@ -136,9 +135,6 @@ public class LevelRenderer extends Object{
         Draw_Sprite_Partial(x,y, tile.getSpriteSheetX()*tile.getTileWidth(), tile.getSpriteSheetY()*tile.getTileHeight(), tile.getTileWidth(), tile.getTileHeight(), getSprite(), 0, Transform.NONE);
     }
 
-    protected void DrawDataTile(byte[] p, double x, double y, DataTile tile) {
-    }
-
     protected void DrawTransparentTile(double x, double y, Tile tile, Alpha alpha) {
         Draw_Sprite_Partial_Ext(x,y, tile.getSpriteSheetX()*tile.getTileWidth(), tile.getSpriteSheetY()*tile.getTileHeight(), tile.getTileWidth(), tile.getTileHeight(), getSprite(), alpha, Transform.NONE);
     }
@@ -150,6 +146,7 @@ public class LevelRenderer extends Object{
             case LEVEL_EDITOR:{
                 RabiClone.OBJ.clear();
                 RabiClone.ResetGame();
+                Map.LoadMap(RabiClone.CURRENT_MAP);
                 RabiClone.OBJ.add(RabiClone.level_renderer = new EditorRenderer(RabiClone.p));
             }break;
         }
