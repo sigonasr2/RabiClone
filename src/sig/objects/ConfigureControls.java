@@ -16,6 +16,7 @@ import sig.engine.KeyBind;
 import sig.engine.PaletteColor;
 import sig.engine.Panel;
 import sig.engine.String;
+import sig.engine.Transform;
 import sig.engine.objects.Object;
 
 public class ConfigureControls extends Object{
@@ -151,6 +152,11 @@ public class ConfigureControls extends Object{
             updateHighlightSections();
             assigningKey=false;
         }
+    }
+
+    @Override
+    public Transform getSpriteTransform() {
+        return Transform.NONE;
     }
     
 }
