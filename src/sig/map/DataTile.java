@@ -15,4 +15,7 @@ public enum DataTile {
     DataTile(java.lang.String s) {
         this.description=new String(s);
     }
+    public String getDescription() {
+        return description;
+    }
 }

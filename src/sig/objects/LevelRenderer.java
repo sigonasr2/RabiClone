@@ -15,6 +15,7 @@ import sig.engine.objects.AnimatedObject;
 import sig.engine.objects.Object;
 import sig.engine.String;
 import sig.map.Background;
+import sig.map.DataTile;
 import sig.map.Map;
 import sig.map.Tile;
 
@@ -42,6 +43,9 @@ public class LevelRenderer extends Object{
                 if (RabiClone.CURRENT_MAP.getTile(x,y)!=Tile.VOID) {
                     DrawTile(x*Tile.TILE_WIDTH-this.getX(),y*Tile.TILE_HEIGHT-this.getY(),RabiClone.CURRENT_MAP.getTile(x,y));
                     //System.out.println((x*Tile.TILE_WIDTH+(this.getX()%Tile.TILE_WIDTH) )+","+(y*Tile.TILE_HEIGHT+(this.getY()%Tile.TILE_HEIGHT)));
+                }
+                if (RabiClone.CURRENT_MAP.getDataTile(x,y)!=DataTile.NULL) {
+                    DrawDataTile(p,x*Tile.TILE_WIDTH-this.getX(),y*Tile.TILE_HEIGHT-this.getY(),RabiClone.CURRENT_MAP.getDataTile(x,y));
                 }
             }
         }
@@ -83,8 +87,6 @@ public class LevelRenderer extends Object{
         //RenderCollisionGrid(p);
     }
 
-    protected void drawMapTileForEditorMode(int x, int y) {}
-
     /**
      * Draws an object where its sprite is centered among its position and drawn relative to the camera position.
      * @param object
@@ -103,6 +105,9 @@ public class LevelRenderer extends Object{
 
     private void DrawTile(double x, double y, Tile tile) {
         Draw_Sprite_Partial(x,y, tile.getSpriteSheetX()*tile.getTileWidth(), tile.getSpriteSheetY()*tile.getTileHeight(), tile.getTileWidth(), tile.getTileHeight(), getSprite(), 0, Transform.NONE);
+    }
+
+    protected void DrawDataTile(byte[] p, double x, double y, DataTile tile) {
     }
 
     protected void DrawTransparentTile(double x, double y, Tile tile, Alpha alpha) {

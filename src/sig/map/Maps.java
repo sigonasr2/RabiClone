@@ -46,6 +46,15 @@ public enum Maps {
         }
     }
 
+    public DataTile getDataTile(int x,int y) {
+        int index = y*Map.MAP_WIDTH+x;
+        if (index<0||index>=this.map.data.length) {
+            return DataTile.NULL;
+        } else {
+            return DataTile.values()[this.map.data[index]];
+        }
+    }
+
     public View getView(int x,int y) {
         int index = (y/Tile.TILE_SCREEN_COUNT_Y)*(Map.MAP_WIDTH/Tile.TILE_WIDTH)+x/Tile.TILE_SCREEN_COUNT_X;
         if (index<0||index>=this.map.views.length) {

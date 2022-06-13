@@ -2,18 +2,17 @@ package sig.objects;
 
 import java.awt.event.MouseEvent;
 import java.io.IOException;
-import java.awt.event.KeyEvent;
 
 import sig.RabiClone;
 import sig.engine.Action;
 import sig.engine.Alpha;
 import sig.engine.Font;
-import sig.engine.Key;
 import sig.engine.MouseScrollValue;
 import sig.engine.PaletteColor;
 import sig.engine.Panel;
 import sig.engine.String;
 import sig.map.Background;
+import sig.map.DataTile;
 import sig.map.Map;
 import sig.map.Tile;
 import sig.map.View;
@@ -22,6 +21,7 @@ import sig.map.Type;
 public class EditorRenderer extends LevelRenderer{
 
     Tile selectedTile = Tile.WALL;
+    DataTile selectedDataTile = DataTile.BUN1;
 
     String messageLog = new String();
     final static long MESSAGE_TIME = 5000;
@@ -110,7 +110,11 @@ public class EditorRenderer extends LevelRenderer{
                 if (x<0||x>Map.MAP_WIDTH) {
                     continue;
                 }
-                drawMapTileForEditorMode(x,y);
+                if (dataTileView) {
+                    drawMapTileForDataTileMode(p,x,y);
+                } else {
+                    drawMapTileForEditorMode(x,y);
+                }
             }
         }
         for (int y=(int)(this.getY()/Tile.TILE_HEIGHT);y<(int)(RabiClone.BASE_HEIGHT/Tile.TILE_HEIGHT+this.getY()/Tile.TILE_HEIGHT+1);y++) {
@@ -163,7 +167,6 @@ public class EditorRenderer extends LevelRenderer{
         }
     }
 
-    @Override
     protected void drawMapTileForEditorMode(int x, int y) {
         int tilerX = (int)(RabiClone.MOUSE_POS.getX()+getX())/Tile.TILE_WIDTH;
         int tilerY = (int)(RabiClone.MOUSE_POS.getY()+getY())/Tile.TILE_HEIGHT;
@@ -174,6 +177,28 @@ public class EditorRenderer extends LevelRenderer{
             Draw_Text(tileX+2,tileY-Font.PROFONT_12.getGlyphHeight()-2,new String(selectedTile.toString()),Font.PROFONT_12);
             Draw_Text_Ext(tileX+2,tileY+Tile.TILE_HEIGHT+2,new String(RabiClone.CURRENT_MAP.getTile(x,y).toString()),Font.PROFONT_12,Alpha.ALPHA0,PaletteColor.CRIMSON);
         }
+    }
+
+    protected void drawMapTileForDataTileMode(byte[] p, int x, int y) {
+        int tilerX = (int)(RabiClone.MOUSE_POS.getX()+getX())/Tile.TILE_WIDTH;
+        int tilerY = (int)(RabiClone.MOUSE_POS.getY()+getY())/Tile.TILE_HEIGHT;
+        if (x==tilerX&&y==tilerY) {
+            double tileX = x*Tile.TILE_WIDTH-this.getX();
+            double tileY = y*Tile.TILE_HEIGHT-this.getY();
+            DrawTransparentDataTile(p,tileX,tileY,selectedDataTile,PaletteColor.GRAPE);
+            Draw_Text(tileX+2,tileY-Font.PROFONT_12.getGlyphHeight()-2,new String(selectedTile.toString()),Font.PROFONT_12);
+            Draw_Text_Ext(tileX+2,tileY+Tile.TILE_HEIGHT+2,new String(RabiClone.CURRENT_MAP.getTile(x,y).toString()),Font.PROFONT_12,Alpha.ALPHA0,PaletteColor.CRIMSON);
+        }
+    }
+
+    protected void DrawTransparentDataTile(byte[] p, double x, double y, DataTile tile,PaletteColor col) {
+        Draw_Rect(p,col,x,y,Tile.TILE_WIDTH,Tile.TILE_HEIGHT);
+        Draw_Text_Ext(x+2,y+2,RabiClone.CURRENT_MAP.getDataTile((int)x,(int)y).getDescription(),Font.PROFONT_12,Alpha.ALPHA0,PaletteColor.WHITE);
+    }
+
+    @Override
+    protected void DrawDataTile(byte[] p, double x, double y, DataTile tile) {
+        DrawTransparentDataTile(p,x,y,tile,PaletteColor.MIDNIGHT_BLUE);
     }
 
     @Override
