@@ -50,13 +50,17 @@ public class Map {
         try {
             if (RabiClone.CURRENT_MAP!=null) {
                 if (RabiClone.CURRENT_MAP!=map) {
-                    resetMapData(RabiClone.CURRENT_MAP.getMap());
+                    Map currentMapData = RabiClone.CURRENT_MAP.getMap();
+                    resetMapData(currentMapData);
+                    RabiClone.CURRENT_MAP=map;
+                    RabiClone.CURRENT_MAP.setMap(currentMapData);
                 } else {
                     resetAndReloadEventData(RabiClone.CURRENT_MAP);
                     return RabiClone.CURRENT_MAP.getMap();
                 }
+            } else {
+                map.initializeMap();
             }
-            RabiClone.CURRENT_MAP=map;
             Map newMap = RabiClone.CURRENT_MAP.getMap()!=null?RabiClone.CURRENT_MAP.getMap():new Map();
             DataInputStream stream = new DataInputStream(new FileInputStream(map.getFile()));
             int marker=0;

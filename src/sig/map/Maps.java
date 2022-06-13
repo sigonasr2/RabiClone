@@ -24,6 +24,14 @@ public enum Maps {
         return map;
     }
 
+    public void initializeMap() {
+        map = new Map();
+    }
+
+    public void setMap(Map m) {
+        this.map=m;
+    }
+
     public void ModifyTile(int x,int y,Tile t) {
         map.ModifyTile(x, y, t);
         //System.out.println("Tile "+(y*MAP_WIDTH+x)+" is now "+tiles[y*MAP_WIDTH+x]+".");
