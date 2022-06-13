@@ -48,11 +48,13 @@ public class Map {
 
     public static Map LoadMap(Maps map) {
         try {
-            if (RabiClone.CURRENT_MAP!=map) {
-                resetMapData(RabiClone.CURRENT_MAP.getMap());
-            } else {
-                resetAndReloadEventData(RabiClone.CURRENT_MAP);
-                return RabiClone.CURRENT_MAP.getMap();
+            if (RabiClone.CURRENT_MAP!=null) {
+                if (RabiClone.CURRENT_MAP!=map) {
+                    resetMapData(RabiClone.CURRENT_MAP.getMap());
+                } else {
+                    resetAndReloadEventData(RabiClone.CURRENT_MAP);
+                    return RabiClone.CURRENT_MAP.getMap();
+                }
             }
             RabiClone.CURRENT_MAP=map;
             Map newMap = RabiClone.CURRENT_MAP.getMap()!=null?RabiClone.CURRENT_MAP.getMap():new Map();

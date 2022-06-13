@@ -60,6 +60,7 @@ public class RabiClone {
 	final static long TARGET_FRAMETIME = 8333333l;
 	static long lastReportedTime = System.currentTimeMillis();
 	public static long TIME = 0;
+	public static long scaleTime;
 
 	public static void main(String[] args) {
 		System.setProperty("sun.java2d.transaccel", "True");

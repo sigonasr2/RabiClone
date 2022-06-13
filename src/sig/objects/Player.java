@@ -59,8 +59,6 @@ public class Player extends AnimatedObject implements CollisionEntity {
     long spacebarPressed = RabiClone.TIME;
     long jump_slide_fall_StartAnimationTimer = -1;
     long slide_time = -1;
-    long slide_time2 = -1;
-    long slide_time3 = 0;
     long jumpHoldTime = TimeUtils.millisToNanos(150);
 
     final static long slideBufferTime = TimeUtils.millisToNanos(200);
@@ -144,7 +142,6 @@ public class Player extends AnimatedObject implements CollisionEntity {
                         facing_direction = RIGHT;
                     }
                     state = State.IDLE;
-                    slide_time3 = (System.nanoTime() - slide_time2);
                 }
                 if (KeyHeld(Action.MOVE_LEFT) && !KeyHeld(Action.MOVE_RIGHT)) {
                     if (facing_direction == LEFT && x_velocity > -sliding_velocity * 1.5 ||
@@ -244,7 +241,6 @@ public class Player extends AnimatedObject implements CollisionEntity {
 
     private void performSlide() {
         slide_time = RabiClone.TIME;
-        slide_time2 = System.nanoTime();
         if (facing_direction) {
             x_velocity = sliding_velocity;
         } else {

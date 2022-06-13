@@ -197,7 +197,9 @@ public class Panel extends JPanel implements Runnable,KeyListener {
     public void paintComponent(Graphics g) {
 		//super.paintComponent(g);
 		// perform draws on pixels
+		long startTime = System.currentTimeMillis();
 		g.drawImage(this.imageBuffer,0,0,getWidth(),getHeight(),0,0,RabiClone.BASE_WIDTH,RabiClone.BASE_HEIGHT,this);
+		RabiClone.scaleTime=System.currentTimeMillis()-startTime;
     }
     
     /**
