@@ -31,6 +31,8 @@ public class EditorRenderer extends LevelRenderer{
 
     final static char CAMERA_SPD = 512;
 
+    boolean dataTileView=false;
+
     public EditorRenderer(Panel panel) {
         super(panel);
         setX(3.5*Tile.TILE_WIDTH);
@@ -180,6 +182,14 @@ public class EditorRenderer extends LevelRenderer{
         int tileX = (int)(RabiClone.MOUSE_POS.getX()+getX())/Tile.TILE_WIDTH;
         int tileY = (int)(RabiClone.MOUSE_POS.getY()+getY())/Tile.TILE_HEIGHT;
         switch (a) {
+            case PLAY_GAME:{
+                RabiClone.OBJ.remove(RabiClone.level_renderer);
+                RabiClone.OBJ.add(RabiClone.level_renderer = new LevelRenderer(RabiClone.p));
+                RabiClone.StartGame();
+            }break;
+            case LEVEL_EDITOR:{
+                dataTileView=!dataTileView;
+            }break;
             case EDITOR_SET_VIEW:{
                 RabiClone.CURRENT_MAP.setView(tileX,tileY,View.values()[(RabiClone.CURRENT_MAP.getView(tileX, tileY).ordinal()+1)%View.values().length]);
             }break;
@@ -189,11 +199,6 @@ public class EditorRenderer extends LevelRenderer{
             case EDITOR_SET_BACKGROUND:{
                 RabiClone.CURRENT_MAP.setBackground(tileX,tileY,Background.values()[(RabiClone.CURRENT_MAP.getBackground(tileX, tileY).ordinal()+1)%Background.values().length]);
             }break;
-        }
-        if (Key.isKeyHeld(KeyEvent.VK_F1)) {
-            RabiClone.OBJ.remove(RabiClone.level_renderer);
-            RabiClone.OBJ.add(RabiClone.level_renderer = new LevelRenderer(RabiClone.p));
-            RabiClone.StartGame();
         }
     }    
 }

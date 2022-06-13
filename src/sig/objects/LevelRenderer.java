@@ -110,11 +110,14 @@ public class LevelRenderer extends Object{
     }
 
     @Override
+    @SuppressWarnings("incomplete-switch")
     public void KeyPressed(Action a) {
-        if (Key.isKeyHeld(KeyEvent.VK_F2)) {
-            RabiClone.OBJ.clear();
-            RabiClone.ResetGame();
-            RabiClone.OBJ.add(RabiClone.level_renderer = new EditorRenderer(RabiClone.p));
+        switch(a) {
+            case LEVEL_EDITOR:{
+                RabiClone.OBJ.clear();
+                RabiClone.ResetGame();
+                RabiClone.OBJ.add(RabiClone.level_renderer = new EditorRenderer(RabiClone.p));
+            }break;
         }
         if (Key.isKeyHeld(KeyEvent.VK_F3)) {
             RabiClone.OBJ.clear();
