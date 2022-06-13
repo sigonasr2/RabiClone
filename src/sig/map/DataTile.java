@@ -1,19 +1,22 @@
 package sig.map;
 
 import sig.engine.String;
+import sig.events.Event;
+import sig.events.SpawnEvent;
+import sig.objects.Erinoah;
 
 public enum DataTile {
     NULL, //File is populated by 0s by default. This represents nothing.
-    BUN1("Spawns a blue bun"),
-    BUN2("Spawns a green bun"),
-    BUN3("Spawns a yellow bun"),
-    BUN4("Spawns a red bun");
+    BUN1(new SpawnEvent("Spawns a blue bun",Erinoah.class)),
+    BUN2(new SpawnEvent("Spawns a green bun",Erinoah.class)),
+    BUN3(new SpawnEvent("Spawns a yellow bun",Erinoah.class)),
+    BUN4(new SpawnEvent("Spawns a red bun",Erinoah.class));
 
     String description;
 
     DataTile(){}
-    DataTile(java.lang.String s) {
-        this.description=new String(s);
+    DataTile(Event e) {
+        this.description=e.getDescription();
     }
     public String getDescription() {
         return description;

@@ -18,6 +18,7 @@ import sig.map.Background;
 import sig.map.DataTile;
 import sig.map.Map;
 import sig.map.Tile;
+import sig.objects.actor.RenderedObject;
 
 public class LevelRenderer extends Object{
 
@@ -28,6 +29,19 @@ public class LevelRenderer extends Object{
 
    @Override 
     public void update(double updateMult) {
+        for (int y=(int)(this.getY()/Tile.TILE_HEIGHT);y<(int)(RabiClone.BASE_HEIGHT/Tile.TILE_HEIGHT+this.getY()/Tile.TILE_HEIGHT+1);y++) {
+            if (y<0||y>Map.MAP_HEIGHT) {
+                continue;
+            }
+            for (int x=(int)(0+this.getX()/Tile.TILE_WIDTH);x<(int)(RabiClone.BASE_WIDTH/Tile.TILE_WIDTH+this.getX()/Tile.TILE_WIDTH+1);x++) {
+                if (x<0||x>Map.MAP_WIDTH) {
+                    continue;
+                }
+                if (RabiClone.CURRENT_MAP.getDataTile(x,y)!=DataTile.NULL) {
+                    
+                }
+            }
+        }
     }
 
     @Override
@@ -49,8 +63,17 @@ public class LevelRenderer extends Object{
                 }
             }
         }
+        for (int i=0;i<RabiClone.OBJ.size();i++) {
+            Object o = RabiClone.OBJ.get(i);
+            if (o instanceof RenderedObject) {
+                if (o instanceof AnimatedObject) {
+                    Draw_Animated_Object((AnimatedObject)o,RabiClone.player.facing_direction?Transform.HORIZONTAL:Transform.NONE);
+                } else {
+                    Draw_Object(o,RabiClone.player.facing_direction?Transform.HORIZONTAL:Transform.NONE);
+                }
+            }
+        }
         if (RabiClone.player!=null) {
-            Draw_Animated_Object(RabiClone.player,RabiClone.player.facing_direction?Transform.HORIZONTAL:Transform.NONE);
             Draw_Text(4,4,new String(RabiClone.player.y_velocity),Font.PROFONT_12);
             Draw_Text(4,4+Font.PROFONT_12.getGlyphHeight(),new String(RabiClone.scaleTime),Font.PROFONT_12);
         }
@@ -93,6 +116,10 @@ public class LevelRenderer extends Object{
      */
     protected void Draw_Object(Object object) {
         super.Draw_Sprite(object.getX()-this.getX()-object.getSprite().getWidth()/2, Math.round(object.getY()-this.getY()-object.getSprite().getHeight()/2), object.getSprite());
+    }
+
+    protected void Draw_Object(Object object, Transform transform) {
+        super.Draw_Sprite(object.getX()-this.getX()-object.getSprite().getWidth()/2, Math.round(object.getY()-this.getY()-object.getSprite().getHeight()/2), object.getSprite(), transform);
     }
 
     protected void Draw_Animated_Object(AnimatedObject object) {

@@ -10,10 +10,11 @@ import sig.engine.objects.CollisionEntity;
 import sig.map.Map;
 import sig.map.Tile;
 import sig.map.View;
+import sig.objects.actor.RenderedObject;
 import sig.objects.actor.State;
 import sig.utils.TimeUtils;
 
-public class Player extends AnimatedObject implements CollisionEntity {
+public class Player extends AnimatedObject implements CollisionEntity,RenderedObject{
     final static double GRAVITY = 1300;
     final static double NORMAL_FRICTION = 6400;
     final static double NORMAL_JUMP_VELOCITY = -300;

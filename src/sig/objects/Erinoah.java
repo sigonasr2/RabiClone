@@ -1,13 +1,16 @@
 package sig.objects;
 
-import sig.engine.Panel;
+import sig.RabiClone;
 import sig.engine.Sprite;
 import sig.engine.objects.AnimatedObject;
+import sig.objects.actor.RenderedObject;
 
-public class Erinoah extends AnimatedObject{
+public class Erinoah extends AnimatedObject implements RenderedObject{
 
-    public Erinoah(Panel panel) {
-        super(Sprite.ERINOAH, 6.5, panel);
+    public Erinoah(double x, double y) {
+        super(Sprite.ERINOAH,6.5,RabiClone.p);
+        setX(x);
+        setY(y);
     }
 
     @Override

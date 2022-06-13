@@ -92,6 +92,10 @@ public abstract class Object implements GameEntity{
         DrawLoop.Draw_Sprite(x,y,sprite);
     }
 
+	protected void Draw_Sprite(double x, double y, Sprite sprite, Transform transform){
+        DrawLoop.Draw_Sprite(x,y,sprite,transform);
+    }
+
 	protected void Draw_Animated_Sprite(double x, double y, AnimatedSprite sprite, double frameIndex){
         DrawLoop.Draw_Animated_Sprite(x,y,sprite,frameIndex);
     }
