@@ -114,6 +114,15 @@ public class Map {
         saveByteData(stream,map.map.backgrounds);
         saveByteData(stream,map.map.colors);
         saveByteData(stream,map.map.types);
+        int[] eventData = new int[map.map.eventTileCount];
+        int eventCounter = 0;
+        for (int y=0;y<MAP_HEIGHT;y++) {
+            for (int x=0;x<MAP_WIDTH;x++) {
+                if (map.map.data[y*MAP_WIDTH+x]!=0) {
+                    eventData[eventCounter++]=map.map.data[y*MAP_WIDTH+x]<<18|y*MAP_WIDTH+x;
+                }
+            }
+        }
         stream.close();
     }
 
