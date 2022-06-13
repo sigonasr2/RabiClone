@@ -17,8 +17,10 @@ public class Map {
     //After that, the next 1024 bytes will indicate the background information.
     //After that, the next 1024 bytes will indicate the map color information.
     //After that, the next 1024 bytes will indicate the map room type. (Might show checkpoints, warp points, POI, etc)
+    //After that, there will be one integer (4 bytes) to indicate how many event tiles there are.
+    //Following that is an integer for each event tile that needs to be loaded in.
     //
-    //299008 bytes = 299KB of memory storage per map.
+    //299012 + [event tiles*4] bytes = at least 299KB of memory storage per map.
     //
 
     final public static int MAP_WIDTH=512;
@@ -29,12 +31,17 @@ public class Map {
     byte[] backgrounds = new byte[(MAP_WIDTH/Tile.TILE_WIDTH)*(MAP_HEIGHT/Tile.TILE_HEIGHT)];
     byte[] colors = new byte[(MAP_WIDTH/Tile.TILE_WIDTH)*(MAP_HEIGHT/Tile.TILE_HEIGHT)];
     byte[] types = new byte[(MAP_WIDTH/Tile.TILE_WIDTH)*(MAP_HEIGHT/Tile.TILE_HEIGHT)];
+    char[] data = new char[MAP_WIDTH*MAP_HEIGHT];
+
+    int eventTileCount=0;
 
     final static byte MAP_DATA = 0;
     final static byte VIEW_DATA = 1;
     final static byte BACKGROUND_DATA = 2;
     final static byte COLOR_DATA = 3;
     final static byte TYPE_DATA = 4;
+    final static byte EVENT_DATA_COUNT = 5;
+    final static byte EVENT_DATA = 6;
 
     public static Map LoadMap(Maps map) {
         try {
@@ -71,6 +78,18 @@ public class Map {
                     break;
                     case TYPE_DATA:
                         newMap.types[marker++]=stream.readByte();
+                    break;
+                    case EVENT_DATA_COUNT:
+                        newMap.eventTileCount=stream.readInt();
+                        readingData=EVENT_DATA;
+                        iterationCount=newMap.eventTileCount;
+                    break;
+                    case EVENT_DATA:
+                        int dataPacket = stream.readInt();
+                        //First 14 bits are event info. Last 18 bits are index info.
+                        char event = (char)(dataPacket>>>18);
+                        int index = dataPacket&0b00000000000000111111111111111111;
+                        newMap.data[index]=event;
                     break;
                 }
                 iterationCount--;
