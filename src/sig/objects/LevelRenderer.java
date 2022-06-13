@@ -1,8 +1,12 @@
 package sig.objects;
 
+import java.awt.event.KeyEvent;
+
 import sig.RabiClone;
+import sig.engine.Action;
 import sig.engine.Alpha;
 import sig.engine.Font;
+import sig.engine.Key;
 import sig.engine.PaletteColor;
 import sig.engine.Panel;
 import sig.engine.Sprite;
@@ -102,6 +106,20 @@ public class LevelRenderer extends Object{
 
     protected void DrawTransparentTile(double x, double y, Tile tile, Alpha alpha) {
         Draw_Sprite_Partial_Ext(x,y, tile.getSpriteSheetX()*tile.getTileWidth(), tile.getSpriteSheetY()*tile.getTileHeight(), tile.getTileWidth(), tile.getTileHeight(), getSprite(), alpha, Transform.NONE);
+    }
+
+    @Override
+    public void KeyPressed(Action a) {
+        if (Key.isKeyHeld(KeyEvent.VK_F2)) {
+            RabiClone.OBJ.clear();
+            RabiClone.ResetGame();
+            RabiClone.OBJ.add(RabiClone.level_renderer = new EditorRenderer(RabiClone.p));
+        }
+        if (Key.isKeyHeld(KeyEvent.VK_F3)) {
+            RabiClone.OBJ.clear();
+            RabiClone.ResetGame();
+            RabiClone.OBJ.add(RabiClone.control_settings_menu = new ConfigureControls(RabiClone.p));
+        }
     }
     
 }

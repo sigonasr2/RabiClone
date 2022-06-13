@@ -74,7 +74,6 @@ public class RabiClone {
 		RENDERHINTS.put(RenderingHints.KEY_COLOR_RENDERING,RenderingHints.VALUE_COLOR_RENDER_SPEED);
 		RENDERHINTS.put(RenderingHints.KEY_DITHERING,RenderingHints.VALUE_DITHER_DISABLE);
 		RENDERHINTS.put(RenderingHints.KEY_FRACTIONALMETRICS,RenderingHints.VALUE_FRACTIONALMETRICS_OFF);
-		RENDERHINTS.put(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 		RENDERHINTS.put(RenderingHints.KEY_RENDERING,RenderingHints.VALUE_RENDER_SPEED);
 
 		Key.InitializeKeyConversionMap();
@@ -120,25 +119,6 @@ public class RabiClone {
 
 				KeyBind.poll();
 
-				if (Key.isKeyHeld(KeyEvent.VK_F1)) {
-					if (level_renderer instanceof EditorRenderer) {
-						OBJ.remove(level_renderer);
-						OBJ.add(level_renderer = new LevelRenderer(p));
-						StartGame();
-					}
-				}
-				if (Key.isKeyHeld(KeyEvent.VK_F2)) {
-					if (!(level_renderer instanceof EditorRenderer)) {
-						OBJ.clear();
-						ResetGame();
-						OBJ.add(level_renderer = new EditorRenderer(p));
-					}
-				}
-				if (Key.isKeyHeld(KeyEvent.VK_F6)) {
-					OBJ.clear();
-					ResetGame();
-					OBJ.add(control_settings_menu = new ConfigureControls(p));
-				}
 				if (Key.isKeyHeld(KeyEvent.VK_F5) && System.currentTimeMillis() - lastControllerScan > 5000) {
 					CONTROLLERS = ControllerEnvironment.getDefaultEnvironment().rescanControllers();
 					System.out.println(Arrays.toString(CONTROLLERS));
@@ -193,14 +173,14 @@ public class RabiClone {
 		}
 	}
 
-	private static void ResetGame() {
+	public static void ResetGame() {
 		player = null;
 		level_renderer = null;
 		control_settings_menu = null;
 		// System.gc();
 	}
 
-	private static void StartGame() {
+	public static void StartGame() {
 		// System.gc();
 		OBJ.add(player = new Player(p));
 		//OBJ.add(new Erinoah(p));

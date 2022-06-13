@@ -2,11 +2,13 @@ package sig.objects;
 
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.awt.event.KeyEvent;
 
 import sig.RabiClone;
 import sig.engine.Action;
 import sig.engine.Alpha;
 import sig.engine.Font;
+import sig.engine.Key;
 import sig.engine.MouseScrollValue;
 import sig.engine.PaletteColor;
 import sig.engine.Panel;
@@ -187,6 +189,11 @@ public class EditorRenderer extends LevelRenderer{
             case EDITOR_SET_BACKGROUND:{
                 RabiClone.CURRENT_MAP.setBackground(tileX,tileY,Background.values()[(RabiClone.CURRENT_MAP.getBackground(tileX, tileY).ordinal()+1)%Background.values().length]);
             }break;
+        }
+        if (Key.isKeyHeld(KeyEvent.VK_F1)) {
+            RabiClone.OBJ.remove(RabiClone.level_renderer);
+            RabiClone.OBJ.add(RabiClone.level_renderer = new LevelRenderer(RabiClone.p));
+            RabiClone.StartGame();
         }
     }    
 }
