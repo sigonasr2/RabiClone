@@ -120,7 +120,6 @@ public class RabiClone {
 					if (!(level_renderer instanceof EditorRenderer)) {
 						OBJ.clear();
 						ResetGame();
-						Map.LoadMap(Maps.WORLD1,CURRENT_MAP.getMap());
 						OBJ.add(level_renderer = new EditorRenderer(p));
 					}
 				}
