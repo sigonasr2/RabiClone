@@ -1,4 +1,4 @@
-export AUTO_UPDATE=false
+export AUTO_UPDATE=true
 
 source utils/define.sh
 
