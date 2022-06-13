@@ -1,6 +1,7 @@
 package sig.engine;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.image.ColorModel;
 import java.awt.image.MemoryImageSource;
@@ -19,6 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.event.MouseInputListener;
 
 import java.awt.event.KeyListener;
+import java.awt.Graphics2D;
 
 import sig.DrawLoop;
 import sig.RabiClone;
@@ -367,7 +369,8 @@ public class Panel extends JPanel implements Runnable,KeyListener {
 				do {
 					do {
 						if (RabiClone.f.getBufferStrategy()!=null) {
-							Graphics g2 = RabiClone.f.getBufferStrategy().getDrawGraphics();
+							Graphics2D g2 = (Graphics2D)RabiClone.f.getBufferStrategy().getDrawGraphics();
+							g2.setRenderingHints(RabiClone.RENDERHINTS);
 							if (g2!=null) {
 								try {      
 									paintComponent(g2);

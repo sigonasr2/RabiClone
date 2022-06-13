@@ -48,7 +48,9 @@ public class Map {
 
     public static Map LoadMap(Maps map) {
         try {
+            Map newMap;
             if (RabiClone.CURRENT_MAP!=null) {
+                newMap = map.getMap();
                 if (RabiClone.CURRENT_MAP!=map) {
                     Map currentMapData = RabiClone.CURRENT_MAP.getMap();
                     resetMapData(currentMapData);
@@ -60,8 +62,9 @@ public class Map {
                 }
             } else {
                 map.initializeMap();
+                RabiClone.CURRENT_MAP=map;
+                newMap = map.getMap();
             }
-            Map newMap = RabiClone.CURRENT_MAP.getMap()!=null?RabiClone.CURRENT_MAP.getMap():new Map();
             DataInputStream stream = new DataInputStream(new FileInputStream(map.getFile()));
             int marker=0;
             int iterationCount=MAP_WIDTH*MAP_HEIGHT;

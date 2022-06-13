@@ -25,6 +25,7 @@ import sig.engine.PaletteColor;
 
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
+import java.awt.RenderingHints;
 
 public class RabiClone {
 	public static final String PROGRAM_NAME = "RabiClone";
@@ -62,10 +63,19 @@ public class RabiClone {
 	public static long TIME = 0;
 	public static long scaleTime;
 
+	public static RenderingHints RENDERHINTS = new RenderingHints(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_OFF);
+
 	public static void main(String[] args) {
 		System.setProperty("sun.java2d.transaccel", "True");
 		System.setProperty("sun.java2d.d3d", "True");
 		System.setProperty("sun.java2d.ddforcevram", "True");
+		System.setProperty("sun.java2d.xrender", "True");
+
+		RENDERHINTS.put(RenderingHints.KEY_COLOR_RENDERING,RenderingHints.VALUE_COLOR_RENDER_SPEED);
+		RENDERHINTS.put(RenderingHints.KEY_DITHERING,RenderingHints.VALUE_DITHER_DISABLE);
+		RENDERHINTS.put(RenderingHints.KEY_FRACTIONALMETRICS,RenderingHints.VALUE_FRACTIONALMETRICS_OFF);
+		RENDERHINTS.put(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		RENDERHINTS.put(RenderingHints.KEY_RENDERING,RenderingHints.VALUE_RENDER_SPEED);
 
 		Key.InitializeKeyConversionMap();
 
