@@ -65,7 +65,11 @@ public class EditorRenderer extends LevelRenderer{
         if(left_mb){
             int tileX = (int)(RabiClone.MOUSE_POS.getX()+getX())/Tile.TILE_WIDTH;
             int tileY = (int)(RabiClone.MOUSE_POS.getY()+getY())/Tile.TILE_HEIGHT;
-            RabiClone.CURRENT_MAP.ModifyTile(tileX, tileY, selectedTile);
+            if (dataTileView) {
+                RabiClone.CURRENT_MAP.ModifyDataTile(tileX, tileY, selectedDataTile);
+            } else {
+                RabiClone.CURRENT_MAP.ModifyTile(tileX, tileY, selectedTile);
+            }
         }
         if(KeyHeld(Action.SLIDE)&&KeyHeld(Action.FALL)){
             AddMessage("Saving map...");
@@ -94,9 +98,15 @@ public class EditorRenderer extends LevelRenderer{
     public void MouseScrolled(MouseScrollValue scrolled) {
         int up = scrolled==MouseScrollValue.UP?1:0;
         int down = scrolled==MouseScrollValue.DOWN?1:0;
-        int tempIndex = selectedTile.ordinal()+down-up;
-        int selectedIndex = tempIndex<0?Tile.values().length-1:tempIndex%Tile.values().length;
-        selectedTile = Tile.values()[selectedIndex];
+        if (dataTileView) {
+            int tempIndex = selectedDataTile.ordinal()+down-up;
+            int selectedIndex = tempIndex<0?DataTile.values().length-1:tempIndex%DataTile.values().length;
+            selectedDataTile = DataTile.values()[selectedIndex];
+        } else {
+            int tempIndex = selectedTile.ordinal()+down-up;
+            int selectedIndex = tempIndex<0?Tile.values().length-1:tempIndex%Tile.values().length;
+            selectedTile = Tile.values()[selectedIndex];
+        }
     }
 
     @Override

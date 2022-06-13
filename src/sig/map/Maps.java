@@ -37,6 +37,10 @@ public enum Maps {
         //System.out.println("Tile "+(y*MAP_WIDTH+x)+" is now "+tiles[y*MAP_WIDTH+x]+".");
     }
 
+    public void ModifyDataTile(int tileX, int tileY, DataTile selectedDataTile) {
+        map.ModifyDataTile(tileX, tileY, selectedDataTile);
+    }
+
     public Tile getTile(int x,int y) {
         int index = y*Map.MAP_WIDTH+x;
         if (index<0||index>=this.map.tiles.length) {
