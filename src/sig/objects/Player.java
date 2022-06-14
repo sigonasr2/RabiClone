@@ -6,28 +6,22 @@ import sig.engine.Panel;
 import sig.engine.Rectangle;
 import sig.engine.Sprite;
 import sig.engine.Transform;
-import sig.engine.objects.AnimatedObject;
-import sig.engine.objects.CollisionEntity;
 import sig.map.Map;
 import sig.map.Tile;
 import sig.map.View;
+import sig.objects.actor.PhysicsObject;
 import sig.objects.actor.RenderedObject;
 import sig.objects.actor.State;
 import sig.utils.TimeUtils;
 
-public class Player extends AnimatedObject implements CollisionEntity,RenderedObject{
-    final static double GRAVITY = 1300;
-    final static double NORMAL_FRICTION = 6400;
-    final static double NORMAL_JUMP_VELOCITY = -300;
+public class Player extends PhysicsObject implements RenderedObject{
     final static boolean LEFT = false;
     final static boolean RIGHT = true;
     final static long jump_fall_AnimationWaitTime = TimeUtils.millisToNanos(200);
     final static long slide_AnimationWaitTime = TimeUtils.millisToNanos(100);
     final static long slide_duration = TimeUtils.millisToNanos(700);
 
-    final static double WALKING_SPEED_LIMIT = 164;
-
-    double y_acceleration = GRAVITY;
+    double y_acceleration = PhysicsObject.GRAVITY;
     double y_acceleration_limit = 100;
     double x_acceleration = 0;
     double x_acceleration_limit = 100;
@@ -39,11 +33,11 @@ public class Player extends AnimatedObject implements CollisionEntity,RenderedOb
     double sliding_acceleration = 120;
 
     double horizontal_drag = 2000;
-    double horizontal_friction = NORMAL_FRICTION;
+    double horizontal_friction = PhysicsObject.NORMAL_FRICTION;
     double horizontal_air_drag = 800;
     double horizontal_air_friction = 180;
 
-    double jump_velocity = NORMAL_JUMP_VELOCITY;
+    double jump_velocity = PhysicsObject.NORMAL_JUMP_VELOCITY;
 
     int maxJumpCount = 2;
     int jumpCount = maxJumpCount;
@@ -88,6 +82,7 @@ public class Player extends AnimatedObject implements CollisionEntity,RenderedOb
                 if (prvState != State.FALLING) {
                     jump_slide_fall_StartAnimationTimer = RabiClone.TIME;
                     setAnimatedSpr(Sprite.ERINA_JUMP_FALL1);
+                    spacebarPressed = 0;
                 }
                 if (RabiClone.TIME - jump_slide_fall_StartAnimationTimer > jump_fall_AnimationWaitTime) {
                     setAnimatedSpr(Sprite.ERINA_JUMP_FALL);
@@ -100,8 +95,8 @@ public class Player extends AnimatedObject implements CollisionEntity,RenderedOb
                     break;
                 }
 
-                jump_velocity = NORMAL_JUMP_VELOCITY;
-                horizontal_friction = NORMAL_FRICTION;
+                jump_velocity = PhysicsObject.NORMAL_JUMP_VELOCITY;
+                horizontal_friction = PhysicsObject.NORMAL_FRICTION;
                 jump_slide_fall_StartAnimationTimer = -1;
 
                 if (x_velocity != 0) {
@@ -340,175 +335,6 @@ public class Player extends AnimatedObject implements CollisionEntity,RenderedOb
         RabiClone.level_renderer.setY(newY < 0 ? 0 : newY);
     }
 
-    private void handleMovementPhysics(double updateMult) {
-        int right = KeyHeld(Action.MOVE_RIGHT)?1:0;
-        int left = KeyHeld(Action.MOVE_LEFT)?1:0;
-        if(state==State.SLIDE){
-            right=0;
-            left=0;
-        }
-        x_velocity = 
-            Math.abs(x_velocity+x_acceleration*updateMult)>x_velocity_limit
-                ?Math.signum(x_velocity+x_acceleration*updateMult)*x_velocity_limit
-                :x_velocity+x_acceleration*updateMult;
-        y_velocity =
-            Math.abs(y_velocity+y_acceleration*updateMult)>y_velocity_limit
-                ?Math.signum(y_velocity+y_acceleration*updateMult)*y_velocity_limit
-                :y_velocity+y_acceleration*updateMult;
-        double displacement_y = y_velocity*updateMult;
-        double displacement_x = x_velocity*updateMult;
-
-        boolean sideCollision = false;
-        boolean hitAbove=false;
-        if (y_velocity==0) {
-            if (!(checkCollision(getX()-getSprite().getWidth()/2+getCollisionBox().getX2(),getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()+2)||
-            checkCollision(getX()-getSprite().getWidth()/2+getCollisionBox().getX(),getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()+2))) {
-                groundCollision=false;
-            } else {
-                groundCollision=true;
-                jumpCount=maxJumpCount;
-            }
-        } else {
-            double startingY=getY();
-            groundCollision=false;
-            if (displacement_y>0) {
-                for (int y=(int)getY();y<startingY+displacement_y;y++) {
-                    if (y==getY()) {
-                        continue;
-                    }
-                    if (checkCollision(getX()-getSprite().getWidth()/2+getCollisionBox().getX2()-1,y+getCollisionBox().getY2()-getSprite().getHeight()/2)||
-                    checkCollision(getX()-getSprite().getWidth()/2+getCollisionBox().getX()+1,y+getCollisionBox().getY2()-getSprite().getHeight()/2)) {
-                        setY(y-0.1);
-                        //System.out.println("Running"+System.currentTimeMillis());
-                        y_acceleration = 0;
-                        y_velocity = 0;
-                        groundCollision = true;
-                        if (state != State.SLIDE) {
-                            state = State.IDLE;
-                        }
-                        break;
-                    }       
-                }
-            } else {
-                for (int y=(int)getY();y>startingY+displacement_y;y--) {
-                    if (y==getY()) {
-                        continue;
-                    }
-                    if (checkCollision(getX()-getSprite().getWidth()/2+getCollisionBox().getX2()-1,y+getCollisionBox().getY()-getSprite().getHeight()/2)||
-                    checkCollision(getX()-getSprite().getWidth()/2+getCollisionBox().getX()+1,y+getCollisionBox().getY()-getSprite().getHeight()/2)) {
-                        setY(y+1);
-                        hitAbove=true;
-                        spacebarPressed=0;
-                        state=State.FALLING;
-                        y_acceleration = 0;
-                        y_velocity = 0;
-                        displacement_y=0;
-                        //groundCollision = true;
-                        break;
-                    }       
-                }
-            }
-        }
-
-        double startingX=getX();
-        if (displacement_x>0.00001) {
-            for (int x=(int)getX();x<startingX+displacement_x;x++) {
-                if (x==getX()) {
-                    continue;
-                }
-                if (checkCollision(x+getCollisionBox().getX2()-getSprite().getWidth()/2,(getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()))||
-                checkCollision(x+getCollisionBox().getX2()-getSprite().getWidth()/2,(getY()-getSprite().getHeight()/2+getCollisionBounds().getY()))) {
-                    if (!(checkCollision(x+getCollisionBox().getX2()-getSprite().getWidth()/2,(getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()-2))||
-                    checkCollision(x+getCollisionBox().getX2()-getSprite().getWidth()/2,(getY()-getSprite().getHeight()/2+getCollisionBounds().getY()-2)))) {
-                        setY(getY()-1);
-                    } else {
-                        x_acceleration = 0;
-                        x_velocity = 0.000001;
-                        sideCollision=true;
-                        setX(x-0.1);
-                        break;
-                    }
-                } else {
-                    if (!hitAbove&&!checkCollision(x+getCollisionBox().getX()-getSprite().getWidth()/2,(getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()+1))&&
-                    checkCollision(x+getCollisionBox().getX()-getSprite().getWidth()/2,(getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()+2))) {
-                        //System.out.println("Performs check."+System.currentTimeMillis());
-                        setY(getY()+1);
-                        //x_velocity = ;
-                    }
-                } 
-            }
-        } else 
-        if (displacement_x<-0.00001) {
-            for (int x=(int)getX();x>startingX+displacement_x;x--) {
-                if (x==getX()) {
-                    continue;
-                }
-                if (checkCollision((x+getCollisionBox().getX()-getSprite().getWidth()/2),getY()-getSprite().getHeight()/2+getCollisionBounds().getY2())||
-                checkCollision((x+getCollisionBox().getX()-getSprite().getWidth()/2),getY()-getSprite().getHeight()/2+getCollisionBounds().getY())) {
-                    if (!(checkCollision(x+getCollisionBox().getX()-getSprite().getWidth()/2,(getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()-2))||
-                    checkCollision(x+getCollisionBox().getX()-getSprite().getWidth()/2,(getY()-getSprite().getHeight()/2+getCollisionBounds().getY()-2)))) {
-                        setY(getY()-1);
-                    } else {
-                        x_acceleration = 0;
-                        x_velocity = -0.000001;
-                        sideCollision=true;
-                        setX(x+0.1);
-                        break;
-                    }
-                } else {
-                    if (!hitAbove&&!checkCollision(x+getCollisionBox().getX2()-getSprite().getWidth()/2,(getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()+1))&&
-                    checkCollision(x+getCollisionBox().getX2()-getSprite().getWidth()/2,(getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()+2))) {
-                        //System.out.println("Performs check."+System.currentTimeMillis());
-                        setY(getY()+1);
-                        //x_velocity = ;
-                    }
-                } 
-            }
-        }
-        if (!groundCollision){
-            this.setY(this.getY()+displacement_y);
-            y_acceleration = GRAVITY;
-            if(y_velocity>0 && state!=State.SLIDE){
-                state = State.FALLING;
-            }
-            if (!sideCollision) {
-                handleKeyboardMovement(updateMult, right-left, horizontal_air_friction, horizontal_air_drag);
-                this.setX(this.getX()+displacement_x);
-            }
-        } else {
-            if (!sideCollision) {
-                handleKeyboardMovement(updateMult, right-left, horizontal_friction, horizontal_drag);
-                this.setX(this.getX()+displacement_x);
-            }
-        }
-    }
-
-    private boolean checkCollision(double x,double y) {
-        int index = (int)y*RabiClone.BASE_WIDTH*Tile.TILE_WIDTH+(int)x;
-        if (index>=0&&index<RabiClone.COLLISION.length) {
-            return RabiClone.COLLISION[index];
-        } else {
-            return false;
-        }
-    }
-
-    private void handleKeyboardMovement(double updateMult, int movement, double friction, double drag) {
-        if (movement != 0 && Math.abs(x_velocity) < WALKING_SPEED_LIMIT) {
-            x_acceleration = drag * (movement);
-        } else {
-            if (x_velocity != 0) {
-                x_velocity = x_velocity > 0
-                        ? x_velocity - friction * updateMult > 0
-                                ? x_velocity - friction * updateMult
-                                : 0
-                        : x_velocity + friction * updateMult < 0
-                                ? x_velocity + friction * updateMult
-                                : 0;
-            }
-            x_acceleration = 0;
-        }
-    }
-
     @Override
     public void draw(byte[] p) {
     }
@@ -534,5 +360,15 @@ public class Player extends AnimatedObject implements CollisionEntity,RenderedOb
     @Override
     public Transform getSpriteTransform() {
         return facing_direction?Transform.HORIZONTAL:Transform.NONE;
+    }
+
+    @Override
+    public boolean rightKeyHeld() {
+        return KeyHeld(Action.MOVE_RIGHT);
+    }
+
+    @Override
+    public boolean leftKeyHeld() {
+        return KeyHeld(Action.MOVE_LEFT);
     }
 }
