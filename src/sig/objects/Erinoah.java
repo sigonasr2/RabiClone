@@ -16,6 +16,11 @@ public class Erinoah extends PhysicsObject implements RenderedObject{
     }
 
     @Override
+    public Rectangle setCollisionBounds() {
+        return new Rectangle(12,4,24,38);
+    }
+
+    @Override
     public void update(double updateMult) {
         super.update(updateMult);
     }
@@ -31,18 +36,11 @@ public class Erinoah extends PhysicsObject implements RenderedObject{
 
     @Override
     public boolean rightKeyHeld() {
-        // TODO Auto-generated method stub
         return false;
     }
 
     @Override
     public boolean leftKeyHeld() {
-        // TODO Auto-generated method stub
         return false;
     }
-
-    @Override
-    public Rectangle getCollisionBounds() {
-        return new Rectangle(8,2,16,30);
-    }    
 }

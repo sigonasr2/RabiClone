@@ -6,5 +6,5 @@ public interface PhysicsObjectRequirements {
     boolean rightKeyHeld();
     boolean leftKeyHeld();
     Rectangle getCollisionBounds();
-    void setCollisionBounds(Rectangle bounds);
+    Rectangle setCollisionBounds();
 }

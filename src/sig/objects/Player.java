@@ -66,7 +66,11 @@ public class Player extends PhysicsObject implements RenderedObject{
         super(Sprite.ERINA, 5, panel);
         setX(RabiClone.BASE_WIDTH / 2 - getAnimatedSpr().getWidth() / 2);
         setY(RabiClone.BASE_HEIGHT * (2 / 3d) - getAnimatedSpr().getHeight() / 2);
-        setCollisionBounds(new Rectangle(10,2,12,27));
+    }
+
+    @Override
+    public Rectangle setCollisionBounds() {
+        return new Rectangle(10,2,12,27);
     }
 
     @Override
