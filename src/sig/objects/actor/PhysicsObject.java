@@ -3,8 +3,6 @@ package sig.objects.actor;
 import sig.RabiClone;
 import sig.engine.AnimatedSprite;
 import sig.engine.Panel;
-import sig.engine.Rectangle;
-import sig.engine.Transform;
 import sig.engine.objects.AnimatedObject;
 import sig.engine.objects.CollisionEntity;
 import sig.map.Tile;
@@ -30,8 +28,6 @@ public abstract class PhysicsObject extends AnimatedObject implements CollisionE
         super(spr, animationSpd, panel);
     }
 
-    
-    
     @Override
     public void update(double updateMult) {
         super.update(updateMult);
@@ -205,21 +201,5 @@ public abstract class PhysicsObject extends AnimatedObject implements CollisionE
             x_acceleration = 0;
         }
     }
-
-    @Override
-    public void draw(byte[] p) {}
-
-    @Override
-    public Transform getSpriteTransform() {
-        return null;
-    }
-
-    @Override
-    public Rectangle getCollisionBounds() {
-        return null;
-    }
-
-    @Override
-    public void setCollisionBounds(Rectangle bounds){}
     
 }
