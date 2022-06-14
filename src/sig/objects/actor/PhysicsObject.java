@@ -3,11 +3,11 @@ package sig.objects.actor;
 import sig.RabiClone;
 import sig.engine.AnimatedSprite;
 import sig.engine.Panel;
+import sig.engine.Rectangle;
 import sig.engine.objects.AnimatedObject;
-import sig.engine.objects.CollisionEntity;
 import sig.map.Tile;
 
-public abstract class PhysicsObject extends AnimatedObject implements CollisionEntity,PhysicsObjectRequirements{
+public abstract class PhysicsObject extends AnimatedObject implements PhysicsObjectRequirements{
     final public static double GRAVITY = 1300;
     final public static double NORMAL_FRICTION = 6400;
     final public static double NORMAL_JUMP_VELOCITY = -300;
@@ -200,6 +200,24 @@ public abstract class PhysicsObject extends AnimatedObject implements CollisionE
             }
             x_acceleration = 0;
         }
+    }
+    
+    public Rectangle getCollisionBox() {
+        return collisionBox;
+    }
+
+    public void setCollisionBox(Rectangle collisionBox) {
+        this.collisionBox = collisionBox;
+    }
+
+    @Override
+    public Rectangle getCollisionBounds() {
+        return getCollisionBox();
+    }
+
+    @Override
+    public void setCollisionBounds(Rectangle bounds) {
+        setCollisionBox(bounds);
     }
     
 }

@@ -348,16 +348,6 @@ public class Player extends PhysicsObject implements RenderedObject{
     }
 
     @Override
-    public Rectangle getCollisionBounds() {
-        return getCollisionBox();
-    }
-
-    @Override
-    public void setCollisionBounds(Rectangle bounds) {
-        setCollisionBox(bounds);
-    }
-
-    @Override
     public Transform getSpriteTransform() {
         return facing_direction?Transform.HORIZONTAL:Transform.NONE;
     }

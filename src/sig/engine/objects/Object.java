@@ -19,15 +19,7 @@ public abstract class Object implements GameEntity{
     double x,y;
     Sprite spr;
     Panel panel;
-    Rectangle collisionBox;
-    
-    public Rectangle getCollisionBox() {
-        return collisionBox;
-    }
-
-    public void setCollisionBox(Rectangle collisionBox) {
-        this.collisionBox = collisionBox;
-    }
+    protected Rectangle collisionBox;
 
     public Panel getPanel() {
         return panel;

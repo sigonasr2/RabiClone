@@ -43,14 +43,6 @@ public class Erinoah extends PhysicsObject implements RenderedObject{
 
     @Override
     public Rectangle getCollisionBounds() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public void setCollisionBounds(Rectangle bounds) {
-        // TODO Auto-generated method stub
-        
-    }
-    
+        return new Rectangle(8,2,16,30);
+    }    
 }
