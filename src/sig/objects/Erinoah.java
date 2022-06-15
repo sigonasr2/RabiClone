@@ -83,4 +83,9 @@ public class Erinoah extends PhysicsObject implements RenderedObject{
     public boolean leftKeyHeld() {
         return moveTimer>0&&!moveDir;
     }
+
+    @Override
+    public boolean isFriendlyObject() {
+        return false;
+    }
 }

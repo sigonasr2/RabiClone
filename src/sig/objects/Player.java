@@ -355,4 +355,9 @@ public class Player extends PhysicsObject implements RenderedObject{
     public double getYVelocity() {
         return y_velocity;
     }
+
+    @Override
+    public boolean isFriendlyObject() {
+        return true;
+    }
 }

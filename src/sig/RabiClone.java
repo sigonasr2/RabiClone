@@ -11,6 +11,8 @@ import java.util.List;
 
 import sig.engine.Panel;
 import sig.engine.Point;
+import sig.engine.Transform;
+import sig.engine.objects.AnimatedObject;
 import sig.engine.objects.Object;
 import sig.map.Map;
 import sig.map.Maps;
@@ -18,6 +20,7 @@ import sig.map.Tile;
 import sig.objects.ConfigureControls;
 import sig.objects.LevelRenderer;
 import sig.objects.Player;
+import sig.objects.actor.RenderedObject;
 import sig.engine.Key;
 import sig.engine.KeyBind;
 import sig.engine.PaletteColor;
@@ -45,6 +48,11 @@ public class RabiClone {
 	public static int EVENT_BOUNDARY_RANGE = 8;
 	public static int SIZE_MULTIPLIER = 1;
 	public static Point MOUSE_POS;
+
+	public static boolean PLAYER_COLLISION[] = new boolean[RabiClone.BASE_WIDTH*RabiClone.BASE_HEIGHT];
+	public static boolean ENEMY_COLLISION[] = new boolean[RabiClone.BASE_WIDTH*RabiClone.BASE_HEIGHT];
+	public static boolean PLAYER_WEAPON_COLLISION[] = new boolean[RabiClone.BASE_WIDTH*RabiClone.BASE_HEIGHT];
+	public static boolean ENEMY_WEAPON_COLLISION[] = new boolean[RabiClone.BASE_WIDTH*RabiClone.BASE_HEIGHT];
 
 	public static PaletteColor BACKGROUND_COLOR = PaletteColor.DARK_ORCHID;
 
@@ -125,7 +133,29 @@ public class RabiClone {
 					lastControllerScan = System.currentTimeMillis();
 				}
 
+				Arrays.fill(PLAYER_COLLISION,false);
+				Arrays.fill(ENEMY_COLLISION,false);
 				for (int i = 0; i < OBJ.size(); i++) {
+					if (OBJ.get(i) instanceof RenderedObject) {
+						RenderedObject r = (RenderedObject)OBJ.get(i);
+						if (r.isFriendlyObject()) {
+							if (OBJ.get(i) instanceof AnimatedObject) {
+								AnimatedObject a = ((AnimatedObject)OBJ.get(i));
+								double xpos = a.getX()-level_renderer.getX()-a.getAnimatedSpr().getWidth()/2;
+								double ypos = a.getY()-level_renderer.getY()-a.getAnimatedSpr().getHeight()/2;
+								int xindex = (int)a.getCurrentFrame()%a.getAnimatedSpr().getFrame_count();
+								int yindex = ((int)a.getCurrentFrame()%a.getAnimatedSpr().getFrame_count())/a.getAnimatedSpr().getFrame_count();
+								for (int y=0;y<a.getAnimatedSpr().getHeight();y++) {
+									for (int x=0;x<a.getAnimatedSpr().getWidth();x++) {
+										int index=((a.getSpriteTransform()==Transform.VERTICAL||a.getSpriteTransform()==Transform.HORIZ_VERTIC?a.getAnimatedSpr().getHeight()-y:y)+(int)ypos)*BASE_WIDTH+(a.getSpriteTransform()==Transform.HORIZONTAL||a.getSpriteTransform()==Transform.HORIZ_VERTIC?a.getAnimatedSpr().getWidth()-x:x)+(int)xpos;
+										if (index>=0&&index<PLAYER_COLLISION.length&&a.getAnimatedSpr().getBi_array()[(yindex*a.getAnimatedSpr().getHeight()+y)*a.getAnimatedSpr().getCanvasWidth()+xindex*a.getAnimatedSpr().getWidth()+x]!=(byte)32) {
+											PLAYER_COLLISION[index]=true;
+										}
+									}
+								}
+							}
+						}
+					}
 					OBJ.get(i).update(UPDATE_MULT);
 					if (OBJ.get(i).isMarkedForDeletion()) {
 						OBJ.remove(i--);
