@@ -148,6 +148,7 @@ public class ConfigureControls extends Object{
     
 
     @Override
+    @SuppressWarnings("incomplete")
     public void KeyPressed(Action a) {
         switch(a) {
             case PLAY_GAME:{
@@ -161,6 +162,8 @@ public class ConfigureControls extends Object{
                 Map.LoadMap(RabiClone.CURRENT_MAP);
                 RabiClone.OBJ.add(RabiClone.level_renderer = new EditorRenderer(RabiClone.p));
             }break;
+            default:
+                break;
         }
     }
 
