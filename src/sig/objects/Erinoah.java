@@ -10,6 +10,7 @@ import sig.objects.actor.RenderedObject;
 public class Erinoah extends PhysicsObject implements RenderedObject{
 
     double lastMoved = 0;
+    double lastJumped = 0;
     boolean moveDir = false;
     double moveTimer = 0;
 
@@ -37,6 +38,7 @@ public class Erinoah extends PhysicsObject implements RenderedObject{
     public void update(double updateMult) {
         super.update(updateMult);
         lastMoved+=updateMult;
+        lastJumped+=updateMult;
         if (lastMoved>5) {
             switch ((int)(Math.random()*3)) {
                 case 0:{
@@ -47,9 +49,17 @@ public class Erinoah extends PhysicsObject implements RenderedObject{
                     moveDir=false;
                     moveTimer=Math.random()*3;
                 }break;
-                case 2:{
-                    lastMoved=0;
-                }break;
+            }
+            lastMoved=0;
+        }
+        if (lastJumped>3) {
+            if (Math.random()<=0.4&&jumpCount>0) {
+                y_velocity = jump_velocity;
+                jumpCount--;
+                lastJumped=2.5+Math.random()*0.5;
+                lastMoved=4.5+Math.random()*0.5;
+            } else {
+                lastJumped=0;
             }
         }
         moveTimer-=updateMult;
