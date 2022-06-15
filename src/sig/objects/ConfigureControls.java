@@ -18,6 +18,7 @@ import sig.engine.Panel;
 import sig.engine.String;
 import sig.engine.Transform;
 import sig.engine.objects.Object;
+import sig.map.Map;
 
 public class ConfigureControls extends Object{
 
@@ -142,6 +143,25 @@ public class ConfigureControls extends Object{
             sb.append(c.isKeyHeld()?PaletteColor.YELLOW_GREEN:"").append(c.getName()).append(PaletteColor.MIDNIGHT_BLUE).append(i!=KeyBind.KEYBINDS.get(a).size()-1?",":"");
         }
         return sb;
+    }
+
+    
+
+    @Override
+    public void KeyPressed(Action a) {
+        switch(a) {
+            case PLAY_GAME:{
+                RabiClone.OBJ.remove(RabiClone.level_renderer);
+                RabiClone.OBJ.add(RabiClone.level_renderer = new LevelRenderer(RabiClone.p));
+                RabiClone.StartGame();
+            }break;
+            case LEVEL_EDITOR:{
+                RabiClone.OBJ.clear();
+                RabiClone.ResetGame();
+                Map.LoadMap(RabiClone.CURRENT_MAP);
+                RabiClone.OBJ.add(RabiClone.level_renderer = new EditorRenderer(RabiClone.p));
+            }break;
+        }
     }
 
     public void rawKeyPressed(int keyCode) {
