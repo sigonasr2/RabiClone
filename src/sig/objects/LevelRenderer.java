@@ -73,7 +73,7 @@ public class LevelRenderer extends Object{
             }
         }
         if (RabiClone.player!=null) {
-            Draw_Text(4,4,new String(RabiClone.player.y_velocity),Font.PROFONT_12);
+            Draw_Text(4,4,new String(RabiClone.player.getYVelocity()),Font.PROFONT_12);
             Draw_Text(4,4+Font.PROFONT_12.getGlyphHeight(),new String(RabiClone.scaleTime),Font.PROFONT_12);
         }
     }

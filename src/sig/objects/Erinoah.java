@@ -13,6 +13,15 @@ public class Erinoah extends PhysicsObject implements RenderedObject{
         super(Sprite.ERINOAH,6.5,RabiClone.p);
         setX(x);
         setY(y);
+        setAccelerationLimits(100, 100);
+        setVelocityLimits(246, 500);
+        setGroundDrag(2000);
+        setGroundFriction(PhysicsObject.NORMAL_FRICTION);
+        setAirDrag(800);
+        setAirFriction(180);
+        setSlidingVelocity(164);
+        setSlidingAcceleration(120);
+        setJumpVelocity(PhysicsObject.NORMAL_JUMP_VELOCITY);
     }
 
     @Override
