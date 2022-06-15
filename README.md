@@ -42,6 +42,8 @@ Collectibles
 Combat Systems
 Storyboarding / Event Systems
 
+https://docs.oracle.com/en/java/javase/14/jpackage/image-and-runtime-modifications.html#GUID-5B97E9DB-577A-427F-B275-97E8B27224C9
+
 
 `all` to suppress all warnings
 `boxing` to suppress warnings relative to boxing/unboxing operations
