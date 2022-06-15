@@ -21,34 +21,12 @@ public class Player extends PhysicsObject implements RenderedObject{
     final static long slide_AnimationWaitTime = TimeUtils.millisToNanos(100);
     final static long slide_duration = TimeUtils.millisToNanos(700);
 
-    double y_acceleration = PhysicsObject.GRAVITY;
-    double y_acceleration_limit = 100;
-    double x_acceleration = 0;
-    double x_acceleration_limit = 100;
-    double x_velocity = 0;
-    double x_velocity_limit = 246;
-    double y_velocity = 5;
-    double y_velocity_limit = 500;
-    double sliding_velocity = 164;
-    double sliding_acceleration = 120;
-
-    double horizontal_drag = 2000;
-    double horizontal_friction = PhysicsObject.NORMAL_FRICTION;
-    double horizontal_air_drag = 800;
-    double horizontal_air_friction = 180;
-
-    double jump_velocity = PhysicsObject.NORMAL_JUMP_VELOCITY;
-
-    int maxJumpCount = 2;
-    int jumpCount = maxJumpCount;
-    State state = State.IDLE;
     State prvState = state;
 
     final double viewBoundaryX = RabiClone.BASE_WIDTH / 3;
     final double viewBoundaryY = RabiClone.BASE_HEIGHT / 3;
     View lastCameraView = View.FIXED;
 
-    boolean groundCollision = false;
     boolean spacebarReleased = true;
     boolean facing_direction = RIGHT;
 
@@ -66,6 +44,15 @@ public class Player extends PhysicsObject implements RenderedObject{
         super(Sprite.ERINA, 5, panel);
         setX(RabiClone.BASE_WIDTH / 2 - getAnimatedSpr().getWidth() / 2);
         setY(RabiClone.BASE_HEIGHT * (2 / 3d) - getAnimatedSpr().getHeight() / 2);
+        setAccelerationLimits(100, 100);
+        setVelocityLimits(246, 500);
+        setGroundDrag(2000);
+        setGroundFriction(PhysicsObject.NORMAL_FRICTION);
+        setAirDrag(800);
+        setAirFriction(180);
+        setSlidingVelocity(164);
+        setSlidingAcceleration(120);
+        setJumpVelocity(PhysicsObject.NORMAL_JUMP_VELOCITY);
     }
 
     @Override
@@ -76,7 +63,6 @@ public class Player extends PhysicsObject implements RenderedObject{
     @Override
     public void update(double updateMult) {
         super.update(updateMult);
-        handleMovementPhysics(updateMult);
         handleCameraRoomMovement();
 
         switch (state) {
@@ -364,5 +350,9 @@ public class Player extends PhysicsObject implements RenderedObject{
     @Override
     public boolean leftKeyHeld() {
         return KeyHeld(Action.MOVE_LEFT);
+    }
+
+    public double getYVelocity() {
+        return y_velocity;
     }
 }

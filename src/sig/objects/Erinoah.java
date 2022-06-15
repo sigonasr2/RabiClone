@@ -9,10 +9,23 @@ import sig.objects.actor.RenderedObject;
 
 public class Erinoah extends PhysicsObject implements RenderedObject{
 
+    double lastMoved = 0;
+    boolean moveDir = false;
+    double moveTimer = 0;
+
     public Erinoah(double x, double y) {
         super(Sprite.ERINOAH,6.5,RabiClone.p);
         setX(x);
         setY(y);
+        setAccelerationLimits(100, 100);
+        setVelocityLimits(246, 500);
+        setGroundDrag(2000);
+        setGroundFriction(PhysicsObject.NORMAL_FRICTION);
+        setAirDrag(800);
+        setAirFriction(180);
+        setSlidingVelocity(164);
+        setSlidingAcceleration(120);
+        setJumpVelocity(PhysicsObject.NORMAL_JUMP_VELOCITY);
     }
 
     @Override
@@ -23,6 +36,23 @@ public class Erinoah extends PhysicsObject implements RenderedObject{
     @Override
     public void update(double updateMult) {
         super.update(updateMult);
+        lastMoved+=updateMult;
+        if (lastMoved>5) {
+            switch ((int)(Math.random()*3)) {
+                case 0:{
+                    moveDir=true;
+                    moveTimer=Math.random()*3;
+                }break;
+                case 1:{
+                    moveDir=false;
+                    moveTimer=Math.random()*3;
+                }break;
+                case 2:{
+                    lastMoved=0;
+                }break;
+            }
+        }
+        moveTimer-=updateMult;
     }
 
     @Override
@@ -36,11 +66,11 @@ public class Erinoah extends PhysicsObject implements RenderedObject{
 
     @Override
     public boolean rightKeyHeld() {
-        return false;
+        return moveTimer>0&&moveDir;
     }
 
     @Override
     public boolean leftKeyHeld() {
-        return false;
+        return moveTimer>0&&!moveDir;
     }
 }

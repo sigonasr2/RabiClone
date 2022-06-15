@@ -13,16 +13,19 @@ public abstract class PhysicsObject extends AnimatedObject implements PhysicsObj
     final public static double NORMAL_JUMP_VELOCITY = -300;
     final public static double WALKING_SPEED_LIMIT = 164;
 
-    State state = State.IDLE;
-    double x_velocity,y_velocity;
-    double x_acceleration,y_acceleration;
-    double x_velocity_limit,y_velocity_limit;
-    boolean groundCollision;
-    byte maxJumpCount=2;
-    byte jumpCount=0;
+    protected State state = State.IDLE;
+    protected double x_velocity,y_velocity;
+    protected double x_acceleration,y_acceleration;
+    protected double x_velocity_limit,y_velocity_limit;
+    protected double x_acceleration_limit,y_acceleration_limit;
+    protected boolean groundCollision;
+    protected byte maxJumpCount=2;
+    protected byte jumpCount=0;
+    protected double jump_velocity;
 
-    double horizontal_air_friction,horizontal_air_drag;
-    double horizontal_friction,horizontal_drag;
+    protected double horizontal_air_friction,horizontal_air_drag;
+    protected double horizontal_friction,horizontal_drag;
+    protected double sliding_velocity,sliding_acceleration;
 
     protected PhysicsObject(AnimatedSprite spr, double animationSpd, Panel panel) {
         super(spr, animationSpd, panel);
@@ -214,6 +217,60 @@ public abstract class PhysicsObject extends AnimatedObject implements PhysicsObj
     @Override
     public Rectangle getCollisionBounds() {
         return getCollisionBox();
+    }
+
+
+
+    @Override
+    public void setVelocityLimits(double x, double y) {
+        this.x_velocity_limit=x;
+        this.y_velocity_limit=y;
+    }
+
+    @Override
+    public void setAccelerationLimits(double x, double y) {
+        this.x_acceleration_limit=x;
+        this.y_acceleration_limit=y;
+    }
+
+    @Override
+    public void setMaxJumpCount(byte jumps) {
+        this.maxJumpCount=jumps;
+    }
+
+    @Override
+    public void setGroundFriction(double x) {
+        this.horizontal_friction=x;
+    }
+
+    @Override
+    public void setAirFriction(double x) {
+        this.horizontal_air_friction=x;
+    }
+
+    @Override
+    public void setGroundDrag(double x) {
+        this.horizontal_drag=x;
+    }
+
+    @Override
+    public void setAirDrag(double x) {
+        this.horizontal_air_drag=x;
+    }
+
+    @Override
+    public void setSlidingVelocity(double x) {
+        this.sliding_velocity=x;
+    }
+
+    @Override
+    public void setSlidingAcceleration(double x) {
+        this.sliding_acceleration=x;
+    }
+
+    @Override
+    public void setJumpVelocity(double x) {
+        this.jump_velocity=x;
     }
     
 }
