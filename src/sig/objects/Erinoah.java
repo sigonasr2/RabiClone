@@ -71,7 +71,7 @@ public class Erinoah extends PhysicsObject implements RenderedObject{
 
     @Override
     public Transform getSpriteTransform() {
-        return Transform.NONE;
+        return moveDir?Transform.HORIZONTAL:Transform.NONE;
     }
 
     @Override
