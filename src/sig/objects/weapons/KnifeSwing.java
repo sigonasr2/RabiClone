@@ -4,10 +4,9 @@ import sig.engine.AnimatedSprite;
 import sig.engine.Panel;
 import sig.engine.Transform;
 import sig.objects.actor.AttachableObject;
-import sig.objects.actor.RenderedObject;
 import sig.engine.objects.Object;
 
-public class KnifeSwing extends AttachableObject implements RenderedObject{
+public class KnifeSwing extends AttachableObject{
 
     final byte frameCount = 5; //Number of frames before animation ends.
 
@@ -23,9 +22,9 @@ public class KnifeSwing extends AttachableObject implements RenderedObject{
             return;
         }
         if (getSpriteTransform()==Transform.HORIZONTAL) {
-            setX(getAttachedObject().getX()-getAnimatedSpr().getWidth()/2);
-        } else {
             setX(getAttachedObject().getX()+getAnimatedSpr().getWidth()/2);
+        } else {
+            setX(getAttachedObject().getX()-getAnimatedSpr().getWidth()/2);
         }
         setY(getAttachedObject().getY());
     }
@@ -36,7 +35,7 @@ public class KnifeSwing extends AttachableObject implements RenderedObject{
 
     @Override
     public Transform getSpriteTransform() {
-        return getAttached().getSpriteTransform()==Transform.HORIZONTAL||getAttached().getSpriteTransform()==Transform.HORIZ_VERTIC?Transform.NONE:Transform.HORIZONTAL;
+        return getAttached().getSpriteTransform();
     }
 
     @Override

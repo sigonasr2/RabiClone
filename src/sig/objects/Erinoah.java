@@ -4,8 +4,10 @@ import sig.RabiClone;
 import sig.engine.Rectangle;
 import sig.engine.Sprite;
 import sig.engine.Transform;
+import sig.engine.objects.AnimatedObject;
 import sig.objects.actor.PhysicsObject;
 import sig.objects.actor.RenderedObject;
+import sig.objects.weapons.KnifeSwing;
 
 public class Erinoah extends PhysicsObject implements RenderedObject{
 
@@ -37,7 +39,7 @@ public class Erinoah extends PhysicsObject implements RenderedObject{
     @Override
     public void update(double updateMult) {
         super.update(updateMult);
-        lastMoved+=updateMult;
+        /*lastMoved+=updateMult;
         lastJumped+=updateMult;
         if (lastMoved>5) {
             switch ((int)(Math.random()*3)) {
@@ -62,7 +64,7 @@ public class Erinoah extends PhysicsObject implements RenderedObject{
                 lastJumped=0;
             }
         }
-        moveTimer-=updateMult;
+        moveTimer-=updateMult;*/
     }
 
     @Override
@@ -87,5 +89,5 @@ public class Erinoah extends PhysicsObject implements RenderedObject{
     @Override
     public boolean isFriendlyObject() {
         return false;
-    }
+    }    
 }

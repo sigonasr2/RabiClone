@@ -2,8 +2,9 @@ package sig.engine.objects;
 
 import sig.engine.AnimatedSprite;
 import sig.engine.Panel;
+import sig.objects.actor.RenderedObject;
 
-public abstract class AnimatedObject extends Object{
+public abstract class AnimatedObject extends Object implements RenderedObject{
 
     double currentFrame;
     double animationSpd; 
@@ -42,6 +43,10 @@ public abstract class AnimatedObject extends Object{
 
     public void setAnimatedSpr(AnimatedSprite animatedSpr) {
         this.animatedSpr = animatedSpr;
+    }
+
+    public void collisionEvent(AnimatedObject obj) {
+
     }
     
 }

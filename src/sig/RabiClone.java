@@ -41,6 +41,8 @@ public class RabiClone {
 	public static JFrame f;
 
 	public static List<Object> OBJ = new ArrayList<Object>();
+	public static List<AnimatedObject> FRIENDLY_OBJ = new ArrayList<AnimatedObject>();
+	public static List<AnimatedObject> ENEMY_OBJ = new ArrayList<AnimatedObject>();
 	public static boolean COLLISION[] = new boolean[(Tile.TILE_WIDTH*Map.MAP_WIDTH)*(Tile.TILE_HEIGHT*Map.MAP_HEIGHT)];
 
 	public static int BASE_WIDTH = 512;
@@ -133,32 +135,30 @@ public class RabiClone {
 					lastControllerScan = System.currentTimeMillis();
 				}
 
-				Arrays.fill(PLAYER_COLLISION,false);
-				Arrays.fill(ENEMY_COLLISION,false);
+				FRIENDLY_OBJ.clear();
+				ENEMY_OBJ.clear();
 				for (int i = 0; i < OBJ.size(); i++) {
 					if (OBJ.get(i) instanceof RenderedObject) {
 						RenderedObject r = (RenderedObject)OBJ.get(i);
 						if (r.isFriendlyObject()) {
-							if (OBJ.get(i) instanceof AnimatedObject) {
-								AnimatedObject a = ((AnimatedObject)OBJ.get(i));
-								double xpos = a.getX()-level_renderer.getX()-a.getAnimatedSpr().getWidth()/2;
-								double ypos = a.getY()-level_renderer.getY()-a.getAnimatedSpr().getHeight()/2;
-								int xindex = (int)a.getCurrentFrame()%a.getAnimatedSpr().getFrame_count();
-								int yindex = ((int)a.getCurrentFrame()%a.getAnimatedSpr().getFrame_count())/a.getAnimatedSpr().getFrame_count();
-								for (int y=0;y<a.getAnimatedSpr().getHeight();y++) {
-									for (int x=0;x<a.getAnimatedSpr().getWidth();x++) {
-										int index=((a.getSpriteTransform()==Transform.VERTICAL||a.getSpriteTransform()==Transform.HORIZ_VERTIC?a.getAnimatedSpr().getHeight()-y:y)+(int)ypos)*BASE_WIDTH+(a.getSpriteTransform()==Transform.HORIZONTAL||a.getSpriteTransform()==Transform.HORIZ_VERTIC?a.getAnimatedSpr().getWidth()-x:x)+(int)xpos;
-										if (index>=0&&index<PLAYER_COLLISION.length&&a.getAnimatedSpr().getBi_array()[(yindex*a.getAnimatedSpr().getHeight()+y)*a.getAnimatedSpr().getCanvasWidth()+xindex*a.getAnimatedSpr().getWidth()+x]!=(byte)32) {
-											PLAYER_COLLISION[index]=true;
-										}
-									}
-								}
-							}
+							FRIENDLY_OBJ.add((AnimatedObject)r);
+						} else {
+							ENEMY_OBJ.add((AnimatedObject)r);
 						}
 					}
 					OBJ.get(i).update(UPDATE_MULT);
 					if (OBJ.get(i).isMarkedForDeletion()) {
 						OBJ.remove(i--);
+					}
+				}
+				for (int i = 0; i < FRIENDLY_OBJ.size(); i++) {
+					AnimatedObject f = FRIENDLY_OBJ.get(i);
+					for (int j=0;j<ENEMY_OBJ.size();j++) {
+						AnimatedObject e = ENEMY_OBJ.get(j);
+						if (detectCollision(e,f)) {
+							e.collisionEvent(f);
+							f.collisionEvent(e);
+						}
 					}
 				}
 				dt -= UPDATE_LOOP_NANOTIME;
@@ -167,6 +167,49 @@ public class RabiClone {
 			}
 			gameUpdateLoopStabilizer(dt); //This is hackish. Removing this slows down the game by about 30%. The timer runs slower. ??? 
 		}
+	}
+
+	private static boolean detectCollision(AnimatedObject e, AnimatedObject f) {
+		double x1=e.getX()-e.getAnimatedSpr().getWidth()/2,y1=e.getY()-e.getAnimatedSpr().getHeight()/2,x2=e.getX()+e.getAnimatedSpr().getWidth()/2,y2=e.getY()+e.getAnimatedSpr().getHeight()/2;
+		double x3=f.getX()-f.getAnimatedSpr().getWidth()/2,y3=f.getY()-f.getAnimatedSpr().getHeight()/2,x4=f.getX()+f.getAnimatedSpr().getWidth()/2,y4=f.getY()+f.getAnimatedSpr().getHeight()/2;
+
+		if (x3<x2&&y3<y2&&x4>x1&&y4>y1) //Rectangular collision detected, now check on a pixel level. 
+		{
+			int sx1,sy1,w,h;
+			sx1 = (int)Math.max(x1,x3);
+			sy1 = (int)Math.max(y1,y3);
+			w = (int)Math.min(x2,x4)-sx1-1;
+			h = (int)Math.min(y2,y4)-sy1-1;
+			int offsetX_r1=(int)(x1>x3?0:x3-x1);
+			int offsetY_r1=(int)(y1>y3?0:y3-y1);
+			int offsetX_r2=(int)(x3>x1?0:x1-x3);
+			int offsetY_r2=(int)(y3>y1?0:y1-y3);
+
+			byte[] arr1=e.getAnimatedSpr().getBi_array();
+			int xFrame1 = (int)e.getCurrentFrame()%(e.getAnimatedSpr().getCanvasWidth()/e.getAnimatedSpr().getWidth());
+			int yFrame1 = ((int)e.getCurrentFrame()/(e.getAnimatedSpr().getCanvasWidth()/e.getAnimatedSpr().getWidth()))%(e.getAnimatedSpr().getCanvasHeight()/e.getAnimatedSpr().getHeight());
+			byte[] arr2=f.getAnimatedSpr().getBi_array();
+			int xFrame2 = (int)f.getCurrentFrame()%(f.getAnimatedSpr().getCanvasWidth()/f.getAnimatedSpr().getWidth());
+			int yFrame2 = ((int)f.getCurrentFrame()/(f.getAnimatedSpr().getCanvasWidth()/f.getAnimatedSpr().getWidth()))%(f.getAnimatedSpr().getCanvasHeight()/f.getAnimatedSpr().getHeight());
+
+
+			if (w>0&&h>0) {
+				for (int yy1=offsetY_r1;yy1<offsetY_r1+h;yy1++) {
+					for (int xx1=offsetX_r1;xx1<offsetX_r1+w;xx1++) {
+						if (arr1[((e.getSpriteTransform()==Transform.VERTICAL||e.getSpriteTransform()==Transform.HORIZ_VERTIC?e.getAnimatedSpr().getHeight()-yy1:yy1)+yFrame1*e.getAnimatedSpr().getHeight())*e.getAnimatedSpr().getCanvasWidth()+(e.getSpriteTransform()==Transform.HORIZONTAL||e.getSpriteTransform()==Transform.HORIZ_VERTIC?e.getAnimatedSpr().getWidth()-xx1:xx1)+xFrame1*e.getAnimatedSpr().getWidth()]!=(byte)32) {
+							for (int yy2=offsetY_r2;yy2<offsetY_r2+h;yy2++) {
+								for (int xx2=offsetX_r2;xx2<offsetX_r2+w;xx2++) {
+									if (arr2[((f.getSpriteTransform()==Transform.VERTICAL||f.getSpriteTransform()==Transform.HORIZ_VERTIC?f.getAnimatedSpr().getHeight()-yy2:yy2)+yFrame2*f.getAnimatedSpr().getHeight())*f.getAnimatedSpr().getCanvasWidth()+((f.getSpriteTransform()==Transform.HORIZONTAL||f.getSpriteTransform()==Transform.HORIZ_VERTIC?f.getAnimatedSpr().getWidth()-xx2:xx2)+xFrame2*f.getAnimatedSpr().getWidth())]!=(byte)32) {
+										return true;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 	private static void gameUpdateLoopStabilizer(long dt) {
@@ -192,7 +235,7 @@ public class RabiClone {
 				continue;
 			}
 			if (!CONTROLLERS[i].poll()) {
-				Controller[] newArr = new Controller[CONTROLLERS.length - 1];
+				Controller[] newArr = new Controller[CONTROLLERS.length - 2];
 				for (int j = 0; j < CONTROLLERS.length; j++) {
 					if (j != i) {
 						newArr[(j > i ? j - 1 : j)] = CONTROLLERS[i];

@@ -6,16 +6,16 @@ import sig.engine.Panel;
 import sig.engine.Rectangle;
 import sig.engine.Sprite;
 import sig.engine.Transform;
+import sig.engine.objects.AnimatedObject;
 import sig.map.Map;
 import sig.map.Tile;
 import sig.map.View;
 import sig.objects.actor.PhysicsObject;
-import sig.objects.actor.RenderedObject;
 import sig.objects.actor.State;
 import sig.objects.weapons.KnifeSwing;
 import sig.utils.TimeUtils;
 
-public class Player extends PhysicsObject implements RenderedObject{
+public class Player extends PhysicsObject{
     final static boolean LEFT = false;
     final static boolean RIGHT = true;
     final static long jump_fall_AnimationWaitTime = TimeUtils.millisToNanos(200);
@@ -372,4 +372,5 @@ public class Player extends PhysicsObject implements RenderedObject{
     public boolean isFriendlyObject() {
         return true;
     }
+    
 }
