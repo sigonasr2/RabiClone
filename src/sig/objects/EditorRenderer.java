@@ -219,7 +219,8 @@ public class EditorRenderer extends LevelRenderer{
         int tileY = (int)(RabiClone.MOUSE_POS.getY()+getY())/Tile.TILE_HEIGHT;
         switch (a) {
             case PLAY_GAME:{
-                RabiClone.OBJ.remove(RabiClone.level_renderer);
+                RabiClone.OBJ.clear();
+                RabiClone.ResetGame();
                 RabiClone.OBJ.add(RabiClone.level_renderer = new LevelRenderer(RabiClone.p));
                 RabiClone.StartGame();
             }break;

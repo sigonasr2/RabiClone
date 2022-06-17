@@ -11,6 +11,7 @@ public enum Action {
     MOVE_LEFT(new KeyBind(KeyEvent.VK_LEFT),new KeyBind(KeyEvent.VK_A)),
     JUMP(new KeyBind(KeyEvent.VK_SPACE),new KeyBind(KeyEvent.VK_W)),
     FALL(new KeyBind(KeyEvent.VK_DOWN),new KeyBind(KeyEvent.VK_S)),
+    ATTACK(new KeyBind(KeyEvent.VK_Z)),
     SLIDE(new KeyBind(KeyEvent.VK_CONTROL)),
     LEVEL_EDITOR(new KeyBind(KeyEvent.VK_F2)),
     PLAY_GAME(new KeyBind(KeyEvent.VK_F1)),
