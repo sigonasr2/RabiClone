@@ -152,7 +152,8 @@ public class ConfigureControls extends Object{
     public void KeyPressed(Action a) {
         switch(a) {
             case PLAY_GAME:{
-                RabiClone.OBJ.remove(RabiClone.level_renderer);
+                RabiClone.OBJ.clear();
+                RabiClone.ResetGame();
                 RabiClone.OBJ.add(RabiClone.level_renderer = new LevelRenderer(RabiClone.p));
                 RabiClone.StartGame();
             }break;

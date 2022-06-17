@@ -26,6 +26,7 @@ public class Sprite{
     public static AnimatedSprite ERINA_JUMP_FALL = new AnimatedSprite(new File(new File("..","sprites"),"erina_jump_fall.gif"),32,32);
     public static AnimatedSprite ERINA_SLIDE1 = new AnimatedSprite(new File(new File("..","sprites"),"erina_slide1.gif"),32,32);
     public static AnimatedSprite ERINA_SLIDE = new AnimatedSprite(new File(new File("..","sprites"),"erina_slide.gif"),32,32);
+    public static AnimatedSprite KNIFE_SWING = new AnimatedSprite(new File(new File("..","sprites"),"knife-swing.gif"),32,32);
 
 
 

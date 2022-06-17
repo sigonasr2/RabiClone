@@ -12,6 +12,7 @@ import sig.map.View;
 import sig.objects.actor.PhysicsObject;
 import sig.objects.actor.RenderedObject;
 import sig.objects.actor.State;
+import sig.objects.weapons.KnifeSwing;
 import sig.utils.TimeUtils;
 
 public class Player extends PhysicsObject implements RenderedObject{
@@ -20,6 +21,9 @@ public class Player extends PhysicsObject implements RenderedObject{
     final static long jump_fall_AnimationWaitTime = TimeUtils.millisToNanos(200);
     final static long slide_AnimationWaitTime = TimeUtils.millisToNanos(100);
     final static long slide_duration = TimeUtils.millisToNanos(700);
+    final static long weaponSwingAnimationTime = TimeUtils.millisToNanos(333);
+
+    long weaponSwingTime = 0;
 
     State prvState = state;
 
@@ -67,6 +71,9 @@ public class Player extends PhysicsObject implements RenderedObject{
 
         switch (state) {
             case ATTACK:
+                if (RabiClone.TIME - weaponSwingTime > weaponSwingAnimationTime) {
+                    state=State.IDLE;
+                }
                 break;
             case FALLING:
                 if (prvState != State.FALLING) {
@@ -203,6 +210,11 @@ public class Player extends PhysicsObject implements RenderedObject{
                 break;
             default:
                 break;
+        }
+        if (a == Action.ATTACK&&(state==State.IDLE||state==State.FALLING||state==State.JUMP)&&(RabiClone.TIME-weaponSwingTime>=weaponSwingAnimationTime)) {
+            RabiClone.OBJ.add(new KnifeSwing(Sprite.KNIFE_SWING,15,RabiClone.p,this));
+            state=State.ATTACK;
+            weaponSwingTime=RabiClone.TIME;
         }
         if (groundCollision) {
             if (spacebarReleased && (a == Action.JUMP) && jumpCount > 0) {
