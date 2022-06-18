@@ -9,6 +9,7 @@ import sig.objects.actor.PhysicsObject;
 public class BunnyGirls extends PhysicsObject{
 
     AnimatedSprite walkingSprite;
+    AnimatedSprite standingSprite;
     double lastMoved = 0;
     double lastJumped = 0;
     boolean moveDir = false;
@@ -17,6 +18,7 @@ public class BunnyGirls extends PhysicsObject{
     protected BunnyGirls(AnimatedSprite spr,AnimatedSprite walkingSpr, double animationSpd, Panel panel) {
         super(spr, animationSpd, panel);
         this.walkingSprite=walkingSpr;
+        this.standingSprite=spr;
     }
 
     @Override
@@ -28,10 +30,12 @@ public class BunnyGirls extends PhysicsObject{
             switch ((int)(Math.random()*3)) {
                 case 0:{
                     moveDir=true;
+                    setAnimatedSpr(walkingSprite);
                     moveTimer=Math.random()*3;
                 }break;
                 case 1:{
                     moveDir=false;
+                    setAnimatedSpr(walkingSprite);
                     moveTimer=Math.random()*3;
                 }break;
             }
@@ -48,6 +52,9 @@ public class BunnyGirls extends PhysicsObject{
             }
         }
         moveTimer-=updateMult;
+        if(moveTimer<=0){
+            setAnimatedSpr(standingSprite);
+        }
     }
 
     @Override
