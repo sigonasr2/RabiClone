@@ -52,7 +52,7 @@ public class Player extends PhysicsObject{
         setVelocityLimits(246, 500);
         setGroundDrag(2000);
         setGroundFriction(PhysicsObject.NORMAL_FRICTION);
-        setAirDrag(1000);
+        setAirDrag(900);
         setAirFriction(180);
         setSlidingVelocity(164);
         setSlidingAcceleration(120);
