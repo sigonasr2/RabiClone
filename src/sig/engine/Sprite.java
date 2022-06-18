@@ -27,6 +27,14 @@ public class Sprite{
     public static AnimatedSprite ERINA_SLIDE1 = new AnimatedSprite(new File(new File("..","sprites"),"erina_slide1.gif"),32,32);
     public static AnimatedSprite ERINA_SLIDE = new AnimatedSprite(new File(new File("..","sprites"),"erina_slide.gif"),32,32);
     public static AnimatedSprite KNIFE_SWING = new AnimatedSprite(new File(new File("..","sprites"),"knife-swing.gif"),32,32);
+    public static AnimatedSprite RED_STAND = new AnimatedSprite(new File(new File("..","sprites"),"redgirl_stand.gif"),32,32);
+    public static AnimatedSprite RED_WALK = new AnimatedSprite(new File(new File("..","sprites"),"redgirl_walk.gif"),32,32);
+    public static AnimatedSprite BLUE_STAND = new AnimatedSprite(new File(new File("..","sprites"),"bluegirl_stand.gif"),32,32);
+    public static AnimatedSprite BLUE_WALK = new AnimatedSprite(new File(new File("..","sprites"),"bluegirl_walk.gif"),32,32);
+    public static AnimatedSprite YELLOW_STAND = new AnimatedSprite(new File(new File("..","sprites"),"yellowgirl_stand.gif"),32,32);
+    public static AnimatedSprite YELLOW_WALK = new AnimatedSprite(new File(new File("..","sprites"),"yellowgirl_walk.gif"),32,32);
+    public static AnimatedSprite GREEN_STAND = new AnimatedSprite(new File(new File("..","sprites"),"greengirl_stand.gif"),32,32);
+    public static AnimatedSprite GREEN_WALK = new AnimatedSprite(new File(new File("..","sprites"),"greengirl_walk.gif"),32,32);
 
 
 

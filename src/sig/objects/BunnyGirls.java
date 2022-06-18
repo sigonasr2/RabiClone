@@ -1,37 +1,20 @@
 package sig.objects;
 
-import sig.RabiClone;
+import sig.engine.AnimatedSprite;
+import sig.engine.Panel;
 import sig.engine.Rectangle;
-import sig.engine.Sprite;
 import sig.engine.Transform;
 import sig.objects.actor.PhysicsObject;
 
-public class Erinoah extends PhysicsObject{
+public class BunnyGirls extends PhysicsObject{
 
     double lastMoved = 0;
     double lastJumped = 0;
     boolean moveDir = false;
     double moveTimer = 0;
 
-    public Erinoah(double x, double y) {
-        super(Sprite.ERINOAH,6.5,RabiClone.p);
-        setX(x);
-        setY(y);
-        setAccelerationLimits(100, 100);
-        setVelocityLimits(500, 500);
-        setGroundDrag(2000);
-        setGroundFriction(PhysicsObject.NORMAL_FRICTION);
-        setAirDrag(800);
-        setAirFriction(180);
-        setSlidingVelocity(164);
-        setSlidingAcceleration(120);
-        setJumpVelocity(PhysicsObject.NORMAL_JUMP_VELOCITY);
-        setGravity(450);
-    }
-
-    @Override
-    public Rectangle setCollisionBounds() {
-        return new Rectangle(12,4,24,38);
+    protected BunnyGirls(AnimatedSprite spr, double animationSpd, Panel panel) {
+        super(spr, animationSpd, panel);
     }
 
     @Override
@@ -66,15 +49,6 @@ public class Erinoah extends PhysicsObject{
     }
 
     @Override
-    public void draw(byte[] p) {
-    }
-
-    @Override
-    public Transform getSpriteTransform() {
-        return moveDir?Transform.HORIZONTAL:Transform.NONE;
-    }
-
-    @Override
     public boolean rightKeyHeld() {
         return moveTimer>0&&moveDir;
     }
@@ -85,7 +59,22 @@ public class Erinoah extends PhysicsObject{
     }
 
     @Override
+    public Rectangle setCollisionBounds() {
+        return new Rectangle(10,6,12,25);
+    }
+
+    @Override
     public boolean isFriendlyObject() {
         return false;
-    }    
+    }
+
+    @Override
+    public void draw(byte[] p) {        
+    }
+
+    @Override
+    public Transform getSpriteTransform() {
+        return moveDir?Transform.HORIZONTAL:Transform.NONE;
+    }
+    
 }

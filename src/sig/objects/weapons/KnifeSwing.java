@@ -40,12 +40,12 @@ public class KnifeSwing extends AttachableObject{
             if(pobj.state!=State.STAGGER){
                 if(getSpriteTransform()==Transform.NONE){
                     pobj.staggerDuration=0.3;
-                    pobj.x_velocity = -300;
+                    pobj.x_velocity = -500;
                     pobj.y_velocity = -300;
                     pobj.state = State.STAGGER;
                 }else{
                     pobj.staggerDuration=0.3;
-                    pobj.x_velocity = 300;
+                    pobj.x_velocity = 500;
                     pobj.y_velocity = -300;
                     pobj.state = State.STAGGER;
                 }
