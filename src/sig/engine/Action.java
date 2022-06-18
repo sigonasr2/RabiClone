@@ -9,7 +9,7 @@ import net.java.games.input.Component.Identifier;
 public enum Action {
     MOVE_RIGHT(new KeyBind(KeyEvent.VK_RIGHT),new KeyBind(KeyEvent.VK_D)),
     MOVE_LEFT(new KeyBind(KeyEvent.VK_LEFT),new KeyBind(KeyEvent.VK_A)),
-    JUMP(new KeyBind(KeyEvent.VK_SPACE),new KeyBind(KeyEvent.VK_W)),
+    JUMP(new KeyBind(KeyEvent.VK_SPACE),new KeyBind(KeyEvent.VK_W),new KeyBind(KeyEvent.VK_UP)),
     FALL(new KeyBind(KeyEvent.VK_DOWN),new KeyBind(KeyEvent.VK_S)),
     ATTACK(new KeyBind(KeyEvent.VK_Z)),
     SLIDE(new KeyBind(KeyEvent.VK_CONTROL)),

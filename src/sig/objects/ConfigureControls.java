@@ -154,6 +154,7 @@ public class ConfigureControls extends Object{
             case PLAY_GAME:{
                 RabiClone.OBJ.clear();
                 RabiClone.ResetGame();
+                Map.LoadMap(RabiClone.CURRENT_MAP);
                 RabiClone.OBJ.add(RabiClone.level_renderer = new LevelRenderer(RabiClone.p));
                 RabiClone.StartGame();
             }break;

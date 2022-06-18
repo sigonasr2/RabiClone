@@ -1,7 +1,6 @@
 package sig.objects.actor;
 
 import sig.RabiClone;
-import sig.engine.Action;
 import sig.engine.AnimatedSprite;
 import sig.engine.Panel;
 import sig.engine.Rectangle;
@@ -115,7 +114,7 @@ public abstract class PhysicsObject extends AnimatedObject implements PhysicsObj
                         displacement_y=0;
                         //groundCollision = true;
                         break;
-                    }       
+                    }
                 }
             }
         }

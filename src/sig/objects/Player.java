@@ -6,7 +6,6 @@ import sig.engine.Panel;
 import sig.engine.Rectangle;
 import sig.engine.Sprite;
 import sig.engine.Transform;
-import sig.engine.objects.AnimatedObject;
 import sig.map.Map;
 import sig.map.Tile;
 import sig.map.View;
