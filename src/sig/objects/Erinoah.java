@@ -39,7 +39,7 @@ public class Erinoah extends PhysicsObject implements RenderedObject{
     @Override
     public void update(double updateMult) {
         super.update(updateMult);
-        /*lastMoved+=updateMult;
+        lastMoved+=updateMult;
         lastJumped+=updateMult;
         if (lastMoved>5) {
             switch ((int)(Math.random()*3)) {
@@ -64,7 +64,7 @@ public class Erinoah extends PhysicsObject implements RenderedObject{
                 lastJumped=0;
             }
         }
-        moveTimer-=updateMult;*/
+        moveTimer-=updateMult;
     }
 
     @Override

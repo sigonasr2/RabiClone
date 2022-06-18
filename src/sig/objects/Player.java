@@ -52,7 +52,7 @@ public class Player extends PhysicsObject{
         setVelocityLimits(246, 500);
         setGroundDrag(2000);
         setGroundFriction(PhysicsObject.NORMAL_FRICTION);
-        setAirDrag(800);
+        setAirDrag(1000);
         setAirFriction(180);
         setSlidingVelocity(164);
         setSlidingAcceleration(120);
@@ -61,7 +61,7 @@ public class Player extends PhysicsObject{
 
     @Override
     public Rectangle setCollisionBounds() {
-        return new Rectangle(10,2,12,27);
+        return new Rectangle(10,6,12,25);
     }
 
     @Override

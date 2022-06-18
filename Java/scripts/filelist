@@ -1,9 +1,9 @@
-build2.sh
 build.sh
+build2.sh
 clean.sh
 commit.sh
-jar2.sh
 jar.sh
+jar2.sh
 release.sh
 update.sh
 version_info

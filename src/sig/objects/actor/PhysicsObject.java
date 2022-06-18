@@ -1,6 +1,7 @@
 package sig.objects.actor;
 
 import sig.RabiClone;
+import sig.engine.Action;
 import sig.engine.AnimatedSprite;
 import sig.engine.Panel;
 import sig.engine.Rectangle;
@@ -22,7 +23,6 @@ public abstract class PhysicsObject extends AnimatedObject implements PhysicsObj
     protected byte maxJumpCount=2;
     protected byte jumpCount=0;
     protected double jump_velocity;
-
     protected double horizontal_air_friction,horizontal_air_drag;
     protected double horizontal_friction,horizontal_drag;
     protected double sliding_velocity,sliding_acceleration;
@@ -58,6 +58,9 @@ public abstract class PhysicsObject extends AnimatedObject implements PhysicsObj
 
         boolean sideCollision = false;
         boolean hitAbove=false;
+
+        double startingX=getX();
+
         if (y_velocity==0) {
             if (!(checkCollision(getX()-getSprite().getWidth()/2+getCollisionBox().getX2(),getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()+2)||
             checkCollision(getX()-getSprite().getWidth()/2+getCollisionBox().getX(),getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()+2))) {
@@ -69,12 +72,13 @@ public abstract class PhysicsObject extends AnimatedObject implements PhysicsObj
         } else {
             double startingY=getY();
             groundCollision=false;
+
             if (displacement_y>0) {
                 for (int y=(int)getY();y<startingY+displacement_y;y++) {
                     if (y==getY()) {
                         continue;
                     }
-                    if (checkCollision(getX()-getSprite().getWidth()/2+getCollisionBox().getX2()-1,y+getCollisionBox().getY2()-getSprite().getHeight()/2)||
+                    if (checkCollision(getX()-getSprite().getWidth()/2+getCollisionBox().getX2(),y+getCollisionBox().getY2()-getSprite().getHeight()/2)||
                     checkCollision(getX()-getSprite().getWidth()/2+getCollisionBox().getX()+1,y+getCollisionBox().getY2()-getSprite().getHeight()/2)) {
                         setY(y-0.1);
                         //System.out.println("Running"+System.currentTimeMillis());
@@ -92,7 +96,7 @@ public abstract class PhysicsObject extends AnimatedObject implements PhysicsObj
                     if (y==getY()) {
                         continue;
                     }
-                    if (checkCollision(getX()-getSprite().getWidth()/2+getCollisionBox().getX2()-1,y+getCollisionBox().getY()-getSprite().getHeight()/2)||
+                    if (checkCollision(getX()-getSprite().getWidth()/2+getCollisionBox().getX2(),y+getCollisionBox().getY()-getSprite().getHeight()/2)||
                     checkCollision(getX()-getSprite().getWidth()/2+getCollisionBox().getX()+1,y+getCollisionBox().getY()-getSprite().getHeight()/2)) {
                         setY(y+1);
                         hitAbove=true;
@@ -106,8 +110,29 @@ public abstract class PhysicsObject extends AnimatedObject implements PhysicsObj
                 }
             }
         }
+        
+        sideCollision = sideCollisionChecking(displacement_x, sideCollision, hitAbove, startingX);
 
-        double startingX=getX();
+      
+        if (!groundCollision){
+            this.setY(this.getY()+displacement_y);
+            y_acceleration = GRAVITY;
+            if(y_velocity>0 && state!=State.SLIDE){
+                state = State.FALLING;
+            }
+            if (!sideCollision) {
+                handleKeyboardMovement(updateMult, right-left, horizontal_air_friction, horizontal_air_drag);
+                this.setX(this.getX()+displacement_x);
+            }
+        } else {
+            if (!sideCollision) {
+                handleKeyboardMovement(updateMult, right-left, horizontal_friction, horizontal_drag);
+                this.setX(this.getX()+displacement_x);
+            }
+        }
+    }
+
+    private boolean sideCollisionChecking(double displacement_x, boolean sideCollision, boolean hitAbove, double startingX) {
         if (displacement_x>0.00001) {
             for (int x=(int)getX();x<startingX+displacement_x;x++) {
                 if (x==getX()) {
@@ -157,27 +182,12 @@ public abstract class PhysicsObject extends AnimatedObject implements PhysicsObj
                     checkCollision(x+getCollisionBox().getX2()-getSprite().getWidth()/2,(getY()-getSprite().getHeight()/2+getCollisionBounds().getY2()+2))) {
                         //System.out.println("Performs check."+System.currentTimeMillis());
                         setY(getY()+1);
-                        //x_velocity = ;
+                        //x_velocity =;
                     }
                 } 
             }
         }
-        if (!groundCollision){
-            this.setY(this.getY()+displacement_y);
-            y_acceleration = GRAVITY;
-            if(y_velocity>0 && state!=State.SLIDE){
-                state = State.FALLING;
-            }
-            if (!sideCollision) {
-                handleKeyboardMovement(updateMult, right-left, horizontal_air_friction, horizontal_air_drag);
-                this.setX(this.getX()+displacement_x);
-            }
-        } else {
-            if (!sideCollision) {
-                handleKeyboardMovement(updateMult, right-left, horizontal_friction, horizontal_drag);
-                this.setX(this.getX()+displacement_x);
-            }
-        }
+        return sideCollision;
     }
 
     protected boolean checkCollision(double x,double y) {
