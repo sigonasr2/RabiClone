@@ -1,8 +1,6 @@
 package sig.objects.enemies;
 
 import sig.RabiClone;
-import sig.engine.AnimatedSprite;
-import sig.engine.Panel;
 import sig.engine.Sprite;
 import sig.objects.BunnyGirls;
 import sig.objects.actor.PhysicsObject;
