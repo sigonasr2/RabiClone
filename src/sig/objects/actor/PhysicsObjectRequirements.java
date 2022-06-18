@@ -17,4 +17,5 @@ public interface PhysicsObjectRequirements {
     void setSlidingVelocity(double x);
     void setSlidingAcceleration(double x);
     void setJumpVelocity(double x);
+    void setGravity(double gravity);
 }

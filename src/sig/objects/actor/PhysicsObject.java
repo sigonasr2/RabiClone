@@ -14,8 +14,11 @@ public abstract class PhysicsObject extends AnimatedObject implements PhysicsObj
     final public static double NORMAL_JUMP_VELOCITY = -300;
     final public static double WALKING_SPEED_LIMIT = 164;
 
-    protected State state = State.IDLE;
-    protected double x_velocity,y_velocity;
+    public State state = State.IDLE;
+    public double x_velocity;
+    public double staggerDuration = 0;
+    public double y_velocity;
+    protected double gravity = GRAVITY;
     protected double x_acceleration,y_acceleration;
     protected double x_velocity_limit,y_velocity_limit;
     protected double x_acceleration_limit,y_acceleration_limit;
@@ -36,6 +39,12 @@ public abstract class PhysicsObject extends AnimatedObject implements PhysicsObj
     public void update(double updateMult) {
         super.update(updateMult);
         handleMovementPhysics(updateMult);
+        if(state==State.STAGGER && staggerDuration>0){
+            staggerDuration-=updateMult;
+        }else
+        if(state==State.STAGGER && staggerDuration<=0){
+            state=State.IDLE;
+        }
     }
 
     protected void handleMovementPhysics(double updateMult) {
@@ -110,13 +119,13 @@ public abstract class PhysicsObject extends AnimatedObject implements PhysicsObj
                 }
             }
         }
-        
+
         sideCollision = sideCollisionChecking(displacement_x, sideCollision, hitAbove, startingX);
 
       
         if (!groundCollision){
             this.setY(this.getY()+displacement_y);
-            y_acceleration = GRAVITY;
+            y_acceleration = gravity;
             if(y_velocity>0 && state!=State.SLIDE){
                 state = State.FALLING;
             }
@@ -282,5 +291,13 @@ public abstract class PhysicsObject extends AnimatedObject implements PhysicsObj
     public void setJumpVelocity(double x) {
         this.jump_velocity=x;
     }
-    
+
+    @Override
+    public void setGravity(double gravity) {
+        this.gravity = gravity;
+    }
+
+    public double getGravity() {
+        return gravity;
+    }
 }

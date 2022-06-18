@@ -4,6 +4,9 @@ import sig.engine.AnimatedSprite;
 import sig.engine.Panel;
 import sig.engine.Transform;
 import sig.objects.actor.AttachableObject;
+import sig.objects.actor.PhysicsObject;
+import sig.objects.actor.State;
+import sig.engine.objects.AnimatedObject;
 import sig.engine.objects.Object;
 
 public class KnifeSwing extends AttachableObject{
@@ -27,6 +30,27 @@ public class KnifeSwing extends AttachableObject{
             setX(getAttachedObject().getX()-getAnimatedSpr().getWidth()/2);
         }
         setY(getAttachedObject().getY());
+    }
+
+    @Override
+    public void collisionEvent(AnimatedObject obj) {
+        System.out.println("Bonk");
+        if(obj instanceof PhysicsObject){
+            PhysicsObject pobj = (PhysicsObject)obj;
+            if(pobj.state!=State.STAGGER){
+                if(getSpriteTransform()==Transform.NONE){
+                    pobj.staggerDuration=0.3;
+                    pobj.x_velocity = -300;
+                    pobj.y_velocity = -300;
+                    pobj.state = State.STAGGER;
+                }else{
+                    pobj.staggerDuration=0.3;
+                    pobj.x_velocity = 300;
+                    pobj.y_velocity = -300;
+                    pobj.state = State.STAGGER;
+                }
+            }
+        }
     }
 
     @Override

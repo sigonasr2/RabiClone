@@ -9,7 +9,7 @@ import sig.objects.actor.PhysicsObject;
 import sig.objects.actor.RenderedObject;
 import sig.objects.weapons.KnifeSwing;
 
-public class Erinoah extends PhysicsObject implements RenderedObject{
+public class Erinoah extends PhysicsObject{
 
     double lastMoved = 0;
     double lastJumped = 0;
@@ -21,7 +21,7 @@ public class Erinoah extends PhysicsObject implements RenderedObject{
         setX(x);
         setY(y);
         setAccelerationLimits(100, 100);
-        setVelocityLimits(246, 500);
+        setVelocityLimits(500, 500);
         setGroundDrag(2000);
         setGroundFriction(PhysicsObject.NORMAL_FRICTION);
         setAirDrag(800);
@@ -29,6 +29,7 @@ public class Erinoah extends PhysicsObject implements RenderedObject{
         setSlidingVelocity(164);
         setSlidingAcceleration(120);
         setJumpVelocity(PhysicsObject.NORMAL_JUMP_VELOCITY);
+        setGravity(450);
     }
 
     @Override

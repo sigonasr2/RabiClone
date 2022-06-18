@@ -57,6 +57,7 @@ public class Player extends PhysicsObject{
         setSlidingVelocity(164);
         setSlidingAcceleration(120);
         setJumpVelocity(PhysicsObject.NORMAL_JUMP_VELOCITY);
+        setGravity(1300);
     }
 
     @Override
@@ -212,7 +213,7 @@ public class Player extends PhysicsObject{
                 break;
         }
         if (a == Action.ATTACK&&(state==State.IDLE||state==State.FALLING||state==State.JUMP)&&(RabiClone.TIME-weaponSwingTime>=weaponSwingAnimationTime)) {
-            RabiClone.OBJ.add(new KnifeSwing(Sprite.KNIFE_SWING,15,RabiClone.p,this));
+            RabiClone.OBJ.add(new KnifeSwing(Sprite.KNIFE_SWING,40,RabiClone.p,this));
             state=State.ATTACK;
             weaponSwingTime=RabiClone.TIME;
         }
