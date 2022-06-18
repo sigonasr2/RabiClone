@@ -8,7 +8,7 @@ import sig.objects.actor.PhysicsObject;
 public class RedBun extends BunnyGirls{
 
     public RedBun(double x, double y) {
-        super(Sprite.RED_STAND, 6.5, RabiClone.p);
+        super(Sprite.RED_STAND,Sprite.RED_WALK, 6.5, RabiClone.p);
         setX(x);
         setY(y);
         setAccelerationLimits(100, 100);

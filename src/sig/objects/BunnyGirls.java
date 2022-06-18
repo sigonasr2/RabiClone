@@ -8,13 +8,15 @@ import sig.objects.actor.PhysicsObject;
 
 public class BunnyGirls extends PhysicsObject{
 
+    AnimatedSprite walkingSprite;
     double lastMoved = 0;
     double lastJumped = 0;
     boolean moveDir = false;
     double moveTimer = 0;
 
-    protected BunnyGirls(AnimatedSprite spr, double animationSpd, Panel panel) {
+    protected BunnyGirls(AnimatedSprite spr,AnimatedSprite walkingSpr, double animationSpd, Panel panel) {
         super(spr, animationSpd, panel);
+        this.walkingSprite=walkingSpr;
     }
 
     @Override
