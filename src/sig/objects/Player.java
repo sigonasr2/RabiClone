@@ -21,6 +21,9 @@ public class Player extends PhysicsObject{
     final static long slide_AnimationWaitTime = TimeUtils.millisToNanos(100);
     final static long slide_duration = TimeUtils.millisToNanos(700);
     final static long weaponSwingAnimationTime = TimeUtils.millisToNanos(333);
+    final static long weaponComboWaitTime = TimeUtils.millisToNanos(60);
+    final static double finalComboJumpBackSpeedX = -150;
+    final static double finalComboJumpBackSpeedY = -96;
 
     long weaponSwingTime = 0;
 
@@ -71,6 +74,16 @@ public class Player extends PhysicsObject{
 
         switch (state) {
             case ATTACK:
+                if (RabiClone.TIME - weaponSwingTime > weaponSwingAnimationTime) {
+                    state=State.IDLE;
+                }
+                break;
+            case ATTACK2:
+                if (RabiClone.TIME - weaponSwingTime > weaponSwingAnimationTime) {
+                    state=State.IDLE;
+                }
+                break;
+            case ATTACK3:
                 if (RabiClone.TIME - weaponSwingTime > weaponSwingAnimationTime) {
                     state=State.IDLE;
                 }
@@ -157,7 +170,8 @@ public class Player extends PhysicsObject{
                 break;
         }
         prvState = state;
-        if (KeyHeld(Action.JUMP) && RabiClone.TIME - spacebarPressed < jumpHoldTime) {
+        if (KeyHeld(Action.JUMP) && RabiClone.TIME - spacebarPressed < jumpHoldTime
+        && state!=State.ATTACK2&&state!=State.ATTACK3) {
             y_velocity = jump_velocity;
         }
         // System.out.println(state);
@@ -183,6 +197,24 @@ public class Player extends PhysicsObject{
     public void KeyPressed(Action a) {
         switch (state) {
             case ATTACK:
+                if (a==Action.ATTACK&&RabiClone.TIME-weaponSwingTime>weaponComboWaitTime) {
+                    state=State.ATTACK2;
+                    weaponSwingTime=RabiClone.TIME;
+                }
+                break;
+            case ATTACK2:
+                if (a==Action.ATTACK&&RabiClone.TIME-weaponSwingTime>weaponComboWaitTime) {
+                    state=State.ATTACK3;
+                    weaponSwingTime=RabiClone.TIME;
+                }
+                break;
+            case ATTACK3:
+                if (a==Action.ATTACK&&RabiClone.TIME-weaponSwingTime>weaponComboWaitTime) {
+                    state=State.ATTACK4;
+                    weaponSwingTime=RabiClone.TIME;
+                    y_velocity = finalComboJumpBackSpeedY;
+                    x_velocity = finalComboJumpBackSpeedX*(facing_direction?1:-1);
+                }
                 break;
             case IDLE:
                 if (a == Action.SLIDE || a == Action.FALL) {
@@ -217,7 +249,8 @@ public class Player extends PhysicsObject{
             weaponSwingTime=RabiClone.TIME;
         }
         if (groundCollision) {
-            if (spacebarReleased && (a == Action.JUMP) && jumpCount > 0) {
+            if (spacebarReleased && (a == Action.JUMP) && jumpCount > 0
+                &&state!=State.ATTACK2&&state!=State.ATTACK3) {
                 state = State.JUMP;
                 jumpCount--;
                 y_velocity = jump_velocity;
@@ -356,12 +389,12 @@ public class Player extends PhysicsObject{
 
     @Override
     public boolean rightKeyHeld() {
-        return KeyHeld(Action.MOVE_RIGHT);
+        return state!=State.ATTACK2&&state!=State.ATTACK3&&KeyHeld(Action.MOVE_RIGHT);
     }
 
     @Override
     public boolean leftKeyHeld() {
-        return KeyHeld(Action.MOVE_LEFT);
+        return state!=State.ATTACK2&&state!=State.ATTACK3&&KeyHeld(Action.MOVE_LEFT);
     }
 
     public double getYVelocity() {
