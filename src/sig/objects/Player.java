@@ -6,6 +6,7 @@ import sig.engine.Panel;
 import sig.engine.Rectangle;
 import sig.engine.Sprite;
 import sig.engine.Transform;
+import sig.engine.objects.AnimatedObject;
 import sig.map.Map;
 import sig.map.Tile;
 import sig.map.View;
@@ -394,6 +395,28 @@ public class Player extends PhysicsObject{
             }
         RabiClone.level_renderer.setX(newX < 0 ? 0 : newX);
         RabiClone.level_renderer.setY(newY < 0 ? 0 : newY);
+    }
+
+    @Override
+    public void collisionEvent(AnimatedObject obj) {
+        if (state==State.BELLYSLIDE) {
+            if(obj instanceof PhysicsObject){
+                PhysicsObject pobj = (PhysicsObject)obj;
+                if(pobj.state!=State.STAGGER){
+                    if(facing_direction){
+                        pobj.staggerDuration=0.3;
+                        pobj.x_velocity = -300;
+                        pobj.y_velocity = -120;
+                        pobj.state = State.STAGGER;
+                    }else{
+                        pobj.staggerDuration=0.3;
+                        pobj.x_velocity = 300;
+                        pobj.y_velocity = -120;
+                        pobj.state = State.STAGGER;
+                    }
+                }
+            }
+        }
     }
 
     @Override

@@ -34,7 +34,6 @@ public class KnifeSwing2 extends AttachableObject{
 
     @Override
     public void collisionEvent(AnimatedObject obj) {
-        //System.out.println("Bonk");
         if(obj instanceof PhysicsObject){
             PhysicsObject pobj = (PhysicsObject)obj;
             if(pobj.state!=State.STAGGER){

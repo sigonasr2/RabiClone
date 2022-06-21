@@ -61,10 +61,12 @@ public abstract class PhysicsObject extends AnimatedObject implements PhysicsObj
             Math.abs(x_velocity+x_acceleration*updateMult)>x_velocity_limit
                 ?Math.signum(x_velocity+x_acceleration*updateMult)*x_velocity_limit
                 :x_velocity+x_acceleration*updateMult;
-        y_velocity =
-            Math.abs(y_velocity+y_acceleration*updateMult)>y_velocity_limit
-                ?Math.signum(y_velocity+y_acceleration*updateMult)*y_velocity_limit
-                :y_velocity+y_acceleration*updateMult;
+        if (state!=State.BELLYSLIDE) {
+            y_velocity =
+                Math.abs(y_velocity+y_acceleration*updateMult)>y_velocity_limit
+                    ?Math.signum(y_velocity+y_acceleration*updateMult)*y_velocity_limit
+                    :y_velocity+y_acceleration*updateMult;
+        }
         double displacement_y = y_velocity*updateMult;
         double displacement_x = x_velocity*updateMult;
 
@@ -131,9 +133,6 @@ public abstract class PhysicsObject extends AnimatedObject implements PhysicsObj
             y_acceleration = gravity;
             if(y_velocity>0 && state!=State.SLIDE&&state!=State.BELLYSLIDE){
                 state = State.FALLING;
-            }
-            if (y_velocity>FALLING_SPEED_LIMIT&&state!=State.BELLYSLIDE) {
-                y_velocity=FALLING_SPEED_LIMIT;
             }
             if (!sideCollision) {
                 handleKeyboardMovement(updateMult, right-left, horizontal_air_friction, horizontal_air_drag);
