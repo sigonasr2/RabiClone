@@ -47,6 +47,9 @@ public abstract class PhysicsObject extends AnimatedObject implements PhysicsObj
     }
 
     protected void handleMovementPhysics(double updateMult) {
+        if (state==State.STAGGER) {
+            return;
+        }
         int right = rightKeyHeld()?1:0;
         int left = leftKeyHeld()?1:0;
         if(state==State.SLIDE){
