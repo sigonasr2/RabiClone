@@ -35,7 +35,7 @@ public class ConfigureControls extends Object{
     Action selectedAction = Action.MOVE_RIGHT;
     KeyBind selectedKeybind = null;
     boolean assigningKey = false;
-    List<List<Integer>> actionHighlightSections = new ArrayList<>();
+    static List<List<Integer>> actionHighlightSections = new ArrayList<>();
     int storedX=-1;
     int storedY=-1;
     int storedEndX=-1;
@@ -99,6 +99,7 @@ public class ConfigureControls extends Object{
                     port = stream.readByte();
                 } while (port!='\0');
             }
+            updateHighlightSections();
         } catch (IOException e) {
             e.printStackTrace();
             RabiClone.setupDefaultControls();
@@ -151,7 +152,7 @@ public class ConfigureControls extends Object{
         stream.writeChar('\0');
     }
 
-    private void updateHighlightSections() {
+    private static void updateHighlightSections() {
         for (int i=0;i<Action.values().length;i++) {
             Action a = Action.values()[i];
             actionHighlightSections.add(new ArrayList<Integer>());
