@@ -75,6 +75,8 @@ public class RabiClone {
 	public static long TIME = 0;
 	public static long scaleTime;
 
+	public static boolean reloadControllerList = false;
+
     public static HashMap<Action,List<KeyBind>> DEFAULT_KEYBINDS = new HashMap<>();
 
 	public static RenderingHints RENDERHINTS = new RenderingHints(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_OFF);
@@ -134,10 +136,14 @@ public class RabiClone {
 
 				KeyBind.poll();
 
-				if (Key.isKeyHeld(KeyEvent.VK_F5) && System.currentTimeMillis() - lastControllerScan > 5000) {
+				if ((Key.isKeyHeld(KeyEvent.VK_F5)||reloadControllerList) && System.currentTimeMillis() - lastControllerScan > 5000) {
 					CONTROLLERS = ControllerEnvironment.getDefaultEnvironment().rescanControllers();
 					System.out.println(Arrays.toString(CONTROLLERS));
 					lastControllerScan = System.currentTimeMillis();
+					if (reloadControllerList) {
+						ConfigureControls.LoadControls();
+					}
+					reloadControllerList=false;
 				}
 
 				FRIENDLY_OBJ.clear();

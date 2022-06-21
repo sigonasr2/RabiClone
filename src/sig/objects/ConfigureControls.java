@@ -5,7 +5,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,7 +12,6 @@ import java.util.List;
 
 import net.java.games.input.Component;
 import net.java.games.input.Controller;
-import net.java.games.input.ControllerEnvironment;
 import net.java.games.input.Event;
 import net.java.games.input.Component.Identifier;
 import net.java.games.input.Component.POV;
@@ -46,7 +44,7 @@ public class ConfigureControls extends Object{
         super(panel);
         RabiClone.BACKGROUND_COLOR = PaletteColor.WHITE;
         if (GAME_CONTROLS_FILE.exists()) {
-            LoadControls();
+            RabiClone.reloadControllerList = true;
         }
         updateHighlightSections();
     }
@@ -54,7 +52,6 @@ public class ConfigureControls extends Object{
     public static void LoadControls() {
         try {
             DataInputStream stream = new DataInputStream(new FileInputStream(GAME_CONTROLS_FILE));
-            Controller[] CONTROLLERS = ControllerEnvironment.getDefaultEnvironment().rescanControllers();
             KeyBind.KEYBINDS.clear();
             while (stream.available()>0) {
                 Action a = Action.valueOf(readString(stream));
@@ -67,13 +64,13 @@ public class ConfigureControls extends Object{
                     } else {
                         java.lang.String controllerName = readString(stream);
                         Controller controller=null;
-                        for (int i = 0; i < CONTROLLERS.length; i++) {
-                            if (CONTROLLERS[i].getType() == Controller.Type.KEYBOARD
-                                    || CONTROLLERS[i].getType() == Controller.Type.MOUSE) {
+                        for (int i = 0; i < RabiClone.CONTROLLERS.length; i++) {
+                            if (RabiClone.CONTROLLERS[i].getType() == Controller.Type.KEYBOARD
+                                    || RabiClone.CONTROLLERS[i].getType() == Controller.Type.MOUSE) {
                                 continue;
                             } else
-                            if (CONTROLLERS[i].getName().equals(controllerName)) {
-                                controller=CONTROLLERS[i];
+                            if (RabiClone.CONTROLLERS[i].getName().equals(controllerName)) {
+                                controller=RabiClone.CONTROLLERS[i];
                             }
                         }
                         if (controller==null) {
@@ -205,37 +202,41 @@ public class ConfigureControls extends Object{
 
     @Override
     public void draw(byte[] p) {
-        int y = 4;
-        if (!assigningKey) {
-            selectedAction=null;
-            selectedKeybind=null;
-            for (Action a : Action.values()) {
-                if (RabiClone.MOUSE_POS.getY()>=getY()+y&&RabiClone.MOUSE_POS.getY()<getY()+y+Font.PROFONT_12.getGlyphHeight()+4) {
-                    selectedAction=a;
-                    Draw_Rect(p,PaletteColor.PEACH,0,getY()+y,RabiClone.BASE_WIDTH,Font.PROFONT_12.getGlyphHeight()+4);
-                }
-                for (int i=0;i<actionHighlightSections.get(a.ordinal()).size();i+=2) {
-                    List<Integer> sectionList = actionHighlightSections.get(a.ordinal());
-                    int startX=sectionList.get(i)*Font.PROFONT_12.getGlyphWidth()-4;
-                    int endX=sectionList.get(i+1)*Font.PROFONT_12.getGlyphWidth()+4;
-                    if (selectedKeybind==null&&RabiClone.MOUSE_POS.getY()>=getY()+y&&RabiClone.MOUSE_POS.getY()<getY()+y+Font.PROFONT_12.getGlyphHeight()+4&&RabiClone.MOUSE_POS.getX()>=startX&&RabiClone.MOUSE_POS.getX()<=endX) {
-                        Draw_Rect(p,PaletteColor.RED,startX,getY()+y,endX-startX,Font.PROFONT_12.getGlyphHeight()+4);
-                        storedX=startX;
-                        storedY=y;
-                        storedEndX=endX;
-                        selectedKeybind=KeyBind.KEYBINDS.get(a).get(i/2);
-                        break;
+        if (!RabiClone.reloadControllerList) {
+            int y = 4;
+            if (!assigningKey) {
+                selectedAction=null;
+                selectedKeybind=null;
+                for (Action a : Action.values()) {
+                    if (RabiClone.MOUSE_POS.getY()>=getY()+y&&RabiClone.MOUSE_POS.getY()<getY()+y+Font.PROFONT_12.getGlyphHeight()+4) {
+                        selectedAction=a;
+                        Draw_Rect(p,PaletteColor.PEACH,0,getY()+y,RabiClone.BASE_WIDTH,Font.PROFONT_12.getGlyphHeight()+4);
                     }
+                    for (int i=0;i<actionHighlightSections.get(a.ordinal()).size();i+=2) {
+                        List<Integer> sectionList = actionHighlightSections.get(a.ordinal());
+                        int startX=sectionList.get(i)*Font.PROFONT_12.getGlyphWidth()-4;
+                        int endX=sectionList.get(i+1)*Font.PROFONT_12.getGlyphWidth()+4;
+                        if (selectedKeybind==null&&RabiClone.MOUSE_POS.getY()>=getY()+y&&RabiClone.MOUSE_POS.getY()<getY()+y+Font.PROFONT_12.getGlyphHeight()+4&&RabiClone.MOUSE_POS.getX()>=startX&&RabiClone.MOUSE_POS.getX()<=endX) {
+                            Draw_Rect(p,PaletteColor.RED,startX,getY()+y,endX-startX,Font.PROFONT_12.getGlyphHeight()+4);
+                            storedX=startX;
+                            storedY=y;
+                            storedEndX=endX;
+                            selectedKeybind=KeyBind.KEYBINDS.get(a).get(i/2);
+                            break;
+                        }
+                    }
+                    Draw_Text_Ext(4,getY()+y,DisplayActionKeys(a),Font.PROFONT_12,Alpha.ALPHA0,PaletteColor.MIDNIGHT_BLUE);
+                    y+=Font.PROFONT_12.getGlyphHeight()+4;
                 }
-                Draw_Text_Ext(4,getY()+y,DisplayActionKeys(a),Font.PROFONT_12,Alpha.ALPHA0,PaletteColor.MIDNIGHT_BLUE);
-                y+=Font.PROFONT_12.getGlyphHeight()+4;
-            }
-            if (selectedKeybind!=null) {
-                Draw_Line(p,storedX,getY()+storedY,storedEndX,getY()+storedY+Font.PROFONT_12.getGlyphHeight()+4,PaletteColor.BLACK,Alpha.ALPHA32);
-                Draw_Line(p,storedX,getY()+storedY+Font.PROFONT_12.getGlyphHeight()+4,storedEndX,getY()+storedY,PaletteColor.BLACK,Alpha.ALPHA32);
+                if (selectedKeybind!=null) {
+                    Draw_Line(p,storedX,getY()+storedY,storedEndX,getY()+storedY+Font.PROFONT_12.getGlyphHeight()+4,PaletteColor.BLACK,Alpha.ALPHA32);
+                    Draw_Line(p,storedX,getY()+storedY+Font.PROFONT_12.getGlyphHeight()+4,storedEndX,getY()+storedY,PaletteColor.BLACK,Alpha.ALPHA32);
+                }
+            } else {
+                Draw_Text_Ext(4, 4, new String("Press a key to assign to ").append(selectedAction), Font.PROFONT_12, Alpha.ALPHA0, PaletteColor.MIDNIGHT_BLUE);
             }
         } else {
-            Draw_Text_Ext(4, 4, new String("Press a key to assign to ").append(selectedAction), Font.PROFONT_12, Alpha.ALPHA0, PaletteColor.MIDNIGHT_BLUE);
+            Draw_Text_Ext(4, 4, new String("Preparing controller list..."), Font.PROFONT_12, Alpha.ALPHA0, PaletteColor.MIDNIGHT_BLUE);
         }
     }
 
