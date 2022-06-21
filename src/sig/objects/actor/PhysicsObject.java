@@ -56,7 +56,7 @@ public abstract class PhysicsObject extends AnimatedObject implements PhysicsObj
     }
 
     protected void handleMovementPhysics(double updateMult) {
-        if (state==State.STAGGER) {
+        if (state==State.STAGGER||state==State.UNCONTROLLABLE) {
             return;
         }
         int right = rightKeyHeld()?1:0;
@@ -225,9 +225,9 @@ public abstract class PhysicsObject extends AnimatedObject implements PhysicsObj
     }
 
     /**
-     * Sets how long this object will remain in the unconscious state.
+     * Sets how long this object will remain in the uncontrollable state.
      * Automatically resets the state to the previous state the object
-     * was in when the unconscious state completes.
+     * was in when the uncontrollable state completes.
      * @param duration Amount of time in seconds.
      * */
     public void setUncontrollable(double duration) {
