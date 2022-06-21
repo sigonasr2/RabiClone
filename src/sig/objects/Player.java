@@ -404,15 +404,15 @@ public class Player extends PhysicsObject{
                 PhysicsObject pobj = (PhysicsObject)obj;
                 if(pobj.state!=State.STAGGER){
                     if(facing_direction){
-                        pobj.staggerDuration=0.3;
+                        setUncontrollable(0.2);
+                        pobj.setStagger(0.3);
                         pobj.x_velocity = -300;
                         pobj.y_velocity = -120;
-                        pobj.state = State.STAGGER;
                     }else{
-                        pobj.staggerDuration=0.3;
+                        setUncontrollable(0.2);
+                        pobj.setStagger(0.3);
                         pobj.x_velocity = 300;
                         pobj.y_velocity = -120;
-                        pobj.state = State.STAGGER;
                     }
                 }
             }

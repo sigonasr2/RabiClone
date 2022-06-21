@@ -16,7 +16,9 @@ public abstract class PhysicsObject extends AnimatedObject implements PhysicsObj
 
     public State state = State.IDLE;
     public double x_velocity;
-    public double staggerDuration = 0;
+    protected double staggerDuration = 0;
+    protected State resumeState=null;
+    protected double uncontrollableDuration = 0;
     public double y_velocity;
     protected double gravity = GRAVITY;
     protected double x_acceleration,y_acceleration;
@@ -43,7 +45,13 @@ public abstract class PhysicsObject extends AnimatedObject implements PhysicsObj
             staggerDuration-=updateMult;
         }else
         if(state==State.STAGGER && staggerDuration<=0){
-            state=State.IDLE;
+            state=resumeState;
+        }
+        if(state==State.UNCONTROLLABLE && uncontrollableDuration>0){
+            uncontrollableDuration-=updateMult;
+        }else
+        if(state==State.UNCONTROLLABLE && uncontrollableDuration<=0){
+            state=resumeState;
         }
     }
 
@@ -202,6 +210,30 @@ public abstract class PhysicsObject extends AnimatedObject implements PhysicsObj
             }
         }
         return sideCollision;
+    }
+
+    /**
+     * Sets how long this object will remain in the stagger state.
+     * Automatically resets the state to the previous state the object
+     * was in when the stagger state completes.
+     * @param duration Amount of time in seconds.
+     * */
+    public void setStagger(double duration) {
+        staggerDuration=duration;
+        resumeState=state;
+        state=State.STAGGER;
+    }
+
+    /**
+     * Sets how long this object will remain in the unconscious state.
+     * Automatically resets the state to the previous state the object
+     * was in when the unconscious state completes.
+     * @param duration Amount of time in seconds.
+     * */
+    public void setUncontrollable(double duration) {
+        uncontrollableDuration=duration;
+        resumeState=state;
+        state=State.UNCONTROLLABLE;
     }
 
     protected boolean checkCollision(double x,double y) {
