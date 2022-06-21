@@ -20,6 +20,10 @@ public class Key extends Identifier{
 	static HashMap<Identifier.Key,Boolean> KEYS = new HashMap<>();
     int keycode;
 
+	public int getKeyCode() {
+		return keycode;
+	}
+
 	public static void InitializeKeyConversionMap() {
 		KEY_CONVERSION_MAP.put(KeyEvent.VK_0,Identifier.Key._0);
 		KEY_CONVERSION_MAP.put(KeyEvent.VK_1,Identifier.Key._1);

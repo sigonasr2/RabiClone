@@ -7,6 +7,7 @@ import net.java.games.input.ControllerEnvironment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import sig.engine.Panel;
@@ -21,6 +22,7 @@ import sig.objects.ConfigureControls;
 import sig.objects.LevelRenderer;
 import sig.objects.Player;
 import sig.objects.actor.RenderedObject;
+import sig.engine.Action;
 import sig.engine.Key;
 import sig.engine.KeyBind;
 import sig.engine.PaletteColor;
@@ -73,6 +75,8 @@ public class RabiClone {
 	public static long TIME = 0;
 	public static long scaleTime;
 
+    public static HashMap<Action,List<KeyBind>> DEFAULT_KEYBINDS = new HashMap<>();
+
 	public static RenderingHints RENDERHINTS = new RenderingHints(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_OFF);
 
 	public static void main(String[] args) {
@@ -95,6 +99,7 @@ public class RabiClone {
 		ChooseBestRatio();
 		
 		Map.LoadMap(Maps.WORLD1);
+		setupDefaultControls();
 
 		p = new Panel(f);
 
@@ -166,6 +171,14 @@ public class RabiClone {
 				// System.out.println(TIME);
 			}
 			gameUpdateLoopStabilizer(dt); //This is hackish. Removing this slows down the game by about 30%. The timer runs slower. ??? 
+		}
+	}
+
+	public static void setupDefaultControls() {
+		for (Action a : Action.values()) {
+			List<KeyBind> bindList = new ArrayList<KeyBind>();
+			bindList.addAll(KeyBind.KEYBINDS.get(a));
+			DEFAULT_KEYBINDS.put(a,bindList);
 		}
 	}
 

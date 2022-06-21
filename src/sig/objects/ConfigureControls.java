@@ -1,10 +1,19 @@
 package sig.objects;
 
 import java.awt.event.MouseEvent;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import net.java.games.input.Component;
+import net.java.games.input.Controller;
+import net.java.games.input.ControllerEnvironment;
 import net.java.games.input.Event;
 import net.java.games.input.Component.Identifier;
 import net.java.games.input.Component.POV;
@@ -12,6 +21,7 @@ import sig.RabiClone;
 import sig.engine.Action;
 import sig.engine.Alpha;
 import sig.engine.Font;
+import sig.engine.Key;
 import sig.engine.KeyBind;
 import sig.engine.PaletteColor;
 import sig.engine.Panel;
@@ -21,6 +31,8 @@ import sig.engine.objects.Object;
 import sig.map.Map;
 
 public class ConfigureControls extends Object{
+
+    final static File GAME_CONTROLS_FILE = new File("controls.config");
 
     Action selectedAction = Action.MOVE_RIGHT;
     KeyBind selectedKeybind = null;
@@ -33,7 +45,113 @@ public class ConfigureControls extends Object{
     public ConfigureControls(Panel panel) {
         super(panel);
         RabiClone.BACKGROUND_COLOR = PaletteColor.WHITE;
+        if (GAME_CONTROLS_FILE.exists()) {
+            LoadControls();
+        }
         updateHighlightSections();
+    }
+
+    public static void LoadControls() {
+        try {
+            DataInputStream stream = new DataInputStream(new FileInputStream(GAME_CONTROLS_FILE));
+            Controller[] CONTROLLERS = ControllerEnvironment.getDefaultEnvironment().rescanControllers();
+            KeyBind.KEYBINDS.clear();
+            while (stream.available()>0) {
+                Action a = Action.valueOf(readString(stream));
+                byte port = stream.readByte();
+                do {
+                    if (port==(byte)-1) {
+                        int keycode = stream.readInt();
+                        KeyBind kb = new KeyBind(keycode);
+                        appendToKeybind(a,kb);
+                    } else {
+                        java.lang.String controllerName = readString(stream);
+                        Controller controller=null;
+                        for (int i = 0; i < CONTROLLERS.length; i++) {
+                            if (CONTROLLERS[i].getType() == Controller.Type.KEYBOARD
+                                    || CONTROLLERS[i].getType() == Controller.Type.MOUSE) {
+                                continue;
+                            } else
+                            if (CONTROLLERS[i].getName().equals(controllerName)) {
+                                controller=CONTROLLERS[i];
+                            }
+                        }
+                        if (controller==null) {
+                            //Discard these bits of data as we didn't find a controller.
+                            readString(stream);
+                            stream.readFloat();
+                            continue;
+                        } else {
+                            java.lang.String componentName = readString(stream);
+                            Component c=null;
+                            for (Component cc : controller.getComponents()) {
+                                if (cc.getName().equals(componentName)) {
+                                    c=cc;
+                                    break;
+                                }
+                            }
+                            float val = stream.readFloat();
+                            if (c!=null) {
+                                KeyBind kb = new KeyBind(port,c.getIdentifier(),val);
+                                appendToKeybind(a,kb);
+                            } else {
+                                System.out.println("Could not load component "+componentName+" for keybind "+a);
+                            }
+                        }
+                    }
+                    port = stream.readByte();
+                } while (port!='\0');
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            RabiClone.setupDefaultControls();
+        }
+    }
+
+    private static void appendToKeybind(Action a,KeyBind kb) {
+        List<KeyBind> binds = KeyBind.KEYBINDS.getOrDefault(a,new ArrayList<KeyBind>());
+        binds.add(kb);
+        KeyBind.KEYBINDS.put(a,binds);
+    }
+
+    private static java.lang.String readString(DataInputStream stream) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        while (true) {
+            Character c = stream.readChar();
+            if (c=='\0') {
+                return sb.toString();
+            } else {
+                sb.append(c);
+            }
+        }
+    }
+
+    public static void SaveControls() {
+        try {
+            DataOutputStream stream = new DataOutputStream(new FileOutputStream(GAME_CONTROLS_FILE));
+            for (Action a  : Action.values()) {
+                writeString(a.name(),stream);
+                for (KeyBind k : KeyBind.KEYBINDS.get(a)) {
+                    stream.writeByte(k.port);
+                    if (k.port==(byte)-1) {
+                        stream.writeInt(((Key)k.id).getKeyCode());
+                    } else {
+                        writeString(RabiClone.CONTROLLERS[k.port].getName(),stream);
+                        writeString(RabiClone.CONTROLLERS[k.port].getComponent(k.id).getName(),stream);
+                        stream.writeFloat(k.getVal());
+                    }
+                }
+                stream.writeByte('\0');
+            }
+            stream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void writeString(java.lang.String s, DataOutputStream stream) throws IOException {
+        stream.writeChars(s);
+        stream.writeChar('\0');
     }
 
     private void updateHighlightSections() {
@@ -80,7 +198,7 @@ public class ConfigureControls extends Object{
                     updateHighlightSections();
                     assigningKey=false;
                 }
-                //System.out.println(e.getComponent().getName()+" value: "+e.getValue());
+                System.out.println(e.getComponent().getName()+" value: "+e.getValue());
             }
         }
     }
@@ -152,6 +270,7 @@ public class ConfigureControls extends Object{
     public void KeyPressed(Action a) {
         switch(a) {
             case PLAY_GAME:{
+                SaveControls();
                 RabiClone.OBJ.clear();
                 RabiClone.ResetGame();
                 Map.LoadMap(RabiClone.CURRENT_MAP);
@@ -159,6 +278,7 @@ public class ConfigureControls extends Object{
                 RabiClone.StartGame();
             }break;
             case LEVEL_EDITOR:{
+                SaveControls();
                 RabiClone.OBJ.clear();
                 RabiClone.ResetGame();
                 Map.LoadMap(RabiClone.CURRENT_MAP);
@@ -184,4 +304,10 @@ public class ConfigureControls extends Object{
         return Transform.NONE;
     }
     
+}
+
+enum ControlType{
+    BUTTON,
+    POV,
+    AXIS
 }

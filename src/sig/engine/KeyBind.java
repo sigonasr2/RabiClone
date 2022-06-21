@@ -15,13 +15,9 @@ public class KeyBind {
     public Identifier id;
     float val;
 
-    public KeyBind(byte port, Identifier id) {
-        this.port=port;
-        this.id=id;
-    }
-
     public KeyBind(int keycode) {
-        this((byte)-1,new Key(keycode));
+        this.port=(byte)-1;
+        this.id=new Key(keycode);
     }
 
     public KeyBind(byte port, Identifier id, float val) {
@@ -30,12 +26,16 @@ public class KeyBind {
         this.val=val;
     }
 
+    public float getVal() {
+        return val;
+    }
+
     public boolean isKeyHeld() {
         if (id instanceof Key) {
             return ((Key)id).isKeyHeld();
         } else if (RabiClone.CONTROLLERS.length>port && id instanceof Identifier.Button) {
             return RabiClone.CONTROLLERS[port].getComponent(id).getPollData()>0.0f;
-        } else
+        } else /* POVs are a special case, so even though they are axes, we want to check them separately. */
         if (RabiClone.CONTROLLERS.length>port && RabiClone.CONTROLLERS[port].getComponent(id).getIdentifier()==Identifier.Axis.POV) {
             if (val==POV.DOWN) {
                 return RabiClone.CONTROLLERS[port].getComponent(id).getPollData()==POV.DOWN||
@@ -65,8 +65,7 @@ public class KeyBind {
             return Math.abs(RabiClone.CONTROLLERS[port].getComponent(id).getPollData())>=RabiClone.CONTROLLERS[port].getComponent(id).getDeadZone()&&Math.signum(RabiClone.CONTROLLERS[port].getComponent(id).getPollData())==Math.signum(val);
         }
         else {
-            //System.out.println("Could not find proper recognition for component "+id.getName());
-            return false;
+            throw new UnsupportedOperationException("Could not find proper recognition for component "+id.getName());
         }
     }
 
