@@ -235,7 +235,7 @@ public class RabiClone {
 				continue;
 			}
 			if (!CONTROLLERS[i].poll()) {
-				Controller[] newArr = new Controller[CONTROLLERS.length - 2];
+				Controller[] newArr = new Controller[CONTROLLERS.length - 1];
 				for (int j = 0; j < CONTROLLERS.length; j++) {
 					if (j != i) {
 						newArr[(j > i ? j - 1 : j)] = CONTROLLERS[i];
