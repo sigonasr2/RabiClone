@@ -12,6 +12,7 @@ public abstract class PhysicsObject extends AnimatedObject implements PhysicsObj
     final public static double NORMAL_FRICTION = 6400;
     final public static double NORMAL_JUMP_VELOCITY = -300;
     final public static double WALKING_SPEED_LIMIT = 164;
+    final public static double FALLING_SPEED_LIMIT = 500;
 
     public State state = State.IDLE;
     public double x_velocity;
@@ -128,8 +129,11 @@ public abstract class PhysicsObject extends AnimatedObject implements PhysicsObj
         if (!groundCollision){
             this.setY(this.getY()+displacement_y);
             y_acceleration = gravity;
-            if(y_velocity>0 && state!=State.SLIDE){
+            if(y_velocity>0 && state!=State.SLIDE&&state!=State.BELLYSLIDE){
                 state = State.FALLING;
+            }
+            if (y_velocity>FALLING_SPEED_LIMIT&&state!=State.BELLYSLIDE) {
+                y_velocity=FALLING_SPEED_LIMIT;
             }
             if (!sideCollision) {
                 handleKeyboardMovement(updateMult, right-left, horizontal_air_friction, horizontal_air_drag);

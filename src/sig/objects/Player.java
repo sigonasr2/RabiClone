@@ -20,10 +20,11 @@ public class Player extends PhysicsObject{
     final static long jump_fall_AnimationWaitTime = TimeUtils.millisToNanos(200);
     final static long slide_AnimationWaitTime = TimeUtils.millisToNanos(100);
     final static long slide_duration = TimeUtils.millisToNanos(700);
+    final static long bellySlideDuration = TimeUtils.millisToNanos(1000);
     final static long weaponSwingAnimationTime = TimeUtils.millisToNanos(333);
     final static long weaponComboWaitTime = TimeUtils.millisToNanos(60);
-    final static double finalComboJumpBackSpeedX = -150;
-    final static double finalComboJumpBackSpeedY = -96;
+    final static double finalComboJumpBackSpeedX = -185;
+    final static double finalComboJumpBackSpeedY = -110;
 
     long weaponSwingTime = 0;
 
@@ -40,6 +41,7 @@ public class Player extends PhysicsObject{
     long jump_slide_fall_StartAnimationTimer = -1;
     long slide_time = -1;
     long jumpHoldTime = TimeUtils.millisToNanos(150);
+    long bellySlideTime = -1;
 
     final static long slideBufferTime = TimeUtils.millisToNanos(200);
     long slidePressed = -1;
@@ -100,7 +102,7 @@ public class Player extends PhysicsObject{
                 }
                 break;
             case IDLE:
-                if (RabiClone.TIME - slidePressed <= slideBufferTime) {
+                if (RabiClone.TIME - slidePressed <= slideBufferTime && state!=State.BELLYSLIDE) {
                     performSlide();
                     break;
                 }
@@ -121,9 +123,6 @@ public class Player extends PhysicsObject{
                 }
                 break;
             case JUMP:
-                if (prvState == State.SLIDE) {
-                    // jump_velocity=-500;
-                }
                 if (jump_slide_fall_StartAnimationTimer == -1) {
                     jump_slide_fall_StartAnimationTimer = RabiClone.TIME;
                     setAnimatedSpr(Sprite.ERINA_JUMP_RISE1);
@@ -162,6 +161,28 @@ public class Player extends PhysicsObject{
                     }
                 }
                 break;
+            case BELLYSLIDE:{
+                if (RabiClone.TIME - bellySlideTime > bellySlideDuration) {
+                    if (KeyHeld(Action.MOVE_LEFT)) {
+                        facing_direction = LEFT;
+                    }
+                    if (KeyHeld(Action.MOVE_RIGHT)) {
+                        facing_direction = RIGHT;
+                    }
+                    state = State.IDLE;
+                }
+                if (KeyHeld(Action.MOVE_LEFT) && !KeyHeld(Action.MOVE_RIGHT)) {
+                    if (facing_direction == LEFT && x_velocity > -sliding_velocity * 1.5 ||
+                            facing_direction == RIGHT && x_velocity > sliding_velocity * 0.5) {
+                        x_velocity -= sliding_acceleration * updateMult;
+                    }
+                } else if (KeyHeld(Action.MOVE_RIGHT) && !KeyHeld(Action.MOVE_LEFT)) {
+                    if (facing_direction == LEFT && x_velocity < -sliding_velocity * 0.5 ||
+                            facing_direction == RIGHT && x_velocity < sliding_velocity * 1.5) {
+                        x_velocity += sliding_acceleration * updateMult;
+                    }
+                }
+            }break;
             case STAGGER:
                 break;
             case UNCONTROLLABLE:
@@ -183,7 +204,7 @@ public class Player extends PhysicsObject{
             spacebarPressed = 0;
             spacebarReleased = true;
         }
-        if (state != State.SLIDE) {
+        if (state != State.SLIDE&&state!=State.BELLYSLIDE) {
             if ((a == Action.MOVE_LEFT) && (KeyHeld(Action.MOVE_RIGHT))) {
                 facing_direction = RIGHT;
             } else if ((a == Action.MOVE_RIGHT) && (KeyHeld(Action.MOVE_LEFT))) {
@@ -243,6 +264,11 @@ public class Player extends PhysicsObject{
             default:
                 break;
         }
+        if (a==Action.FALL&&(state==State.JUMP||state==State.FALLING)) {
+            state=State.BELLYSLIDE;
+            y_velocity=y_velocity_limit;
+            x_velocity=60*(facing_direction?1:-1);
+        } else
         if (a == Action.ATTACK&&(state==State.IDLE||state==State.FALLING||state==State.JUMP)&&(RabiClone.TIME-weaponSwingTime>=weaponSwingAnimationTime)) {
             RabiClone.OBJ.add(new KnifeSwing(Sprite.KNIFE_SWING,40,RabiClone.p,this));
             state=State.ATTACK;
@@ -259,7 +285,7 @@ public class Player extends PhysicsObject{
                 // System.out.println("Jump");
             }
         }
-        if (state != State.SLIDE) {
+        if (state != State.SLIDE&&state!=State.BELLYSLIDE) {
             switch (a) {
                 case MOVE_LEFT:
                     facing_direction = LEFT;

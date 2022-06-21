@@ -3,6 +3,7 @@ package sig.objects.actor;
 public enum State{
     IDLE,
     SLIDE,
+    BELLYSLIDE,
     JUMP,
     FALLING,
     ATTACK,
