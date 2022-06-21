@@ -18,9 +18,17 @@ import sig.map.Background;
 import sig.map.DataTile;
 import sig.map.Map;
 import sig.map.Tile;
+import sig.objects.actor.PhysicsObject;
 import sig.objects.actor.RenderedObject;
+import sig.objects.actor.State;
+import sig.utils.TimeUtils;
 
 public class LevelRenderer extends Object{
+
+    final static long staggerJitterWaitTime=TimeUtils.millisToNanos(200);
+
+    long staggerTimer=0;
+    int staggerOffsetX=2;
 
     public LevelRenderer(Panel panel) {
         super(panel);
@@ -43,6 +51,9 @@ public class LevelRenderer extends Object{
                     }
                 }
             }
+        }
+        if (RabiClone.TIME-staggerTimer>staggerJitterWaitTime) {
+            staggerOffsetX*=-1;
         }
     }
 
@@ -138,7 +149,12 @@ public class LevelRenderer extends Object{
     }
 
     protected void Draw_Animated_Object(AnimatedObject object, Transform transform){
-        super.Draw_Animated_Sprite(object.getX()-this.getX()-object.getAnimatedSpr().getWidth()/2, Math.round(object.getY()-this.getY()-object.getAnimatedSpr().getHeight()/2), object.getAnimatedSpr(), object.getCurrentFrame(), transform);
+        if (object instanceof PhysicsObject) {
+            PhysicsObject po = (PhysicsObject)object;
+            super.Draw_Animated_Sprite(object.getX()-this.getX()-object.getAnimatedSpr().getWidth()/2+(po.state==State.STAGGER?staggerOffsetX:0), Math.round(object.getY()-this.getY()-object.getAnimatedSpr().getHeight()/2), object.getAnimatedSpr(), object.getCurrentFrame(), transform);
+        } else {
+            super.Draw_Animated_Sprite(object.getX()-this.getX()-object.getAnimatedSpr().getWidth()/2, Math.round(object.getY()-this.getY()-object.getAnimatedSpr().getHeight()/2), object.getAnimatedSpr(), object.getCurrentFrame(), transform);
+        }
     }
 
     private void DrawTile(double x, double y, Tile tile) {
