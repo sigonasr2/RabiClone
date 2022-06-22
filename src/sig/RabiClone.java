@@ -2,6 +2,7 @@ package sig;
 
 import javax.swing.JFrame;
 
+import net.java.games.input.AbstractController;
 import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
 import net.java.games.input.ControllerEvent;
@@ -30,7 +31,6 @@ import sig.engine.KeyBind;
 import sig.engine.PaletteColor;
 
 import java.awt.Toolkit;
-import java.awt.event.KeyEvent;
 import java.awt.RenderingHints;
 
 public class RabiClone implements ControllerListener{
@@ -67,7 +67,7 @@ public class RabiClone implements ControllerListener{
 	public static Player player;
 
 	public static Maps CURRENT_MAP;
-	public static Controller[] CONTROLLERS = new Controller[] {};
+	public static AbstractController[] CONTROLLERS = new AbstractController[] {};
 
 	public static long lastControllerScan = System.currentTimeMillis();
 
@@ -77,26 +77,11 @@ public class RabiClone implements ControllerListener{
 	public static long TIME = 0;
 	public static long scaleTime;
 
-	public static boolean reloadControllerList = false;
-
     public static HashMap<Action,List<KeyBind>> DEFAULT_KEYBINDS = new HashMap<>();
 
 	public static RenderingHints RENDERHINTS = new RenderingHints(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_OFF);
 
-	public static void main(String[] args) {
-		CONTROLLERS = ControllerEnvironment.getDefaultEnvironment().getControllers();
-
-		RabiClone r  = new RabiClone();
-
-		ControllerEnvironment.getDefaultEnvironment().addControllerListener(r);
-
-		while (true) {
-			if (System.currentTimeMillis() - lastControllerScan > 5000) {
-				lastControllerScan=System.currentTimeMillis();
-				ControllerEnvironment.getDefaultEnvironment().rescanControllers();
-			}
-		}
-		/*System.setProperty("sun.java2d.transaccel", "True");
+	public static void main(String[] args) {System.setProperty("sun.java2d.transaccel", "True");
 		System.setProperty("sun.java2d.d3d", "True");
 		System.setProperty("sun.java2d.ddforcevram", "True");
 		System.setProperty("sun.java2d.xrender", "True");
@@ -151,14 +136,9 @@ public class RabiClone implements ControllerListener{
 
 				KeyBind.poll();
 
-				if ((Key.isKeyHeld(KeyEvent.VK_F5)||reloadControllerList) && System.currentTimeMillis() - lastControllerScan > 5000) {
-					CONTROLLERS = ControllerEnvironment.getDefaultEnvironment().rescanControllers();
-					System.out.println(Arrays.toString(CONTROLLERS));
+				if (System.currentTimeMillis() - lastControllerScan > 5000) {
+					ControllerEnvironment.getDefaultEnvironment().rescanControllers();
 					lastControllerScan = System.currentTimeMillis();
-					if (reloadControllerList) {
-						ConfigureControls.LoadControls();
-					}
-					reloadControllerList=false;
 				}
 
 				FRIENDLY_OBJ.clear();
@@ -192,7 +172,7 @@ public class RabiClone implements ControllerListener{
 				// System.out.println(TIME);
 			}
 			gameUpdateLoopStabilizer(dt); //This is hackish. Removing this slows down the game by about 30%. The timer runs slower. ??? 
-		}*/
+		}
 	}
 
 	public static void setupDefaultControls() {
@@ -281,7 +261,7 @@ public class RabiClone implements ControllerListener{
 						ConfigureControls.updateHighlightSections();
 					}
 				}
-				Controller[] newArr = new Controller[CONTROLLERS.length - 1];
+				AbstractController[] newArr = new AbstractController[CONTROLLERS.length - 1];
 				for (int j = 0; j < CONTROLLERS.length; j++) {
 					if (j != i) {
 						newArr[(j > i ? j - 1 : j)] = CONTROLLERS[i];
