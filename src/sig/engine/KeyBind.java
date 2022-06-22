@@ -65,7 +65,8 @@ public class KeyBind {
             return Math.abs(RabiClone.CONTROLLERS[port].getComponent(id).getPollData())>=RabiClone.CONTROLLERS[port].getComponent(id).getDeadZone()&&Math.signum(RabiClone.CONTROLLERS[port].getComponent(id).getPollData())==Math.signum(val);
         }
         else {
-            throw new UnsupportedOperationException("Could not find proper recognition for component "+id.getName());
+            return false;
+            //throw new UnsupportedOperationException("Could not find proper recognition for component "+id.getName());
         }
     }
 
