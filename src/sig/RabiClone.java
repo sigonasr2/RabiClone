@@ -4,6 +4,8 @@ import javax.swing.JFrame;
 
 import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
+import net.java.games.input.ControllerEvent;
+import net.java.games.input.ControllerListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,7 +33,7 @@ import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.RenderingHints;
 
-public class RabiClone {
+public class RabiClone implements ControllerListener{
 	public static final String PROGRAM_NAME = "RabiClone";
 	public static final int UPDATE_LOOP_FRAMERATE = 244;
 	public static final long UPDATE_LOOP_NANOTIME = (long)((1d/UPDATE_LOOP_FRAMERATE)*1000000000l);
@@ -82,7 +84,19 @@ public class RabiClone {
 	public static RenderingHints RENDERHINTS = new RenderingHints(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_OFF);
 
 	public static void main(String[] args) {
-		System.setProperty("sun.java2d.transaccel", "True");
+		CONTROLLERS = ControllerEnvironment.getDefaultEnvironment().getControllers();
+
+		RabiClone r  = new RabiClone();
+
+		ControllerEnvironment.getDefaultEnvironment().addControllerListener(r);
+
+		while (true) {
+			if (System.currentTimeMillis() - lastControllerScan > 5000) {
+				lastControllerScan=System.currentTimeMillis();
+				ControllerEnvironment.getDefaultEnvironment().rescanControllers();
+			}
+		}
+		/*System.setProperty("sun.java2d.transaccel", "True");
 		System.setProperty("sun.java2d.d3d", "True");
 		System.setProperty("sun.java2d.ddforcevram", "True");
 		System.setProperty("sun.java2d.xrender", "True");
@@ -177,7 +191,7 @@ public class RabiClone {
 				// System.out.println(TIME);
 			}
 			gameUpdateLoopStabilizer(dt); //This is hackish. Removing this slows down the game by about 30%. The timer runs slower. ??? 
-		}
+		}*/
 	}
 
 	public static void setupDefaultControls() {
@@ -283,5 +297,15 @@ public class RabiClone {
 			SIZE_MULTIPLIER++;
 		}
 		f.setSize(f.getWidth() * SIZE_MULTIPLIER, (int) ((f.getWidth() * SIZE_MULTIPLIER) / 1.77777777778d));
+	}
+
+	@Override
+	public void controllerRemoved(ControllerEvent ev) {
+		System.out.println("Removed: "+ev.getController());
+	}
+
+	@Override
+	public void controllerAdded(ControllerEvent ev) {
+		System.out.println("Added: "+ev.getController());
 	}
 }
