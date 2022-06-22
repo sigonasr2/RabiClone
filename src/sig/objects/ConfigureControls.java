@@ -77,7 +77,6 @@ public class ConfigureControls extends Object{
                             //Discard these bits of data as we didn't find a controller.
                             readString(stream);
                             stream.readFloat();
-                            continue;
                         } else {
                             java.lang.String componentName = readString(stream);
                             Component c=null;
@@ -97,7 +96,7 @@ public class ConfigureControls extends Object{
                         }
                     }
                     port = stream.readByte();
-                } while (port!='\0');
+                } while (port!=(byte)-2);
             }
             updateHighlightSections();
         } catch (IOException e) {
@@ -130,16 +129,18 @@ public class ConfigureControls extends Object{
             for (Action a  : Action.values()) {
                 writeString(a.name(),stream);
                 for (KeyBind k : KeyBind.KEYBINDS.get(a)) {
-                    stream.writeByte(k.port);
-                    if (k.port==(byte)-1) {
-                        stream.writeInt(((Key)k.id).getKeyCode());
-                    } else {
-                        writeString(RabiClone.CONTROLLERS[k.port].getName(),stream);
-                        writeString(RabiClone.CONTROLLERS[k.port].getComponent(k.id).getName(),stream);
-                        stream.writeFloat(k.getVal());
+                    if (k.port==-1||k.port<RabiClone.CONTROLLERS.length) {
+                        stream.writeByte(k.port);
+                        if (k.port==(byte)-1) {
+                            stream.writeInt(((Key)k.id).getKeyCode());
+                        } else {
+                            writeString(RabiClone.CONTROLLERS[k.port].getName(),stream);
+                            writeString(RabiClone.CONTROLLERS[k.port].getComponent(k.id).getName(),stream);
+                            stream.writeFloat(k.getVal());
+                        }
                     }
                 }
-                stream.writeByte('\0');
+                stream.writeByte((byte)-2);
             }
             stream.close();
         } catch (IOException e) {
@@ -152,7 +153,7 @@ public class ConfigureControls extends Object{
         stream.writeChar('\0');
     }
 
-    private static void updateHighlightSections() {
+    public static void updateHighlightSections() {
         for (int i=0;i<Action.values().length;i++) {
             Action a = Action.values()[i];
             actionHighlightSections.add(new ArrayList<Integer>());

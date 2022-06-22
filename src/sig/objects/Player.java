@@ -1,11 +1,15 @@
 package sig.objects;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import sig.RabiClone;
 import sig.engine.Action;
 import sig.engine.Panel;
 import sig.engine.Rectangle;
 import sig.engine.Sprite;
 import sig.engine.Transform;
+import sig.engine.objects.AnimatedObject;
 import sig.map.Map;
 import sig.map.Tile;
 import sig.map.View;
@@ -20,7 +24,13 @@ public class Player extends PhysicsObject{
     final static long jump_fall_AnimationWaitTime = TimeUtils.millisToNanos(200);
     final static long slide_AnimationWaitTime = TimeUtils.millisToNanos(100);
     final static long slide_duration = TimeUtils.millisToNanos(700);
+    final static long bellySlideDuration = TimeUtils.millisToNanos(400);
     final static long weaponSwingAnimationTime = TimeUtils.millisToNanos(333);
+    final static long weaponComboWaitTime = TimeUtils.millisToNanos(60);
+    final static double finalComboJumpBackSpeedX = -185;
+    final static double finalComboJumpBackSpeedY = -110;
+
+    List<PhysicsObject> collisionBatch = new ArrayList<PhysicsObject>();
 
     long weaponSwingTime = 0;
 
@@ -32,11 +42,13 @@ public class Player extends PhysicsObject{
 
     boolean spacebarReleased = true;
     boolean facing_direction = RIGHT;
+    boolean landedBellySlide=false;
 
     long spacebarPressed = RabiClone.TIME;
     long jump_slide_fall_StartAnimationTimer = -1;
     long slide_time = -1;
     long jumpHoldTime = TimeUtils.millisToNanos(150);
+    long bellySlideTime = -1;
 
     final static long slideBufferTime = TimeUtils.millisToNanos(200);
     long slidePressed = -1;
@@ -68,9 +80,20 @@ public class Player extends PhysicsObject{
     public void update(double updateMult) {
         super.update(updateMult);
         handleCameraRoomMovement();
+        handleCollisionBatch();
 
         switch (state) {
             case ATTACK:
+                if (RabiClone.TIME - weaponSwingTime > weaponSwingAnimationTime) {
+                    state=State.IDLE;
+                }
+                break;
+            case ATTACK2:
+                if (RabiClone.TIME - weaponSwingTime > weaponSwingAnimationTime) {
+                    state=State.IDLE;
+                }
+                break;
+            case ATTACK3:
                 if (RabiClone.TIME - weaponSwingTime > weaponSwingAnimationTime) {
                     state=State.IDLE;
                 }
@@ -87,7 +110,7 @@ public class Player extends PhysicsObject{
                 }
                 break;
             case IDLE:
-                if (RabiClone.TIME - slidePressed <= slideBufferTime) {
+                if (RabiClone.TIME - slidePressed <= slideBufferTime && state!=State.BELLYSLIDE) {
                     performSlide();
                     break;
                 }
@@ -108,9 +131,6 @@ public class Player extends PhysicsObject{
                 }
                 break;
             case JUMP:
-                if (prvState == State.SLIDE) {
-                    // jump_velocity=-500;
-                }
                 if (jump_slide_fall_StartAnimationTimer == -1) {
                     jump_slide_fall_StartAnimationTimer = RabiClone.TIME;
                     setAnimatedSpr(Sprite.ERINA_JUMP_RISE1);
@@ -149,6 +169,36 @@ public class Player extends PhysicsObject{
                     }
                 }
                 break;
+            case BELLYSLIDE:{
+                horizontal_friction = 0;
+                if (y_velocity>0) {
+                   bellySlideTime=RabiClone.TIME; 
+                }
+                if (groundCollision&&!landedBellySlide){
+                    landedBellySlide=true;
+                    x_velocity = sliding_velocity*(facing_direction?1:-1);
+                }
+                if (RabiClone.TIME - bellySlideTime > bellySlideDuration) {
+                    if (KeyHeld(Action.MOVE_LEFT)) {
+                        facing_direction = LEFT;
+                    }
+                    if (KeyHeld(Action.MOVE_RIGHT)) {
+                        facing_direction = RIGHT;
+                    }
+                    state = State.IDLE;
+                }
+                if (KeyHeld(Action.MOVE_LEFT) && !KeyHeld(Action.MOVE_RIGHT)) {
+                    if (facing_direction == LEFT && x_velocity > -sliding_velocity * 1.5 ||
+                            facing_direction == RIGHT && x_velocity > sliding_velocity * 0.5) {
+                        x_velocity -= sliding_acceleration * updateMult;
+                    }
+                } else if (KeyHeld(Action.MOVE_RIGHT) && !KeyHeld(Action.MOVE_LEFT)) {
+                    if (facing_direction == LEFT && x_velocity < -sliding_velocity * 0.5 ||
+                            facing_direction == RIGHT && x_velocity < sliding_velocity * 1.5) {
+                        x_velocity += sliding_acceleration * updateMult;
+                    }
+                }
+            }break;
             case STAGGER:
                 break;
             case UNCONTROLLABLE:
@@ -157,10 +207,35 @@ public class Player extends PhysicsObject{
                 break;
         }
         prvState = state;
-        if (KeyHeld(Action.JUMP) && RabiClone.TIME - spacebarPressed < jumpHoldTime) {
+        if (KeyHeld(Action.JUMP) && RabiClone.TIME - spacebarPressed < jumpHoldTime
+        && state!=State.ATTACK2&&state!=State.ATTACK3&&state!=State.BELLYSLIDE) {
             y_velocity = jump_velocity;
         }
         // System.out.println(state);
+    }
+
+    private void handleCollisionBatch() {
+        for (int p=0;p<collisionBatch.size();p++) {
+            PhysicsObject pobj = collisionBatch.get(p);
+            if(facing_direction){
+                if (state!=State.UNCONTROLLABLE) {
+                    setUncontrollable(0.2);
+                }
+                pobj.setStagger(0.3);
+                pobj.setInvulnerability(1);
+                pobj.x_velocity = -300;
+                pobj.y_velocity = -120;
+            }else{
+                if (state!=State.UNCONTROLLABLE) {
+                    setUncontrollable(0.2);
+                }
+                pobj.setStagger(0.3);
+                pobj.setInvulnerability(1);
+                pobj.x_velocity = 300;
+                pobj.y_velocity = -120;
+            }
+        }
+        collisionBatch.clear();
     }
 
     @Override
@@ -169,7 +244,7 @@ public class Player extends PhysicsObject{
             spacebarPressed = 0;
             spacebarReleased = true;
         }
-        if (state != State.SLIDE) {
+        if (state != State.SLIDE&&state!=State.BELLYSLIDE) {
             if ((a == Action.MOVE_LEFT) && (KeyHeld(Action.MOVE_RIGHT))) {
                 facing_direction = RIGHT;
             } else if ((a == Action.MOVE_RIGHT) && (KeyHeld(Action.MOVE_LEFT))) {
@@ -183,6 +258,24 @@ public class Player extends PhysicsObject{
     public void KeyPressed(Action a) {
         switch (state) {
             case ATTACK:
+                if (a==Action.ATTACK&&RabiClone.TIME-weaponSwingTime>weaponComboWaitTime) {
+                    state=State.ATTACK2;
+                    weaponSwingTime=RabiClone.TIME;
+                }
+                break;
+            case ATTACK2:
+                if (a==Action.ATTACK&&RabiClone.TIME-weaponSwingTime>weaponComboWaitTime) {
+                    state=State.ATTACK3;
+                    weaponSwingTime=RabiClone.TIME;
+                }
+                break;
+            case ATTACK3:
+                if (a==Action.ATTACK&&RabiClone.TIME-weaponSwingTime>weaponComboWaitTime) {
+                    state=State.ATTACK4;
+                    weaponSwingTime=RabiClone.TIME;
+                    y_velocity = finalComboJumpBackSpeedY;
+                    x_velocity = finalComboJumpBackSpeedX*(facing_direction?1:-1);
+                }
                 break;
             case IDLE:
                 if (a == Action.SLIDE || a == Action.FALL) {
@@ -211,13 +304,22 @@ public class Player extends PhysicsObject{
             default:
                 break;
         }
+        if (a==Action.FALL&&(state==State.JUMP||state==State.FALLING)) {
+            state=State.BELLYSLIDE;
+            y_velocity=y_velocity_limit;
+            x_velocity=60*(facing_direction?1:-1);
+            bellySlideTime=RabiClone.TIME;
+            landedBellySlide=false;
+            spacebarPressed = 0;
+        } else
         if (a == Action.ATTACK&&(state==State.IDLE||state==State.FALLING||state==State.JUMP)&&(RabiClone.TIME-weaponSwingTime>=weaponSwingAnimationTime)) {
             RabiClone.OBJ.add(new KnifeSwing(Sprite.KNIFE_SWING,40,RabiClone.p,this));
             state=State.ATTACK;
             weaponSwingTime=RabiClone.TIME;
         }
         if (groundCollision) {
-            if (spacebarReleased && (a == Action.JUMP) && jumpCount > 0) {
+            if (spacebarReleased && (a == Action.JUMP) && jumpCount > 0
+                &&state!=State.ATTACK2&&state!=State.ATTACK3) {
                 state = State.JUMP;
                 jumpCount--;
                 y_velocity = jump_velocity;
@@ -226,7 +328,7 @@ public class Player extends PhysicsObject{
                 // System.out.println("Jump");
             }
         }
-        if (state != State.SLIDE) {
+        if (state != State.SLIDE&&state!=State.BELLYSLIDE) {
             switch (a) {
                 case MOVE_LEFT:
                     facing_direction = LEFT;
@@ -338,6 +440,18 @@ public class Player extends PhysicsObject{
     }
 
     @Override
+    public void collisionEvent(AnimatedObject obj) {
+        if (state==State.BELLYSLIDE) {
+            if(obj instanceof PhysicsObject){
+                PhysicsObject pobj = (PhysicsObject)obj;
+                if(!pobj.isInvulnerable()){
+                    collisionBatch.add(pobj);
+                }
+            }
+        }
+    }
+
+    @Override
     public void draw(byte[] p) {
     }
 
@@ -356,12 +470,12 @@ public class Player extends PhysicsObject{
 
     @Override
     public boolean rightKeyHeld() {
-        return KeyHeld(Action.MOVE_RIGHT);
+        return state!=State.ATTACK2&&state!=State.ATTACK3&&KeyHeld(Action.MOVE_RIGHT);
     }
 
     @Override
     public boolean leftKeyHeld() {
-        return KeyHeld(Action.MOVE_LEFT);
+        return state!=State.ATTACK2&&state!=State.ATTACK3&&KeyHeld(Action.MOVE_LEFT);
     }
 
     public double getYVelocity() {

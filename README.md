@@ -37,6 +37,8 @@ Underwater / Water Dashing (Propelling motion)
 Side Roll -> Slide
 Wall Jumping
 
+Controller Deadzones..
+
 Movement Systems
 Collectibles
 Combat Systems

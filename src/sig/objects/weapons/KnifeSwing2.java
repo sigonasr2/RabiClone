@@ -9,11 +9,11 @@ import sig.objects.actor.State;
 import sig.engine.objects.AnimatedObject;
 import sig.engine.objects.Object;
 
-public class KnifeSwing extends AttachableObject{
+public class KnifeSwing2 extends AttachableObject{
 
     final byte frameCount = 5; //Number of frames before animation ends.
 
-    public KnifeSwing(AnimatedSprite spr, double animationSpd, Panel panel, Object attachedObj) {
+    public KnifeSwing2(AnimatedSprite spr, double animationSpd, Panel panel, Object attachedObj) {
         super(spr, animationSpd, panel, attachedObj);
     }
 

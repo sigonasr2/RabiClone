@@ -12,10 +12,14 @@ public abstract class PhysicsObject extends AnimatedObject implements PhysicsObj
     final public static double NORMAL_FRICTION = 6400;
     final public static double NORMAL_JUMP_VELOCITY = -300;
     final public static double WALKING_SPEED_LIMIT = 164;
+    final public static double FALLING_SPEED_LIMIT = 500;
 
     public State state = State.IDLE;
     public double x_velocity;
-    public double staggerDuration = 0;
+    protected double staggerDuration = 0;
+    protected State resumeState=null;
+    protected double uncontrollableDuration = 0;
+    protected double invulnerabilityDuration = 0;
     public double y_velocity;
     protected double gravity = GRAVITY;
     protected double x_acceleration,y_acceleration;
@@ -42,14 +46,26 @@ public abstract class PhysicsObject extends AnimatedObject implements PhysicsObj
             staggerDuration-=updateMult;
         }else
         if(state==State.STAGGER && staggerDuration<=0){
-            state=State.IDLE;
+            state=resumeState;
+        }
+        if(state==State.UNCONTROLLABLE && uncontrollableDuration>0){
+            uncontrollableDuration-=updateMult;
+        }else
+        if(state==State.UNCONTROLLABLE && uncontrollableDuration<=0){
+            state=resumeState;
+        }
+        if (invulnerabilityDuration>0) {
+            invulnerabilityDuration-=updateMult;
         }
     }
 
     protected void handleMovementPhysics(double updateMult) {
+        if (state==State.STAGGER||state==State.UNCONTROLLABLE) {
+            return;
+        }
         int right = rightKeyHeld()?1:0;
         int left = leftKeyHeld()?1:0;
-        if(state==State.SLIDE){
+        if(state==State.SLIDE||state==State.BELLYSLIDE){
             right=0;
             left=0;
         }
@@ -93,7 +109,7 @@ public abstract class PhysicsObject extends AnimatedObject implements PhysicsObj
                         y_acceleration = 0;
                         y_velocity = 0;
                         groundCollision = true;
-                        if (state != State.SLIDE) {
+                        if (state != State.SLIDE&&state!=State.BELLYSLIDE) {
                             state = State.IDLE;
                         }
                         break;
@@ -125,7 +141,7 @@ public abstract class PhysicsObject extends AnimatedObject implements PhysicsObj
         if (!groundCollision){
             this.setY(this.getY()+displacement_y);
             y_acceleration = gravity;
-            if(y_velocity>0 && state!=State.SLIDE){
+            if(y_velocity>0 && state!=State.SLIDE&&state!=State.BELLYSLIDE){
                 state = State.FALLING;
             }
             if (!sideCollision) {
@@ -196,6 +212,46 @@ public abstract class PhysicsObject extends AnimatedObject implements PhysicsObj
             }
         }
         return sideCollision;
+    }
+
+    /**
+     * How long to set invincibility for this object.
+     * @param duration Amount of time in seconds.
+     */
+    public void setInvulnerability(double duration) {
+        this.invulnerabilityDuration = duration;
+    }
+
+    public boolean isInvulnerable() {
+        return this.invulnerabilityDuration>0;
+    }
+
+    /**
+     * Sets how long this object will remain in the stagger state.
+     * Automatically resets the state to the previous state the object
+     * was in when the stagger state completes.
+     * @param duration Amount of time in seconds.
+     * */
+    public void setStagger(double duration) {
+        staggerDuration=duration;
+        if (state!=State.STAGGER) {
+            resumeState=state;
+        }
+        state=State.STAGGER;
+    }
+
+    /**
+     * Sets how long this object will remain in the uncontrollable state.
+     * Automatically resets the state to the previous state the object
+     * was in when the uncontrollable state completes.
+     * @param duration Amount of time in seconds.
+     * */
+    public void setUncontrollable(double duration) {
+        uncontrollableDuration=duration;
+        if (state!=State.UNCONTROLLABLE) {
+            resumeState=state;
+        }
+        state=State.UNCONTROLLABLE;
     }
 
     protected boolean checkCollision(double x,double y) {

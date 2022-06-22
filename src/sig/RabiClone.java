@@ -140,6 +140,7 @@ public class RabiClone implements ControllerListener{
 		long dt = 0;
 
 		CONTROLLERS = ControllerEnvironment.getDefaultEnvironment().getControllers();
+		ConfigureControls.LoadControls();
 		
 		while (true) {
 			dt += System.nanoTime() - lastGameTime;
@@ -268,6 +269,18 @@ public class RabiClone implements ControllerListener{
 				continue;
 			}
 			if (!CONTROLLERS[i].poll()) {
+				if (control_settings_menu!=null) {
+					for (Action a : Action.values()) {
+						List<KeyBind> binds = KeyBind.KEYBINDS.get(a);
+						for (int j=0;j<binds.size();j++) {
+							if (binds.get(j).port==i) {
+								binds.remove(j--);
+							}
+						}
+						KeyBind.KEYBINDS.put(a,binds);
+						ConfigureControls.updateHighlightSections();
+					}
+				}
 				Controller[] newArr = new Controller[CONTROLLERS.length - 1];
 				for (int j = 0; j < CONTROLLERS.length; j++) {
 					if (j != i) {
