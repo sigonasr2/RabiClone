@@ -56,7 +56,6 @@ public class ConfigureControls extends Object{
             while (stream.available()>0) {
                 Action a = Action.valueOf(readString(stream));
                 byte port = stream.readByte();
-                System.out.println("PI:"+port);
                 do {
                     if (port==(byte)-1) {
                         int keycode = stream.readInt();
@@ -64,7 +63,6 @@ public class ConfigureControls extends Object{
                         appendToKeybind(a,kb);
                     } else {
                         java.lang.String controllerName = readString(stream);
-                        System.out.println("CONT:"+controllerName);
                         Controller controller=null;
                         for (int i = 0; i < RabiClone.CONTROLLERS.length; i++) {
                             if (RabiClone.CONTROLLERS[i].getType() == Controller.Type.KEYBOARD
@@ -77,12 +75,10 @@ public class ConfigureControls extends Object{
                         }
                         if (controller==null) {
                             //Discard these bits of data as we didn't find a controller.
-                            java.lang.String comName = readString(stream);
-                            System.out.println("NULL:"+comName);
+                            readString(stream);
                             stream.readFloat();
                         } else {
                             java.lang.String componentName = readString(stream);
-                            System.out.println("COM:"+componentName);
                             Component c=null;
                             for (Component cc : controller.getComponents()) {
                                 if (cc.getName().equals(componentName)) {
@@ -100,7 +96,6 @@ public class ConfigureControls extends Object{
                         }
                     }
                     port = stream.readByte();
-                    System.out.println("P:"+port);
                 } while (port!=(byte)-2);
             }
             updateHighlightSections();

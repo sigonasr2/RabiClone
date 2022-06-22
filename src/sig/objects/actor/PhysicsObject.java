@@ -19,6 +19,7 @@ public abstract class PhysicsObject extends AnimatedObject implements PhysicsObj
     protected double staggerDuration = 0;
     protected State resumeState=null;
     protected double uncontrollableDuration = 0;
+    protected double invulnerabilityDuration = 0;
     public double y_velocity;
     protected double gravity = GRAVITY;
     protected double x_acceleration,y_acceleration;
@@ -53,6 +54,9 @@ public abstract class PhysicsObject extends AnimatedObject implements PhysicsObj
         if(state==State.UNCONTROLLABLE && uncontrollableDuration<=0){
             state=resumeState;
         }
+        if (invulnerabilityDuration>0) {
+            invulnerabilityDuration-=updateMult;
+        }
     }
 
     protected void handleMovementPhysics(double updateMult) {
@@ -61,7 +65,7 @@ public abstract class PhysicsObject extends AnimatedObject implements PhysicsObj
         }
         int right = rightKeyHeld()?1:0;
         int left = leftKeyHeld()?1:0;
-        if(state==State.SLIDE){
+        if(state==State.SLIDE||state==State.BELLYSLIDE){
             right=0;
             left=0;
         }
@@ -69,12 +73,10 @@ public abstract class PhysicsObject extends AnimatedObject implements PhysicsObj
             Math.abs(x_velocity+x_acceleration*updateMult)>x_velocity_limit
                 ?Math.signum(x_velocity+x_acceleration*updateMult)*x_velocity_limit
                 :x_velocity+x_acceleration*updateMult;
-        if (state!=State.BELLYSLIDE) {
-            y_velocity =
-                Math.abs(y_velocity+y_acceleration*updateMult)>y_velocity_limit
-                    ?Math.signum(y_velocity+y_acceleration*updateMult)*y_velocity_limit
-                    :y_velocity+y_acceleration*updateMult;
-        }
+        y_velocity =
+            Math.abs(y_velocity+y_acceleration*updateMult)>y_velocity_limit
+                ?Math.signum(y_velocity+y_acceleration*updateMult)*y_velocity_limit
+                :y_velocity+y_acceleration*updateMult;
         double displacement_y = y_velocity*updateMult;
         double displacement_x = x_velocity*updateMult;
 
@@ -107,7 +109,7 @@ public abstract class PhysicsObject extends AnimatedObject implements PhysicsObj
                         y_acceleration = 0;
                         y_velocity = 0;
                         groundCollision = true;
-                        if (state != State.SLIDE) {
+                        if (state != State.SLIDE&&state!=State.BELLYSLIDE) {
                             state = State.IDLE;
                         }
                         break;
@@ -213,6 +215,18 @@ public abstract class PhysicsObject extends AnimatedObject implements PhysicsObj
     }
 
     /**
+     * How long to set invincibility for this object.
+     * @param duration Amount of time in seconds.
+     */
+    public void setInvulnerability(double duration) {
+        this.invulnerabilityDuration = duration;
+    }
+
+    public boolean isInvulnerable() {
+        return this.invulnerabilityDuration>0;
+    }
+
+    /**
      * Sets how long this object will remain in the stagger state.
      * Automatically resets the state to the previous state the object
      * was in when the stagger state completes.
@@ -220,7 +234,9 @@ public abstract class PhysicsObject extends AnimatedObject implements PhysicsObj
      * */
     public void setStagger(double duration) {
         staggerDuration=duration;
-        resumeState=state;
+        if (state!=State.STAGGER) {
+            resumeState=state;
+        }
         state=State.STAGGER;
     }
 
@@ -232,7 +248,9 @@ public abstract class PhysicsObject extends AnimatedObject implements PhysicsObj
      * */
     public void setUncontrollable(double duration) {
         uncontrollableDuration=duration;
-        resumeState=state;
+        if (state!=State.UNCONTROLLABLE) {
+            resumeState=state;
+        }
         state=State.UNCONTROLLABLE;
     }
 

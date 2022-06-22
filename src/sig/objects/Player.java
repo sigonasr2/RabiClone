@@ -1,5 +1,8 @@
 package sig.objects;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import sig.RabiClone;
 import sig.engine.Action;
 import sig.engine.Panel;
@@ -21,11 +24,13 @@ public class Player extends PhysicsObject{
     final static long jump_fall_AnimationWaitTime = TimeUtils.millisToNanos(200);
     final static long slide_AnimationWaitTime = TimeUtils.millisToNanos(100);
     final static long slide_duration = TimeUtils.millisToNanos(700);
-    final static long bellySlideDuration = TimeUtils.millisToNanos(1000);
+    final static long bellySlideDuration = TimeUtils.millisToNanos(400);
     final static long weaponSwingAnimationTime = TimeUtils.millisToNanos(333);
     final static long weaponComboWaitTime = TimeUtils.millisToNanos(60);
     final static double finalComboJumpBackSpeedX = -185;
     final static double finalComboJumpBackSpeedY = -110;
+
+    List<PhysicsObject> collisionBatch = new ArrayList<PhysicsObject>();
 
     long weaponSwingTime = 0;
 
@@ -37,6 +42,7 @@ public class Player extends PhysicsObject{
 
     boolean spacebarReleased = true;
     boolean facing_direction = RIGHT;
+    boolean landedBellySlide=false;
 
     long spacebarPressed = RabiClone.TIME;
     long jump_slide_fall_StartAnimationTimer = -1;
@@ -74,6 +80,7 @@ public class Player extends PhysicsObject{
     public void update(double updateMult) {
         super.update(updateMult);
         handleCameraRoomMovement();
+        handleCollisionBatch();
 
         switch (state) {
             case ATTACK:
@@ -163,6 +170,14 @@ public class Player extends PhysicsObject{
                 }
                 break;
             case BELLYSLIDE:{
+                horizontal_friction = 0;
+                if (y_velocity>0) {
+                   bellySlideTime=RabiClone.TIME; 
+                }
+                if (groundCollision&&!landedBellySlide){
+                    landedBellySlide=true;
+                    x_velocity = sliding_velocity*(facing_direction?1:-1);
+                }
                 if (RabiClone.TIME - bellySlideTime > bellySlideDuration) {
                     if (KeyHeld(Action.MOVE_LEFT)) {
                         facing_direction = LEFT;
@@ -193,10 +208,34 @@ public class Player extends PhysicsObject{
         }
         prvState = state;
         if (KeyHeld(Action.JUMP) && RabiClone.TIME - spacebarPressed < jumpHoldTime
-        && state!=State.ATTACK2&&state!=State.ATTACK3) {
+        && state!=State.ATTACK2&&state!=State.ATTACK3&&state!=State.BELLYSLIDE) {
             y_velocity = jump_velocity;
         }
         // System.out.println(state);
+    }
+
+    private void handleCollisionBatch() {
+        for (int p=0;p<collisionBatch.size();p++) {
+            PhysicsObject pobj = collisionBatch.get(p);
+            if(facing_direction){
+                if (state!=State.UNCONTROLLABLE) {
+                    setUncontrollable(0.2);
+                }
+                pobj.setStagger(0.3);
+                pobj.setInvulnerability(1);
+                pobj.x_velocity = -300;
+                pobj.y_velocity = -120;
+            }else{
+                if (state!=State.UNCONTROLLABLE) {
+                    setUncontrollable(0.2);
+                }
+                pobj.setStagger(0.3);
+                pobj.setInvulnerability(1);
+                pobj.x_velocity = 300;
+                pobj.y_velocity = -120;
+            }
+        }
+        collisionBatch.clear();
     }
 
     @Override
@@ -269,6 +308,9 @@ public class Player extends PhysicsObject{
             state=State.BELLYSLIDE;
             y_velocity=y_velocity_limit;
             x_velocity=60*(facing_direction?1:-1);
+            bellySlideTime=RabiClone.TIME;
+            landedBellySlide=false;
+            spacebarPressed = 0;
         } else
         if (a == Action.ATTACK&&(state==State.IDLE||state==State.FALLING||state==State.JUMP)&&(RabiClone.TIME-weaponSwingTime>=weaponSwingAnimationTime)) {
             RabiClone.OBJ.add(new KnifeSwing(Sprite.KNIFE_SWING,40,RabiClone.p,this));
@@ -402,18 +444,8 @@ public class Player extends PhysicsObject{
         if (state==State.BELLYSLIDE) {
             if(obj instanceof PhysicsObject){
                 PhysicsObject pobj = (PhysicsObject)obj;
-                if(pobj.state!=State.STAGGER){
-                    if(facing_direction){
-                        setUncontrollable(0.2);
-                        pobj.setStagger(0.3);
-                        pobj.x_velocity = -300;
-                        pobj.y_velocity = -120;
-                    }else{
-                        setUncontrollable(0.2);
-                        pobj.setStagger(0.3);
-                        pobj.x_velocity = 300;
-                        pobj.y_velocity = -120;
-                    }
+                if(!pobj.isInvulnerable()){
+                    collisionBatch.add(pobj);
                 }
             }
         }

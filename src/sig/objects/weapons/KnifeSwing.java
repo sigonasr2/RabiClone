@@ -36,7 +36,7 @@ public class KnifeSwing extends AttachableObject{
     public void collisionEvent(AnimatedObject obj) {
         if(obj instanceof PhysicsObject){
             PhysicsObject pobj = (PhysicsObject)obj;
-            if(pobj.state!=State.STAGGER){
+            if(!pobj.isInvulnerable()){
                 if(getSpriteTransform()==Transform.NONE){
                     pobj.setStagger(0.3);
                     pobj.x_velocity = -500;
