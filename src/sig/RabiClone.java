@@ -81,7 +81,12 @@ public class RabiClone implements ControllerListener{
 
 	public static RenderingHints RENDERHINTS = new RenderingHints(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_OFF);
 
-	public static void main(String[] args) {System.setProperty("sun.java2d.transaccel", "True");
+	public static void main(String[] args) {
+
+		RabiClone r = new RabiClone();
+		ControllerEnvironment.getDefaultEnvironment().addControllerListener(r);
+
+		System.setProperty("sun.java2d.transaccel", "True");
 		System.setProperty("sun.java2d.d3d", "True");
 		System.setProperty("sun.java2d.ddforcevram", "True");
 		System.setProperty("sun.java2d.xrender", "True");
@@ -300,5 +305,9 @@ public class RabiClone implements ControllerListener{
 	@Override
 	public void controllerAdded(ControllerEvent ev) {
 		System.out.println("Added: "+ev.getController());
+		AbstractController[] newArr = Arrays.copyOf(CONTROLLERS,CONTROLLERS.length+1);
+		newArr[CONTROLLERS.length] = ev.getController();
+		CONTROLLERS=newArr;
+		ConfigureControls.LoadControls();
 	}
 }
