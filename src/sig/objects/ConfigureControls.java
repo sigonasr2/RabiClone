@@ -98,10 +98,21 @@ public class ConfigureControls extends Object{
                     port = stream.readByte();
                 } while (port!=(byte)-2);
             }
+            FillInDefaults();
             updateHighlightSections();
         } catch (IOException e) {
             e.printStackTrace();
             RabiClone.setupDefaultControls();
+        }
+    }
+
+    private static void FillInDefaults() {
+        for (Action a : Action.values()) {
+            if (KeyBind.KEYBINDS.get(a)==null||KeyBind.KEYBINDS.get(a).size()==0) {
+                List<KeyBind> keybinds = KeyBind.KEYBINDS.getOrDefault(a,new ArrayList<>());
+                keybinds.addAll(RabiClone.DEFAULT_KEYBINDS.get(a));
+                KeyBind.KEYBINDS.put(a,keybinds);
+            }
         }
     }
 
@@ -269,7 +280,7 @@ public class ConfigureControls extends Object{
     
 
     @Override
-    @SuppressWarnings("incomplete")
+    @SuppressWarnings("incomplete-switch")
     public void KeyPressed(Action a) {
         switch(a) {
             case PLAY_GAME:{
@@ -287,8 +298,6 @@ public class ConfigureControls extends Object{
                 Map.LoadMap(RabiClone.CURRENT_MAP);
                 RabiClone.OBJ.add(RabiClone.level_renderer = new EditorRenderer(RabiClone.p));
             }break;
-            default:
-                break;
         }
     }
 

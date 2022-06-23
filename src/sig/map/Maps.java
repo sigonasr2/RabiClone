@@ -41,6 +41,10 @@ public enum Maps {
         map.ModifyDataTile(tileX, tileY, selectedDataTile);
     }
 
+    public void ModifyDataTileValue(int tileX, int tileY, char value) {
+        map.ModifyDataTile(tileX, tileY, value);
+    }
+
     public Tile getTile(int x,int y) {
         int index = y*Map.MAP_WIDTH+x;
         if (index<0||index>=this.map.tiles.length) {
@@ -56,6 +60,15 @@ public enum Maps {
             return DataTile.NULL;
         } else {
             return DataTile.values()[this.map.data[index]];
+        }
+    }
+
+    public char getDataTileValue(int x, int y) {
+        int index = y*Map.MAP_WIDTH+x;
+        if (index<0||index>=this.map.data.length) {
+            return (char)DataTile.NULL.ordinal();
+        } else {
+            return this.map.data[index];
         }
     }
 

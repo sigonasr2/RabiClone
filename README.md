@@ -55,7 +55,7 @@ https://docs.oracle.com/en/java/javase/14/jpackage/image-and-runtime-modificatio
 `fallthrough` to suppress warnings relative to missing breaks in switch statements
 `finally` to suppress warnings relative to finally block that don’t return
 `hiding` to suppress warnings relative to locals that hide variable
-`incomplete`-switch to suppress warnings relative to missing entries in a switch statement (enum case)
+`incomplete-switch` to suppress warnings relative to missing entries in a switch statement (enum case)
 `nls` to suppress warnings relative to non-nls string literals
 `null` to suppress warnings relative to null analysis
 `restriction` to suppress warnings relative to usage of discouraged or forbidden references

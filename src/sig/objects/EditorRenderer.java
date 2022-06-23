@@ -33,7 +33,8 @@ public class EditorRenderer extends LevelRenderer{
 
     boolean dataTileView=false;
     boolean inputDataTileValue=false;
-    char dataTileValue=0;
+    String dataTileValue=new String("");
+    int storedTileX,storedTileY;
 
     String inputMessageLogDisplay = new String();
 
@@ -72,9 +73,13 @@ public class EditorRenderer extends LevelRenderer{
                 int tileX = (int)(RabiClone.MOUSE_POS.getX()+getX())/Tile.TILE_WIDTH;
                 int tileY = (int)(RabiClone.MOUSE_POS.getY()+getY())/Tile.TILE_HEIGHT;
                 if (dataTileView) {
-                    RabiClone.CURRENT_MAP.ModifyDataTile(tileX, tileY, selectedDataTile);
                     if (selectedDataTile==DataTile.DATATILE) {
                         inputDataTileValue=true;
+                        inputMessageLogDisplay=new String("Enter a Data Value: ");
+                        storedTileX=tileX;
+                        storedTileX=tileY;
+                    } else {
+                        RabiClone.CURRENT_MAP.ModifyDataTile(tileX, tileY, selectedDataTile);
                     }
                 } else {
                     RabiClone.CURRENT_MAP.ModifyTile(tileX, tileY, selectedTile);
@@ -141,7 +146,9 @@ public class EditorRenderer extends LevelRenderer{
                 }
                 if (dataTileView) {
                     drawMapTileForDataTileMode(p,x,y);
-                    if (RabiClone.CURRENT_MAP.getDataTile(x, y)!=DataTile.NULL) {
+                    if (RabiClone.CURRENT_MAP.getDataTileValue(x, y)>=32768) {
+                        DrawDataTileValue(p,x*Tile.TILE_WIDTH-this.getX(),y*Tile.TILE_HEIGHT-this.getY(),RabiClone.CURRENT_MAP.getDataTileValue(x, y));
+                    } else if (RabiClone.CURRENT_MAP.getDataTile(x, y)!=DataTile.NULL) {
                         DrawDataTile(p,x*Tile.TILE_WIDTH-this.getX(),y*Tile.TILE_HEIGHT-this.getY(),RabiClone.CURRENT_MAP.getDataTile(x, y));
                     }
                 } else {
@@ -162,6 +169,10 @@ public class EditorRenderer extends LevelRenderer{
         }
         Draw_Rect(p,PaletteColor.YELLOW,2,0,messageLog.getBounds(Font.PROFONT_12).getX(),messageLog.getBounds(Font.PROFONT_12).getY());
         Draw_Text(4,0,messageLog,Font.PROFONT_12);
+        Draw_Rect(p,PaletteColor.YELLOW,2,messageLog.getBounds(Font.PROFONT_12).getY()+10,inputMessageLogDisplay.getBounds(Font.PROFONT_12).getX(),inputMessageLogDisplay.getBounds(Font.PROFONT_12).getY());
+        Draw_Text(4,messageLog.getBounds(Font.PROFONT_12).getY()+12,inputMessageLogDisplay,Font.PROFONT_12);
+        Draw_Rect(p,PaletteColor.YELLOW,4+inputMessageLogDisplay.getBounds(Font.PROFONT_12).getX()+2,messageLog.getBounds(Font.PROFONT_12).getY()+10,dataTileValue.getBounds(Font.PROFONT_12).getX(),dataTileValue.getBounds(Font.PROFONT_12).getY());
+        Draw_Text_Ext(4+inputMessageLogDisplay.getBounds(Font.PROFONT_12).getX()+4,messageLog.getBounds(Font.PROFONT_12).getY()+12,dataTileValue,Font.PROFONT_12,Alpha.ALPHA0,PaletteColor.DEEP_RUBY);
         Draw_Text(4,RabiClone.BASE_HEIGHT-Font.PROFONT_12.getGlyphHeight()-4,HELP_TEXT,Font.PROFONT_12);
     }
 
@@ -227,8 +238,17 @@ public class EditorRenderer extends LevelRenderer{
         Draw_Text_Ext(x+2,y+2,new String(tile.toString()),Font.PROFONT_12,Alpha.ALPHA0,PaletteColor.WHITE);
     }
 
+    protected void DrawTransparentDataTile(byte[] p, double x, double y, char tile,PaletteColor col) {
+        Draw_Rect(p,col,x,y,Tile.TILE_WIDTH,Tile.TILE_HEIGHT);
+        Draw_Text_Ext(x+2,y+2,new String("V:").append(Integer.toString(tile-32768)),Font.PROFONT_12,Alpha.ALPHA0,PaletteColor.WHITE);
+    }
+
     protected void DrawDataTile(byte[] p, double x, double y, DataTile tile) {
         DrawTransparentDataTile(p,x,y,tile,PaletteColor.MIDNIGHT_BLUE);
+    }
+
+    private void DrawDataTileValue(byte[] p, double x, double y, char tile) {
+        DrawTransparentDataTile(p,x,y,tile,PaletteColor.RAZZMIC_BERRY);
     }
 
     @Override
@@ -254,6 +274,28 @@ public class EditorRenderer extends LevelRenderer{
             }break;
             case EDITOR_SET_BACKGROUND:{
                 RabiClone.CURRENT_MAP.setBackground(tileX,tileY,Background.values()[(RabiClone.CURRENT_MAP.getBackground(tileX, tileY).ordinal()+1)%Background.values().length]);
+            }break;
+            case _0:
+            case _1:
+            case _2:
+            case _3:
+            case _4:
+            case _5:
+            case _6:
+            case _7:
+            case _8:
+            case _9:
+                dataTileValue=dataTileValue.append(a.toString().replace("_",""));
+            break;
+            case BACKSPACE:{
+                if (dataTileValue.length()>0) {
+                    dataTileValue=dataTileValue.substring(0, dataTileValue.length()-1);
+                }
+            }break;
+            case ENTER:{
+                inputDataTileValue=false;
+                RabiClone.CURRENT_MAP.ModifyDataTileValue(tileX, tileY, (char)Integer.parseInt(dataTileValue.toString()));
+                dataTileValue.clear();
             }break;
         }
     } 

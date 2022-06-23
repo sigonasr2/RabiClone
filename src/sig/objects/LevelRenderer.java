@@ -45,7 +45,7 @@ public class LevelRenderer extends Object{
                 if (x<0||x>Map.MAP_WIDTH) {
                     continue;
                 }
-                if (RabiClone.CURRENT_MAP.getDataTile(x,y)!=DataTile.NULL) {
+                if (RabiClone.CURRENT_MAP.getDataTileValue(x,y)<32768&&RabiClone.CURRENT_MAP.getDataTile(x,y)!=DataTile.NULL) {
                     if (!RabiClone.CURRENT_MAP.getDataTile(x,y).perform(x*Tile.TILE_WIDTH,y*Tile.TILE_HEIGHT)) {
                         RabiClone.CURRENT_MAP.ModifyDataTile(x, y, DataTile.NULL);
                     }

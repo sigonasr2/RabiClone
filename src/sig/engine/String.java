@@ -114,6 +114,52 @@ public class String{
         updateBounds(this.sb.toString());
         return this;
     }
+
+    /**
+     * Returns a new {@code String} that contains a subsequence of
+     * characters currently contained in this character sequence. The
+     * substring begins at the specified index and extends to the end of
+     * this sequence.
+     *
+     * @param      start    The beginning index, inclusive.
+     * @return     The new string.
+     * @throws     StringIndexOutOfBoundsException  if {@code start} is
+     *             less than zero, or greater than the length of this object.
+     */
+    public String substring(int start) {
+        java.lang.String cutString = this.sb.substring(start);
+        clear();
+        this.sb.append(cutString);
+        bounds = new Point(0,1);
+        currentLineWidth=0;
+        updateBounds(this.sb.toString());
+        return this;
+    }
+
+    /**
+     * Returns a new {@code String} that contains a subsequence of
+     * characters currently contained in this sequence. The
+     * substring begins at the specified {@code start} and
+     * extends to the character at index {@code end - 1}.
+     *
+     * @param      start    The beginning index, inclusive.
+     * @param      end      The ending index, exclusive.
+     * @return     The new string.
+     * @throws     StringIndexOutOfBoundsException  if {@code start}
+     *             or {@code end} are negative or greater than
+     *             {@code length()}, or {@code start} is
+     *             greater than {@code end}.
+     */
+    public String substring(int start,int end) {
+        java.lang.String cutString = this.sb.substring(start,end);
+        clear();
+        this.sb.append(cutString);
+        bounds = new Point(0,1);
+        currentLineWidth=0;
+        updateBounds(this.sb.toString());
+        return this;
+    }
+
     public int length() {
         return this.sb.length();
     }

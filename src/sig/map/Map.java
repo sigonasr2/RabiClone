@@ -230,15 +230,29 @@ public class Map {
     }
 
     public void ModifyDataTile(int x,int y,DataTile t) {
-        DataTile prevTile = DataTile.values()[data[y*Map.MAP_WIDTH+x]];
-        if (prevTile.ordinal()==0) {
-            eventTileCount++;
-        }
-        if (t.ordinal()==0) {
+        if (data[y*Map.MAP_WIDTH+x]<32768) {
+            DataTile prevTile = DataTile.values()[data[y*Map.MAP_WIDTH+x]];
+            if (prevTile.ordinal()==0) {
+                eventTileCount++;
+            }
+            if (t.ordinal()==0) {
+                eventTileCount--;
+            }
+            data[y*Map.MAP_WIDTH+x]=(char)(t.ordinal());
+        } else {
             eventTileCount--;
+            data[y*Map.MAP_WIDTH+x]=(char)(t.ordinal());
         }
-        data[y*Map.MAP_WIDTH+x]=(char)(t.ordinal());
         //System.out.println("Tile "+(y*MAP_WIDTH+x)+" is now "+tiles[y*MAP_WIDTH+x]+".");
+    }
+
+    public void ModifyDataTile(int x, int y, char value) {
+        eventTileCount++;
+        if (value>32767) {
+            value=32767;
+        }
+        data[y*Map.MAP_WIDTH+x]=(char)(value+32768);
+        System.out.println("Tile "+(y*MAP_WIDTH+x)+" is now "+data[y*MAP_WIDTH+x]+".");
     }
 
     public char getWaterLevel() {
@@ -256,7 +270,5 @@ public class Map {
      */
     public char getDataTileValue(int x,int y) {
         return (char)(data[y*Map.MAP_WIDTH+x]-32768);
-    }
-
-    
+    }    
 }

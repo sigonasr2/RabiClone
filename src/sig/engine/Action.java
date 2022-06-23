@@ -17,7 +17,19 @@ public enum Action {
     PLAY_GAME(new KeyBind(KeyEvent.VK_F1)),
     EDITOR_SET_VIEW(new KeyBind(KeyEvent.VK_F3)),
     EDITOR_SET_TYPE(new KeyBind(KeyEvent.VK_F4)),
-    EDITOR_SET_BACKGROUND(new KeyBind(KeyEvent.VK_F5)),;
+    EDITOR_SET_BACKGROUND(new KeyBind(KeyEvent.VK_F5)),
+    _1(new KeyBind(KeyEvent.VK_1),new KeyBind(KeyEvent.VK_NUMPAD1)),
+    _2(new KeyBind(KeyEvent.VK_2),new KeyBind(KeyEvent.VK_NUMPAD2)),
+    _3(new KeyBind(KeyEvent.VK_3),new KeyBind(KeyEvent.VK_NUMPAD3)),
+    _4(new KeyBind(KeyEvent.VK_4),new KeyBind(KeyEvent.VK_NUMPAD4)),
+    _5(new KeyBind(KeyEvent.VK_5),new KeyBind(KeyEvent.VK_NUMPAD5)),
+    _6(new KeyBind(KeyEvent.VK_6),new KeyBind(KeyEvent.VK_NUMPAD6)),
+    _7(new KeyBind(KeyEvent.VK_7),new KeyBind(KeyEvent.VK_NUMPAD7)),
+    _8(new KeyBind(KeyEvent.VK_8),new KeyBind(KeyEvent.VK_NUMPAD8)),
+    _9(new KeyBind(KeyEvent.VK_9),new KeyBind(KeyEvent.VK_NUMPAD9)),
+    _0(new KeyBind(KeyEvent.VK_0),new KeyBind(KeyEvent.VK_NUMPAD0)),
+    BACKSPACE(new KeyBind(KeyEvent.VK_BACK_SPACE)),
+    ENTER(new KeyBind(KeyEvent.VK_ENTER));
 
     float val;
     Key controllingKey;
