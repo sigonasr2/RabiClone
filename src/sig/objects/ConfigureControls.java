@@ -43,6 +43,9 @@ public class ConfigureControls extends Object{
     public ConfigureControls(Panel panel) {
         super(panel);
         RabiClone.BACKGROUND_COLOR = PaletteColor.WHITE;
+        if (GAME_CONTROLS_FILE.exists()) {
+            RabiClone.reloadControllerList = true;
+        }
         updateHighlightSections();
     }
 
@@ -201,37 +204,41 @@ public class ConfigureControls extends Object{
 
     @Override
     public void draw(byte[] p) {
-        int y = 4;
-        if (!assigningKey) {
-            selectedAction=null;
-            selectedKeybind=null;
-            for (Action a : Action.values()) {
-                if (RabiClone.MOUSE_POS.getY()>=getY()+y&&RabiClone.MOUSE_POS.getY()<getY()+y+Font.PROFONT_12.getGlyphHeight()+4) {
-                    selectedAction=a;
-                    Draw_Rect(p,PaletteColor.PEACH,0,getY()+y,RabiClone.BASE_WIDTH,Font.PROFONT_12.getGlyphHeight()+4);
-                }
-                for (int i=0;i<actionHighlightSections.get(a.ordinal()).size();i+=2) {
-                    List<Integer> sectionList = actionHighlightSections.get(a.ordinal());
-                    int startX=sectionList.get(i)*Font.PROFONT_12.getGlyphWidth()-4;
-                    int endX=sectionList.get(i+1)*Font.PROFONT_12.getGlyphWidth()+4;
-                    if (selectedKeybind==null&&RabiClone.MOUSE_POS.getY()>=getY()+y&&RabiClone.MOUSE_POS.getY()<getY()+y+Font.PROFONT_12.getGlyphHeight()+4&&RabiClone.MOUSE_POS.getX()>=startX&&RabiClone.MOUSE_POS.getX()<=endX) {
-                        Draw_Rect(p,PaletteColor.RED,startX,getY()+y,endX-startX,Font.PROFONT_12.getGlyphHeight()+4);
-                        storedX=startX;
-                        storedY=y;
-                        storedEndX=endX;
-                        selectedKeybind=KeyBind.KEYBINDS.get(a).get(i/2);
-                        break;
+        if (!RabiClone.reloadControllerList) {
+            int y = 4;
+            if (!assigningKey) {
+                selectedAction=null;
+                selectedKeybind=null;
+                for (Action a : Action.values()) {
+                    if (RabiClone.MOUSE_POS.getY()>=getY()+y&&RabiClone.MOUSE_POS.getY()<getY()+y+Font.PROFONT_12.getGlyphHeight()+4) {
+                        selectedAction=a;
+                        Draw_Rect(p,PaletteColor.PEACH,0,getY()+y,RabiClone.BASE_WIDTH,Font.PROFONT_12.getGlyphHeight()+4);
                     }
+                    for (int i=0;i<actionHighlightSections.get(a.ordinal()).size();i+=2) {
+                        List<Integer> sectionList = actionHighlightSections.get(a.ordinal());
+                        int startX=sectionList.get(i)*Font.PROFONT_12.getGlyphWidth()-4;
+                        int endX=sectionList.get(i+1)*Font.PROFONT_12.getGlyphWidth()+4;
+                        if (selectedKeybind==null&&RabiClone.MOUSE_POS.getY()>=getY()+y&&RabiClone.MOUSE_POS.getY()<getY()+y+Font.PROFONT_12.getGlyphHeight()+4&&RabiClone.MOUSE_POS.getX()>=startX&&RabiClone.MOUSE_POS.getX()<=endX) {
+                            Draw_Rect(p,PaletteColor.RED,startX,getY()+y,endX-startX,Font.PROFONT_12.getGlyphHeight()+4);
+                            storedX=startX;
+                            storedY=y;
+                            storedEndX=endX;
+                            selectedKeybind=KeyBind.KEYBINDS.get(a).get(i/2);
+                            break;
+                        }
+                    }
+                    Draw_Text_Ext(4,getY()+y,DisplayActionKeys(a),Font.PROFONT_12,Alpha.ALPHA0,PaletteColor.MIDNIGHT_BLUE);
+                    y+=Font.PROFONT_12.getGlyphHeight()+4;
                 }
-                Draw_Text_Ext(4,getY()+y,DisplayActionKeys(a),Font.PROFONT_12,Alpha.ALPHA0,PaletteColor.MIDNIGHT_BLUE);
-                y+=Font.PROFONT_12.getGlyphHeight()+4;
-            }
-            if (selectedKeybind!=null) {
-                Draw_Line(p,storedX,getY()+storedY,storedEndX,getY()+storedY+Font.PROFONT_12.getGlyphHeight()+4,PaletteColor.BLACK,Alpha.ALPHA32);
-                Draw_Line(p,storedX,getY()+storedY+Font.PROFONT_12.getGlyphHeight()+4,storedEndX,getY()+storedY,PaletteColor.BLACK,Alpha.ALPHA32);
+                if (selectedKeybind!=null) {
+                    Draw_Line(p,storedX,getY()+storedY,storedEndX,getY()+storedY+Font.PROFONT_12.getGlyphHeight()+4,PaletteColor.BLACK,Alpha.ALPHA32);
+                    Draw_Line(p,storedX,getY()+storedY+Font.PROFONT_12.getGlyphHeight()+4,storedEndX,getY()+storedY,PaletteColor.BLACK,Alpha.ALPHA32);
+                }
+            } else {
+                Draw_Text_Ext(4, 4, new String("Press a key to assign to ").append(selectedAction), Font.PROFONT_12, Alpha.ALPHA0, PaletteColor.MIDNIGHT_BLUE);
             }
         } else {
-            Draw_Text_Ext(4, 4, new String("Press a key to assign to ").append(selectedAction), Font.PROFONT_12, Alpha.ALPHA0, PaletteColor.MIDNIGHT_BLUE);
+            Draw_Text_Ext(4, 4, new String("Preparing controller list..."), Font.PROFONT_12, Alpha.ALPHA0, PaletteColor.MIDNIGHT_BLUE);
         }
     }
 

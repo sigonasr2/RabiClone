@@ -222,7 +222,7 @@ public class Player extends PhysicsObject{
                     setUncontrollable(0.2);
                 }
                 pobj.setStagger(0.3);
-                pobj.setInvulnerability(1);
+                pobj.setInvulnerability(0.4);
                 pobj.x_velocity = -300;
                 pobj.y_velocity = -120;
             }else{
@@ -230,7 +230,7 @@ public class Player extends PhysicsObject{
                     setUncontrollable(0.2);
                 }
                 pobj.setStagger(0.3);
-                pobj.setInvulnerability(1);
+                pobj.setInvulnerability(0.4);
                 pobj.x_velocity = 300;
                 pobj.y_velocity = -120;
             }

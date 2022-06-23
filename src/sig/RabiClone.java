@@ -32,8 +32,9 @@ import sig.engine.PaletteColor;
 
 import java.awt.Toolkit;
 import java.awt.RenderingHints;
+import java.awt.event.KeyEvent;
 
-public class RabiClone implements ControllerListener{
+public class RabiClone{
 	public static final String PROGRAM_NAME = "RabiClone";
 	public static final int UPDATE_LOOP_FRAMERATE = 244;
 	public static final long UPDATE_LOOP_NANOTIME = (long)((1d/UPDATE_LOOP_FRAMERATE)*1000000000l);
@@ -67,7 +68,7 @@ public class RabiClone implements ControllerListener{
 	public static Player player;
 
 	public static Maps CURRENT_MAP;
-	public static AbstractController[] CONTROLLERS = new AbstractController[] {};
+	public static Controller[] CONTROLLERS = new Controller[] {};
 
 	public static long lastControllerScan = System.currentTimeMillis();
 
@@ -76,16 +77,14 @@ public class RabiClone implements ControllerListener{
 	static long lastReportedTime = System.currentTimeMillis();
 	public static long TIME = 0;
 	public static long scaleTime;
+	
+	public static boolean reloadControllerList = false;
 
     public static HashMap<Action,List<KeyBind>> DEFAULT_KEYBINDS = new HashMap<>();
 
 	public static RenderingHints RENDERHINTS = new RenderingHints(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_OFF);
 
 	public static void main(String[] args) {
-
-		RabiClone r = new RabiClone();
-		ControllerEnvironment.getDefaultEnvironment().addControllerListener(r);
-
 		System.setProperty("sun.java2d.transaccel", "True");
 		System.setProperty("sun.java2d.d3d", "True");
 		System.setProperty("sun.java2d.ddforcevram", "True");
@@ -141,9 +140,14 @@ public class RabiClone implements ControllerListener{
 
 				KeyBind.poll();
 
-				if (System.currentTimeMillis() - lastControllerScan > 5000) {
-					ControllerEnvironment.getDefaultEnvironment().rescanControllers();
+				if ((Key.isKeyHeld(KeyEvent.VK_F5)||reloadControllerList) && System.currentTimeMillis() - lastControllerScan > 5000) {
+					CONTROLLERS = ControllerEnvironment.getDefaultEnvironment().rescanControllers();
+					System.out.println(Arrays.toString(CONTROLLERS));
 					lastControllerScan = System.currentTimeMillis();
+					if (reloadControllerList) {
+						ConfigureControls.LoadControls();
+					}
+					reloadControllerList=false;
 				}
 
 				FRIENDLY_OBJ.clear();
@@ -266,7 +270,7 @@ public class RabiClone implements ControllerListener{
 						ConfigureControls.updateHighlightSections();
 					}
 				}
-				AbstractController[] newArr = new AbstractController[CONTROLLERS.length - 1];
+				Controller[] newArr = new Controller[CONTROLLERS.length - 1];
 				for (int j = 0; j < CONTROLLERS.length; j++) {
 					if (j != i) {
 						newArr[(j > i ? j - 1 : j)] = CONTROLLERS[i];
@@ -295,19 +299,5 @@ public class RabiClone implements ControllerListener{
 			SIZE_MULTIPLIER++;
 		}
 		f.setSize(f.getWidth() * SIZE_MULTIPLIER, (int) ((f.getWidth() * SIZE_MULTIPLIER) / 1.77777777778d));
-	}
-
-	@Override
-	public void controllerRemoved(ControllerEvent ev) {
-		System.out.println("Removed: "+ev.getController());
-	}
-
-	@Override
-	public void controllerAdded(ControllerEvent ev) {
-		System.out.println("Added: "+ev.getController());
-		AbstractController[] newArr = Arrays.copyOf(CONTROLLERS,CONTROLLERS.length+1);
-		newArr[CONTROLLERS.length] = ev.getController();
-		CONTROLLERS=newArr;
-		ConfigureControls.LoadControls();
 	}
 }
