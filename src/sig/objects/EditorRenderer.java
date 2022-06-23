@@ -32,6 +32,10 @@ public class EditorRenderer extends LevelRenderer{
     final static char CAMERA_SPD = 512;
 
     boolean dataTileView=false;
+    boolean inputDataTileValue=false;
+    char dataTileValue=0;
+
+    String inputMessageLogDisplay = new String();
 
     public EditorRenderer(Panel panel) {
         super(panel);
@@ -58,27 +62,42 @@ public class EditorRenderer extends LevelRenderer{
         if (up-down!=0) {
             setY(Math.max(0,getY()+(down-up)*CAMERA_SPD*updateMult));
         }
-        boolean left_mb = MouseHeld(MouseEvent.BUTTON1);
-        // boolean middle_mb = MouseHeld(MouseEvent.BUTTON2);
-        // boolean right_mb = MouseHeld(MouseEvent.BUTTON3);
 
-        if(left_mb){
-            int tileX = (int)(RabiClone.MOUSE_POS.getX()+getX())/Tile.TILE_WIDTH;
-            int tileY = (int)(RabiClone.MOUSE_POS.getY()+getY())/Tile.TILE_HEIGHT;
-            if (dataTileView) {
-                RabiClone.CURRENT_MAP.ModifyDataTile(tileX, tileY, selectedDataTile);
-            } else {
-                RabiClone.CURRENT_MAP.ModifyTile(tileX, tileY, selectedTile);
+        if (!inputDataTileValue) {
+            boolean left_mb = MouseHeld(MouseEvent.BUTTON1);
+            // boolean middle_mb = MouseHeld(MouseEvent.BUTTON2);
+            boolean right_mb = MouseHeld(MouseEvent.BUTTON3);
+
+            if(left_mb){
+                int tileX = (int)(RabiClone.MOUSE_POS.getX()+getX())/Tile.TILE_WIDTH;
+                int tileY = (int)(RabiClone.MOUSE_POS.getY()+getY())/Tile.TILE_HEIGHT;
+                if (dataTileView) {
+                    RabiClone.CURRENT_MAP.ModifyDataTile(tileX, tileY, selectedDataTile);
+                    if (selectedDataTile==DataTile.DATATILE) {
+                        inputDataTileValue=true;
+                    }
+                } else {
+                    RabiClone.CURRENT_MAP.ModifyTile(tileX, tileY, selectedTile);
+                }
             }
-        }
-        if(KeyHeld(Action.SLIDE)&&KeyHeld(Action.FALL)){
-            AddMessage("Saving map...");
-            try {
-                Map.SaveMap(RabiClone.CURRENT_MAP);
-                AddMessage(RabiClone.CURRENT_MAP.toString()," has been saved successfully.");
-            } catch (IOException e) {
-                e.printStackTrace();
-                AddMessage(PaletteColor.RED,"Map failed to save: ",e.getLocalizedMessage());
+            if (right_mb) {
+                int tileX = (int)(RabiClone.MOUSE_POS.getX()+getX())/Tile.TILE_WIDTH;
+                int tileY = (int)(RabiClone.MOUSE_POS.getY()+getY())/Tile.TILE_HEIGHT;
+                if (dataTileView) {
+                    RabiClone.CURRENT_MAP.ModifyDataTile(tileX, tileY, DataTile.NULL);
+                } else {
+                    RabiClone.CURRENT_MAP.ModifyTile(tileX, tileY, Tile.VOID);
+                }
+            }
+            if(KeyHeld(Action.SLIDE)&&KeyHeld(Action.FALL)){
+                AddMessage("Saving map...");
+                try {
+                    Map.SaveMap(RabiClone.CURRENT_MAP);
+                    AddMessage(RabiClone.CURRENT_MAP.toString()," has been saved successfully.");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    AddMessage(PaletteColor.RED,"Map failed to save: ",e.getLocalizedMessage());
+                }
             }
         }
         updateMessageLog();

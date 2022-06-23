@@ -37,6 +37,8 @@ public class Map {
     byte[] types = new byte[MAP_SCREENS_X*MAP_SCREENS_Y];
     char[] data = new char[MAP_WIDTH*MAP_HEIGHT];
 
+    char waterLevel = 144;
+
     int eventTileCount=0;
 
     final static byte MAP_DATA = 0;
@@ -238,4 +240,23 @@ public class Map {
         data[y*Map.MAP_WIDTH+x]=(char)(t.ordinal());
         //System.out.println("Tile "+(y*MAP_WIDTH+x)+" is now "+tiles[y*MAP_WIDTH+x]+".");
     }
+
+    public char getWaterLevel() {
+        return waterLevel;
+    }
+
+    public void setWaterLevel(char waterLevel) {
+        this.waterLevel = waterLevel;
+    }
+
+    /*
+     * This will return the tile's value minus 32768.
+     * This value represents a data tile value, but not
+     * necessarily a data tile.
+     */
+    public char getDataTileValue(int x,int y) {
+        return (char)(data[y*Map.MAP_WIDTH+x]-32768);
+    }
+
+    
 }

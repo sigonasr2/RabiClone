@@ -62,7 +62,7 @@ public class KeyBind {
             }
         } else
         if (RabiClone.CONTROLLERS.length>port && id instanceof Identifier.Axis) {
-            return Math.abs(RabiClone.CONTROLLERS[port].getComponent(id).getPollData())>=RabiClone.CONTROLLERS[port].getComponent(id).getDeadZone()&&Math.signum(RabiClone.CONTROLLERS[port].getComponent(id).getPollData())==Math.signum(val);
+            return Math.abs(RabiClone.CONTROLLERS[port].getComponent(id).getPollData())>=Math.max(RabiClone.CONTROLLERS[port].getComponent(id).getDeadZone(),0.2)&&Math.signum(RabiClone.CONTROLLERS[port].getComponent(id).getPollData())==Math.signum(val);
         }
         else {
             return false;

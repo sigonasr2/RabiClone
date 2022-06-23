@@ -1,8 +1,10 @@
 package sig.map;
 
 import sig.engine.String;
+import sig.events.DataEvent;
 import sig.events.Event;
 import sig.events.SpawnEvent;
+import sig.events.WaterEvent;
 import sig.objects.enemies.BlueBun;
 import sig.objects.Erinoah;
 import sig.objects.enemies.GreenBun;
@@ -11,11 +13,13 @@ import sig.objects.enemies.YellowBun;
 
 public enum DataTile {
     NULL, //File is populated by 0s by default. This represents nothing.
-    BUN0(new SpawnEvent("Spawns an Erinoa bun",Erinoah.class)),
-    BUN1(new SpawnEvent("Spawns a red bun",RedBun.class)),
-    BUN2(new SpawnEvent("Spawns a blue bun",BlueBun.class)),
-    BUN3(new SpawnEvent("Spawns a yellow bun",YellowBun.class)),
-    BUN4(new SpawnEvent("Spawns a green bun",GreenBun.class));
+    BUN0("Spawns an Erinoa bun",new SpawnEvent(Erinoah.class)),
+    BUN1("Spawns a red bun",new SpawnEvent(RedBun.class)),
+    BUN2("Spawns a blue bun",new SpawnEvent(BlueBun.class)),
+    BUN3("Spawns a yellow bun",new SpawnEvent(YellowBun.class)),
+    BUN4("Spawns a green bun",new SpawnEvent(GreenBun.class)),
+    WATERLEVEL("Sets the water level according to the data tile at X+1",new WaterEvent()),
+    DATATILE("Uses a value between 32768-65536 to represent extra data.",new DataEvent());
 
     String description;
     Event event;
@@ -23,8 +27,8 @@ public enum DataTile {
     DataTile(){
         this.description=new String("");
     }
-    DataTile(Event e) {
-        this.description=e.getDescription();
+    DataTile(java.lang.String description,Event e) {
+        this.description=new String(description);
         this.event=e;
     }
     public String getDescription() {
