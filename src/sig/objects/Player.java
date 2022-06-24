@@ -10,6 +10,7 @@ import sig.engine.Rectangle;
 import sig.engine.Sprite;
 import sig.engine.Transform;
 import sig.engine.objects.AnimatedObject;
+import sig.map.DataTile;
 import sig.map.Map;
 import sig.map.Tile;
 import sig.map.View;
@@ -81,6 +82,7 @@ public class Player extends PhysicsObject{
         super.update(updateMult);
         handleCameraRoomMovement();
         handleCollisionBatch();
+        handleEventCollisions();
 
         switch (state) {
             case ATTACK:
@@ -212,6 +214,19 @@ public class Player extends PhysicsObject{
             y_velocity = jump_velocity;
         }
         // System.out.println(state);
+    }
+
+    private void handleEventCollisions() {
+        int x = (int)getX()/Tile.TILE_WIDTH;
+        int y = (int)getY()/Tile.TILE_HEIGHT;
+        if (x>=0&&x<Map.MAP_WIDTH&&y>=0&&y<Map.MAP_HEIGHT) {
+            char dataTileValue = RabiClone.CURRENT_MAP.getDataTileRawValue((int)getX()/Tile.TILE_WIDTH, (int)getY()/Tile.TILE_HEIGHT);
+            if (dataTileValue<8192&&dataTileValue!=0) {
+                if (!RabiClone.CURRENT_MAP.getDataTile(x, y).getEvent().performCollision((int)getX(), (int)getY())) {
+                    RabiClone.CURRENT_MAP.ModifyDataTile(x, y, DataTile.NULL);
+                }
+            }
+        }
     }
 
     private void handleCollisionBatch() {

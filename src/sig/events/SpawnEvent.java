@@ -24,5 +24,10 @@ public class SpawnEvent implements Event{
         }
         return false;
     }
+
+    @Override
+    public boolean performCollision(int x, int y) {
+        return false;
+    }
     
 }

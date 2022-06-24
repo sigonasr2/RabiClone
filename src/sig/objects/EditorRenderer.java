@@ -146,8 +146,8 @@ public class EditorRenderer extends LevelRenderer{
                 }
                 if (dataTileView) {
                     drawMapTileForDataTileMode(p,x,y);
-                    if (RabiClone.CURRENT_MAP.getDataTileValue(x, y)>=8192) {
-                        DrawDataTileValue(p,x*Tile.TILE_WIDTH-this.getX(),y*Tile.TILE_HEIGHT-this.getY(),RabiClone.CURRENT_MAP.getDataTileValue(x, y));
+                    if (RabiClone.CURRENT_MAP.getDataTileRawValue(x, y)>=8192) {
+                        DrawDataTileValue(p,x*Tile.TILE_WIDTH-this.getX(),y*Tile.TILE_HEIGHT-this.getY(),RabiClone.CURRENT_MAP.getDataTileRawValue(x, y));
                     } else if (RabiClone.CURRENT_MAP.getDataTile(x, y)!=DataTile.NULL) {
                         DrawDataTile(p,x*Tile.TILE_WIDTH-this.getX(),y*Tile.TILE_HEIGHT-this.getY(),RabiClone.CURRENT_MAP.getDataTile(x, y));
                     }

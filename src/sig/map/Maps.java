@@ -63,7 +63,11 @@ public enum Maps {
         }
     }
 
-    public char getDataTileValue(int x, int y) {
+    /**
+     * This will return the tile's raw data value.
+     * Data Tile values will not have 8192 subtracted from itself through this function.
+     */
+    public char getDataTileRawValue(int x, int y) {
         int index = y*Map.MAP_WIDTH+x;
         if (index<0||index>=this.map.data.length) {
             return (char)DataTile.NULL.ordinal();

@@ -2,9 +2,19 @@ package sig.events;
 
 public interface Event{
     /**
-     * Perform this event at position {@code (x,y)}.
+     * Runs a constant update event on this tile at the given position.
+     * @param x The X Coordinate in pixel space the event is occuring in. (NOT Tile coordinates)
+     * @param y The Y Coordinate in pixel space the event is occuring in. (NOT Tile coordinates)
      * @return {@code True} to keep this event alive after it runs.
      * {@code False} to remove this event from the game after it runs.
      */
     public boolean perform(int x, int y);
+    /**
+     * Runs a player collision event on this tile at the given position.
+     * @param x The X Coordinate in pixel space the event is occuring in. (NOT Tile coordinates)
+     * @param y The Y Coordinate in pixel space the event is occuring in. (NOT Tile coordinates)
+     * @return {@code True} to keep this event alive after it runs.
+     * {@code False} to remove this event from the game after it runs.
+     */
+    public boolean performCollision(int x, int y);
 }

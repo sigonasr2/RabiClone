@@ -266,12 +266,16 @@ public class Map {
         this.waterLevel = waterLevel;
     }
 
-    /*
+    /**
      * This will return the tile's value minus 8192.
      * This value represents a data tile value, but not
      * necessarily a data tile.
      */
     public char getDataTileValue(int x,int y) {
-        return (char)(data[y*Map.MAP_WIDTH+x]-8192);
+        if (data[y*Map.MAP_WIDTH+x]>=8192) {
+            return (char)(data[y*Map.MAP_WIDTH+x]-8192);
+        } else {
+            return Character.MAX_VALUE;
+        }
     }    
 }

@@ -34,7 +34,7 @@ public enum DataTile {
     public String getDescription() {
         return description;
     }
-    public boolean perform(int x, int y) {
-        return event.perform(x, y);
+    public Event getEvent() {
+        return event;
     }
 }

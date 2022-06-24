@@ -6,5 +6,10 @@ public class DataEvent implements Event{
     public boolean perform(int x, int y) {
         return true;
     }
+
+    @Override
+    public boolean performCollision(int x, int y) {
+        return true;
+    }
     
 }
