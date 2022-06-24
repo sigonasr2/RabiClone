@@ -35,7 +35,7 @@ public class Map {
     byte[] backgrounds = new byte[MAP_SCREENS_X*MAP_SCREENS_Y];
     byte[] colors = new byte[MAP_SCREENS_X*MAP_SCREENS_Y];
     byte[] types = new byte[MAP_SCREENS_X*MAP_SCREENS_Y];
-    char[] data = new char[MAP_WIDTH*MAP_HEIGHT];
+    char[] data = new char[MAP_WIDTH*MAP_HEIGHT]; //While it's stored in a char, the map format only reads 14 bits for this value!! Value is between 0-16384!
 
     char waterLevel = 144;
 
@@ -247,7 +247,10 @@ public class Map {
     }
 
     public void ModifyDataTile(int x, int y, char value) {
-        eventTileCount++;
+        char prevTile = data[y*Map.MAP_WIDTH+x];
+        if (prevTile==0) {
+            eventTileCount++;
+        }
         if (value>8192) {
             value=8192;
         }
@@ -264,11 +267,11 @@ public class Map {
     }
 
     /*
-     * This will return the tile's value minus 32768.
+     * This will return the tile's value minus 8192.
      * This value represents a data tile value, but not
      * necessarily a data tile.
      */
     public char getDataTileValue(int x,int y) {
-        return (char)(data[y*Map.MAP_WIDTH+x]-32768);
+        return (char)(data[y*Map.MAP_WIDTH+x]-8192);
     }    
 }
