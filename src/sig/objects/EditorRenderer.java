@@ -301,7 +301,20 @@ public class EditorRenderer extends LevelRenderer{
                 dataTileValue.clear();
             }break;
         }
-    } 
+    }
 
-    
+    @Override
+    public void drawBackground(byte[] p) {
+        int screenX = (int)(getX()+RabiClone.BASE_WIDTH/2)/Tile.TILE_WIDTH;
+        int screenY = (int)(getY()+RabiClone.BASE_HEIGHT/2)/Tile.TILE_HEIGHT;
+        Background targetBackground = RabiClone.CURRENT_MAP.getBackground(screenX, screenY);
+        for (int y=0;y<RabiClone.BASE_HEIGHT;y++) {
+            for (int x=0;x<RabiClone.BASE_WIDTH;x++) {
+                int index = y*RabiClone.BASE_WIDTH+x;
+                p[index] = targetBackground.getPixels()[
+                    ((y+(int)(getY()*targetBackground.getScrollSpeed()))%targetBackground.getHeight())*targetBackground.getWidth()+((x+(int)(getX()*targetBackground.getScrollSpeed()))%targetBackground.getWidth())
+                ];
+            }
+        }
+    }
 }

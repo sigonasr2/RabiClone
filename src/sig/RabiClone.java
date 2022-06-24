@@ -2,11 +2,8 @@ package sig;
 
 import javax.swing.JFrame;
 
-import net.java.games.input.AbstractController;
 import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
-import net.java.games.input.ControllerEvent;
-import net.java.games.input.ControllerListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;

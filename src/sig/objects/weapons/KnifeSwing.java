@@ -5,7 +5,6 @@ import sig.engine.Panel;
 import sig.engine.Transform;
 import sig.objects.actor.AttachableObject;
 import sig.objects.actor.PhysicsObject;
-import sig.objects.actor.State;
 import sig.engine.objects.AnimatedObject;
 import sig.engine.objects.Object;
 
