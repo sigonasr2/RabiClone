@@ -2,6 +2,7 @@ package sig.engine.objects;
 
 import java.awt.event.MouseEvent;
 import sig.DrawLoop;
+import sig.RabiClone;
 import sig.engine.Action;
 import sig.engine.Alpha;
 import sig.engine.AnimatedSprite;
@@ -131,6 +132,10 @@ public abstract class Object implements GameEntity{
 
 	public void MouseReleased(MouseEvent e) {
 	}
+
+    public boolean isUnderwater() {
+        return getY()>=RabiClone.CURRENT_MAP.getMap().getWaterLevel();
+    }
 
     protected boolean MouseHeld(int mb) {
 		return panel.MOUSE.getOrDefault(mb,false);

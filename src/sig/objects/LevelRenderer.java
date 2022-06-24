@@ -117,8 +117,17 @@ public class LevelRenderer extends Object{
 
     @Override
     public void drawOverlay(byte[] p) {
-        //RenderCollisionGrid(p);
-        //RenderPlayerCollisionGrid(p);
+        if (RabiClone.player!=null&&RabiClone.player.isUnderwater()) {
+            for (int y=0;y<RabiClone.BASE_HEIGHT;y++) {
+                for (int x=0;x<RabiClone.BASE_WIDTH;x++) {
+                    //Draw the water background at double size because it's half the screen's width and height.
+                    int index = y*RabiClone.BASE_WIDTH+x;
+                    p[index] = Sprite.WATER_OVERLAY.getBi_array()[
+                        ((y/2)*Sprite.WATER_OVERLAY.getCanvasHeight())*Sprite.WATER_OVERLAY.getCanvasWidth()+(x/2)*Sprite.WATER_OVERLAY.getCanvasWidth()
+                    ];
+                }
+            }
+        }
     }
 
     @SuppressWarnings("unused")

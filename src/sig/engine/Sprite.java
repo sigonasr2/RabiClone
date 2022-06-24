@@ -9,32 +9,36 @@ import javax.imageio.ImageIO;
 
 public class Sprite{
 
-    //NANA(new File(new File("..","sprites"),"3x.png")),
-    public static Sprite NANA_SMALL = new Sprite(new File(new File("..","sprites"),"1x.gif"));
-    public static Sprite TILE_SHEET = new Sprite(new File(new File("..","sprites"),"tiles.gif"));
-    public static Sprite MAP_TILE_INFO = new Sprite(new File(new File("..","sprites"),"maptileinfo.gif"));
-    public static Sprite PROFONT = new Sprite(new File(new File("..","sprites"),"Profont.gif"));
-    public static Sprite BACKGROUND1 = new Sprite(new File(new File("..","backgrounds"),"back1.gif"));
-    public static Sprite BACKGROUND2 = new Sprite(new File(new File("..","backgrounds"),"back2.gif"));
-    public static Sprite BACKGROUND3 = new Sprite(new File(new File("..","backgrounds"),"back3.gif"));
-    public static AnimatedSprite ERINOAH = new AnimatedSprite(new File(new File("..","sprites"),"erinoah.gif"),48,48);
-    public static AnimatedSprite ERINA = new AnimatedSprite(new File(new File("..","sprites"),"erina.gif"),32,32);
-    public static AnimatedSprite ERINA_WALK = new AnimatedSprite(new File(new File("..","sprites"),"erina_walk.gif"),32,32);
-    public static AnimatedSprite ERINA_JUMP_RISE1 = new AnimatedSprite(new File(new File("..","sprites"),"erina_jump_rise1.gif"),32,32);
-    public static AnimatedSprite ERINA_JUMP_RISE = new AnimatedSprite(new File(new File("..","sprites"),"erina_jump_rise.gif"),32,32);
-    public static AnimatedSprite ERINA_JUMP_FALL1 = new AnimatedSprite(new File(new File("..","sprites"),"erina_jump_fall1.gif"),32,32);
-    public static AnimatedSprite ERINA_JUMP_FALL = new AnimatedSprite(new File(new File("..","sprites"),"erina_jump_fall.gif"),32,32);
-    public static AnimatedSprite ERINA_SLIDE1 = new AnimatedSprite(new File(new File("..","sprites"),"erina_slide1.gif"),32,32);
-    public static AnimatedSprite ERINA_SLIDE = new AnimatedSprite(new File(new File("..","sprites"),"erina_slide.gif"),32,32);
-    public static AnimatedSprite KNIFE_SWING = new AnimatedSprite(new File(new File("..","sprites"),"knife-swing.gif"),32,32);
-    public static AnimatedSprite RED_STAND = new AnimatedSprite(new File(new File("..","sprites"),"redgirl_stand.gif"),32,32);
-    public static AnimatedSprite RED_WALK = new AnimatedSprite(new File(new File("..","sprites"),"redgirl_walk.gif"),32,32);
-    public static AnimatedSprite BLUE_STAND = new AnimatedSprite(new File(new File("..","sprites"),"bluegirl_stand.gif"),32,32);
-    public static AnimatedSprite BLUE_WALK = new AnimatedSprite(new File(new File("..","sprites"),"bluegirl_walk.gif"),32,32);
-    public static AnimatedSprite YELLOW_STAND = new AnimatedSprite(new File(new File("..","sprites"),"yellowgirl_stand.gif"),32,32);
-    public static AnimatedSprite YELLOW_WALK = new AnimatedSprite(new File(new File("..","sprites"),"yellowgirl_walk.gif"),32,32);
-    public static AnimatedSprite GREEN_STAND = new AnimatedSprite(new File(new File("..","sprites"),"greengirl_stand.gif"),32,32);
-    public static AnimatedSprite GREEN_WALK = new AnimatedSprite(new File(new File("..","sprites"),"greengirl_walk.gif"),32,32);
+    public final static File SPRITES_FOLDER = new File("..","sprites");
+    public final static File BACKGROUNDS_FOLDER = new File("..","backgrounds");
+
+    //NANA(new File(SPRITES_FOLDER,"3x.png")),
+    public static Sprite NANA_SMALL = new Sprite(new File(SPRITES_FOLDER,"1x.gif"));
+    public static Sprite TILE_SHEET = new Sprite(new File(SPRITES_FOLDER,"tiles.gif"));
+    public static Sprite MAP_TILE_INFO = new Sprite(new File(SPRITES_FOLDER,"maptileinfo.gif"));
+    public static Sprite PROFONT = new Sprite(new File(SPRITES_FOLDER,"Profont.gif"));
+    public static Sprite BACKGROUND1 = new Sprite(new File(BACKGROUNDS_FOLDER,"back1.gif"));
+    public static Sprite BACKGROUND2 = new Sprite(new File(BACKGROUNDS_FOLDER,"back2.gif"));
+    public static Sprite BACKGROUND3 = new Sprite(new File(BACKGROUNDS_FOLDER,"back3.gif"));
+    public static AnimatedSprite ERINOAH = new AnimatedSprite(new File(SPRITES_FOLDER,"erinoah.gif"),48,48);
+    public static AnimatedSprite ERINA = new AnimatedSprite(new File(SPRITES_FOLDER,"erina.gif"),32,32);
+    public static AnimatedSprite ERINA_WALK = new AnimatedSprite(new File(SPRITES_FOLDER,"erina_walk.gif"),32,32);
+    public static AnimatedSprite ERINA_JUMP_RISE1 = new AnimatedSprite(new File(SPRITES_FOLDER,"erina_jump_rise1.gif"),32,32);
+    public static AnimatedSprite ERINA_JUMP_RISE = new AnimatedSprite(new File(SPRITES_FOLDER,"erina_jump_rise.gif"),32,32);
+    public static AnimatedSprite ERINA_JUMP_FALL1 = new AnimatedSprite(new File(SPRITES_FOLDER,"erina_jump_fall1.gif"),32,32);
+    public static AnimatedSprite ERINA_JUMP_FALL = new AnimatedSprite(new File(SPRITES_FOLDER,"erina_jump_fall.gif"),32,32);
+    public static AnimatedSprite ERINA_SLIDE1 = new AnimatedSprite(new File(SPRITES_FOLDER,"erina_slide1.gif"),32,32);
+    public static AnimatedSprite ERINA_SLIDE = new AnimatedSprite(new File(SPRITES_FOLDER,"erina_slide.gif"),32,32);
+    public static AnimatedSprite KNIFE_SWING = new AnimatedSprite(new File(SPRITES_FOLDER,"knife-swing.gif"),32,32);
+    public static AnimatedSprite RED_STAND = new AnimatedSprite(new File(SPRITES_FOLDER,"redgirl_stand.gif"),32,32);
+    public static AnimatedSprite RED_WALK = new AnimatedSprite(new File(SPRITES_FOLDER,"redgirl_walk.gif"),32,32);
+    public static AnimatedSprite BLUE_STAND = new AnimatedSprite(new File(SPRITES_FOLDER,"bluegirl_stand.gif"),32,32);
+    public static AnimatedSprite BLUE_WALK = new AnimatedSprite(new File(SPRITES_FOLDER,"bluegirl_walk.gif"),32,32);
+    public static AnimatedSprite YELLOW_STAND = new AnimatedSprite(new File(SPRITES_FOLDER,"yellowgirl_stand.gif"),32,32);
+    public static AnimatedSprite YELLOW_WALK = new AnimatedSprite(new File(SPRITES_FOLDER,"yellowgirl_walk.gif"),32,32);
+    public static AnimatedSprite GREEN_STAND = new AnimatedSprite(new File(SPRITES_FOLDER,"greengirl_stand.gif"),32,32);
+    public static AnimatedSprite GREEN_WALK = new AnimatedSprite(new File(SPRITES_FOLDER,"greengirl_walk.gif"),32,32);
+    public static Sprite WATER_OVERLAY = new Sprite(new File(BACKGROUNDS_FOLDER,"water-overlay.gif"));
 
 
 
