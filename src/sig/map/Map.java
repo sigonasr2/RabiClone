@@ -230,7 +230,7 @@ public class Map {
     }
 
     public void ModifyDataTile(int x,int y,DataTile t) {
-        if (data[y*Map.MAP_WIDTH+x]<32768) {
+        if (data[y*Map.MAP_WIDTH+x]<8192) {
             DataTile prevTile = DataTile.values()[data[y*Map.MAP_WIDTH+x]];
             if (prevTile.ordinal()==0) {
                 eventTileCount++;
@@ -248,10 +248,10 @@ public class Map {
 
     public void ModifyDataTile(int x, int y, char value) {
         eventTileCount++;
-        if (value>32767) {
-            value=32767;
+        if (value>8192) {
+            value=8192;
         }
-        data[y*Map.MAP_WIDTH+x]=(char)(value+32768);
+        data[y*Map.MAP_WIDTH+x]=(char)(value+8192);
         System.out.println("Tile "+(y*MAP_WIDTH+x)+" is now "+data[y*MAP_WIDTH+x]+".");
     }
 

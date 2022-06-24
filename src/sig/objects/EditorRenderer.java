@@ -146,7 +146,7 @@ public class EditorRenderer extends LevelRenderer{
                 }
                 if (dataTileView) {
                     drawMapTileForDataTileMode(p,x,y);
-                    if (RabiClone.CURRENT_MAP.getDataTileValue(x, y)>=32768) {
+                    if (RabiClone.CURRENT_MAP.getDataTileValue(x, y)>=8192) {
                         DrawDataTileValue(p,x*Tile.TILE_WIDTH-this.getX(),y*Tile.TILE_HEIGHT-this.getY(),RabiClone.CURRENT_MAP.getDataTileValue(x, y));
                     } else if (RabiClone.CURRENT_MAP.getDataTile(x, y)!=DataTile.NULL) {
                         DrawDataTile(p,x*Tile.TILE_WIDTH-this.getX(),y*Tile.TILE_HEIGHT-this.getY(),RabiClone.CURRENT_MAP.getDataTile(x, y));
@@ -240,7 +240,7 @@ public class EditorRenderer extends LevelRenderer{
 
     protected void DrawTransparentDataTile(byte[] p, double x, double y, char tile,PaletteColor col) {
         Draw_Rect(p,col,x,y,Tile.TILE_WIDTH,Tile.TILE_HEIGHT);
-        Draw_Text_Ext(x+2,y+2,new String("V:").append(Integer.toString(tile-32768)),Font.PROFONT_12,Alpha.ALPHA0,PaletteColor.WHITE);
+        Draw_Text_Ext(x+2,y+2,new String("V:").append(Integer.toString(tile-8192)),Font.PROFONT_12,Alpha.ALPHA0,PaletteColor.WHITE);
     }
 
     protected void DrawDataTile(byte[] p, double x, double y, DataTile tile) {
@@ -285,7 +285,9 @@ public class EditorRenderer extends LevelRenderer{
             case _7:
             case _8:
             case _9:
-                dataTileValue=dataTileValue.append(a.toString().replace("_",""));
+                if (inputDataTileValue) {
+                    dataTileValue=dataTileValue.append(a.toString().replace("_",""));
+                }
             break;
             case BACKSPACE:{
                 if (dataTileValue.length()>0) {
@@ -295,6 +297,7 @@ public class EditorRenderer extends LevelRenderer{
             case ENTER:{
                 inputDataTileValue=false;
                 RabiClone.CURRENT_MAP.ModifyDataTileValue(tileX, tileY, (char)Integer.parseInt(dataTileValue.toString()));
+                inputMessageLogDisplay.clear();
                 dataTileValue.clear();
             }break;
         }
