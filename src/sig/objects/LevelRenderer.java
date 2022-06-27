@@ -21,14 +21,19 @@ import sig.map.Tile;
 import sig.objects.actor.PhysicsObject;
 import sig.objects.actor.RenderedObject;
 import sig.objects.actor.State;
-import sig.utils.TimeUtils;
 
 public class LevelRenderer extends Object{
 
-    final static long staggerJitterWaitTime=TimeUtils.millisToNanos(200);
+    final static double staggerJitterWaitTime=0.05;
 
-    long staggerTimer=0;
+    double staggerTimer=0;
     int staggerOffsetX=2;
+
+    public final static byte MAX_RIPPLE_SIZE = (byte)4;
+    public final static byte RIPPLE_CHANCE = (byte)3;
+    //Ripples will store bit 8 for the direction the ripple is moving. Bits 1-7 are used as the actual value for ripples up to 64 in size (Half used for movement in each direction).
+    byte[] ripples = new byte[RabiClone.BASE_HEIGHT/MAX_RIPPLE_SIZE];
+    long nextRipple = 0;
 
     public LevelRenderer(Panel panel) {
         super(panel);
@@ -52,8 +57,41 @@ public class LevelRenderer extends Object{
                 }
             }
         }
-        if (RabiClone.TIME-staggerTimer>staggerJitterWaitTime) {
+        if ((staggerTimer-=updateMult)<=0) {
             staggerOffsetX*=-1;
+            staggerTimer=staggerJitterWaitTime;
+        }
+        if ((nextRipple-=updateMult)<0) {
+            if (Math.random()*RIPPLE_CHANCE<1) {
+                int selectedIndex=((int)Math.random()*ripples.length);
+                if (ripples[selectedIndex]==0) {
+                    if (Math.random()<0.5) {
+                        ripples[selectedIndex]=(byte)(MAX_RIPPLE_SIZE|0b10000000);
+                    } else {
+                        ripples[selectedIndex]=(byte)(MAX_RIPPLE_SIZE|0b00000000);
+                    }
+                }
+            }
+            for (int i=0;i<ripples.length;i++) {
+                if (ripples[i]!=0) {
+                    if (ripples[i]>>>7==1) {
+                        //We are moving left.
+                        ripples[i]=(byte)((ripples[i]&0b10000000)+((ripples[i]&0b1111111)-1));
+                        if ((ripples[i]&0b1111111)==0) //Flip the sign. 
+                        {
+                            ripples[i]=(byte)(((ripples[i]&0b1111111)+1));
+                        }
+                    } else {
+                        //We are moving right.
+                        ripples[i]=(byte)((ripples[i]&0b10000000)+((ripples[i]&0b1111111)+1));
+                        if ((ripples[i]&0b1111111)==MAX_RIPPLE_SIZE*2) //Flip the sign. 
+                        {
+                            ripples[i]=(byte)((ripples[i]&0b10000000)+((ripples[i]&0b1111111)-1));
+                        }
+                    }
+                }
+            }
+            nextRipple=1;
         }
     }
 
