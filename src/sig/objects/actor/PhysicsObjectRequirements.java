@@ -7,15 +7,15 @@ public interface PhysicsObjectRequirements {
     boolean leftKeyHeld();
     Rectangle getCollisionBounds();
     Rectangle setCollisionBounds();
-    void setVelocityLimits(double x,double y);
-    void setAccelerationLimits(double x,double y);
-    void setMaxJumpCount(byte jumps);
-    void setGroundFriction(double x);
-    void setAirFriction(double x);
-    void setGroundDrag(double x);
-    void setAirDrag(double x);
-    void setSlidingVelocity(double x);
-    void setSlidingAcceleration(double x);
-    void setJumpVelocity(double x);
-    void setGravity(double gravity);
+    void setVelocityLimits(double xVelocity,double yVelocity,double underwaterXVelocity,double underwaterYVelocity);
+    void setAccelerationLimits(double xAccelerationLimit,double yAccelerationLimit,double underwaterXAccelerationLimit,double underwaterYAccelerationLimit);
+    void setMaxJumpCount(byte jumps,byte underwaterJumps);
+    void setGroundFriction(double groundFriction,double underwaterGroundFriction);
+    void setAirFriction(double airFriction,double underwaterAirFriction);
+    void setGroundDrag(double groundDrag,double underwaterGroundDrag);
+    void setAirDrag(double airDrag,double underwaterAirDrag);
+    void setSlidingVelocity(double slidingVelocity,double underwaterSlidingVelocity);
+    void setSlidingAcceleration(double slidingAcceleration,double underwaterSlidingAcceleration);
+    void setJumpVelocity(double jumpVelocity,double underwaterJumpVelocity);
+    void setGravity(double gravity, double underwaterGravity);
 }

@@ -13,6 +13,11 @@ public abstract class PhysicsObject extends AnimatedObject implements PhysicsObj
     final public static double NORMAL_JUMP_VELOCITY = -300;
     final public static double WALKING_SPEED_LIMIT = 164;
     final public static double FALLING_SPEED_LIMIT = 500;
+    final public static double UNDERWATER_GRAVITY = 300;
+    final public static double UNDERWATER_NORMAL_FRICTION = 3200;
+    final public static double UNDERWATER_NORMAL_JUMP_VELOCITY = -900;
+    final public static double UNDERWATER_WALKING_SPEED_LIMIT = 76;
+    final public static double UNDERWATER_FALLING_SPEED_LIMIT = 300;
 
     public State state = State.IDLE;
     public double x_velocity;
@@ -23,15 +28,41 @@ public abstract class PhysicsObject extends AnimatedObject implements PhysicsObj
     public double y_velocity;
     protected double gravity = GRAVITY;
     protected double x_acceleration,y_acceleration;
+    protected boolean groundCollision;
+    protected byte jumpCount=0;
+    protected byte maxJumpCount=2;
     protected double x_velocity_limit,y_velocity_limit;
     protected double x_acceleration_limit,y_acceleration_limit;
-    protected boolean groundCollision;
-    protected byte maxJumpCount=2;
-    protected byte jumpCount=0;
     protected double jump_velocity;
     protected double horizontal_air_friction,horizontal_air_drag;
     protected double horizontal_friction,horizontal_drag;
     protected double sliding_velocity,sliding_acceleration;
+
+    /* LAND is for all values pertaining to being on land. Stored because our active physics values CAN (and probably will) change!
+     * Therefore these are storage containers for what the real values used are.
+     * The handling of switching between land and underwater physics should be abstracted away and not require refactoring of the code in any capacity.
+     * The game will automatically know which values to use.
+     */
+    private double LAND_gravity;
+    private double LAND_x_velocity_limit,LAND_y_velocity_limit;
+    private double LAND_x_acceleration_limit,LAND_y_acceleration_limit;
+    private double LAND_jump_velocity;
+    private byte LAND_maxJumpCount;
+    private double LAND_horizontal_air_friction,LAND_horizontal_air_drag;
+    private double LAND_horizontal_friction,LAND_horizontal_drag;
+    private double LAND_sliding_velocity,LAND_sliding_acceleration;
+
+    private double UNDERWATER_gravity;
+    private double UNDERWATER_x_velocity_limit,UNDERWATER_y_velocity_limit;
+    private double UNDERWATER_x_acceleration_limit,UNDERWATER_y_acceleration_limit;
+    private double UNDERWATER_jump_velocity;
+    private byte UNDERWATER_maxJumpCount;
+    private double UNDERWATER_horizontal_air_friction,UNDERWATER_horizontal_air_drag;
+    private double UNDERWATER_horizontal_friction,UNDERWATER_horizontal_drag;
+    private double UNDERWATER_sliding_velocity,UNDERWATER_sliding_acceleration;
+
+    /** <b>Not to be exposed!</b> Internally tracks if we're underwater and when it switches, sets all the physics values appropriately.*/
+    private boolean underwaterState=false;
 
     protected PhysicsObject(AnimatedSprite spr, double animationSpd, Panel panel) {
         super(spr, animationSpd, panel);
@@ -41,6 +72,7 @@ public abstract class PhysicsObject extends AnimatedObject implements PhysicsObj
     @Override
     public void update(double updateMult) {
         super.update(updateMult);
+        setPhysicsBasedOnLandOrUnderwaterStatus();
         handleMovementPhysics(updateMult);
         if(state==State.STAGGER && staggerDuration>0){
             staggerDuration-=updateMult;
@@ -293,63 +325,105 @@ public abstract class PhysicsObject extends AnimatedObject implements PhysicsObj
         return getCollisionBox();
     }
 
-
-
-    @Override
-    public void setVelocityLimits(double x, double y) {
-        this.x_velocity_limit=x;
-        this.y_velocity_limit=y;
+    public void setPhysicsBasedOnLandOrUnderwaterStatus() {
+        if (isUnderwater()&&!underwaterState) {
+            gravity=UNDERWATER_gravity;
+            x_velocity_limit=UNDERWATER_x_velocity_limit;y_velocity_limit=UNDERWATER_y_velocity_limit;
+            x_acceleration_limit=UNDERWATER_x_acceleration_limit;y_acceleration_limit=UNDERWATER_y_acceleration_limit;
+            jump_velocity=UNDERWATER_jump_velocity;
+            maxJumpCount=UNDERWATER_maxJumpCount;
+            horizontal_air_friction=UNDERWATER_horizontal_air_friction;
+            horizontal_air_drag=UNDERWATER_horizontal_air_drag;
+            horizontal_friction=UNDERWATER_horizontal_friction;
+            horizontal_drag=UNDERWATER_horizontal_drag;
+            sliding_velocity=UNDERWATER_sliding_velocity;
+            sliding_acceleration=UNDERWATER_sliding_acceleration;
+            underwaterState=true;
+        } else
+        if (!isUnderwater()&&underwaterState) {
+            gravity=LAND_gravity;
+            x_velocity_limit=LAND_x_velocity_limit;y_velocity_limit=LAND_y_velocity_limit;
+            x_acceleration_limit=LAND_x_acceleration_limit;y_acceleration_limit=LAND_y_acceleration_limit;
+            jump_velocity=LAND_jump_velocity;
+            maxJumpCount=LAND_maxJumpCount;
+            horizontal_air_friction=LAND_horizontal_air_friction;
+            horizontal_air_drag=LAND_horizontal_air_drag;
+            horizontal_friction=LAND_horizontal_friction;
+            horizontal_drag=LAND_horizontal_drag;
+            sliding_velocity=LAND_sliding_velocity;
+            sliding_acceleration=LAND_sliding_acceleration;
+            underwaterState=false;
+        }
     }
 
     @Override
-    public void setAccelerationLimits(double x, double y) {
-        this.x_acceleration_limit=x;
-        this.y_acceleration_limit=y;
+    public void setVelocityLimits(double xVelocity,double yVelocity,double underwaterXVelocity,double underwaterYVelocity) {
+        this.LAND_x_velocity_limit=xVelocity;
+        this.LAND_y_velocity_limit=yVelocity;
+        this.UNDERWATER_x_velocity_limit=underwaterXVelocity;
+        this.UNDERWATER_y_velocity_limit=underwaterYVelocity;
     }
 
     @Override
-    public void setMaxJumpCount(byte jumps) {
-        this.maxJumpCount=jumps;
+    public void setAccelerationLimits(double xAccelerationLimit,double yAccelerationLimit,double underwaterXAccelerationLimit,double underwaterYAccelerationLimit) {
+        this.LAND_x_acceleration_limit=xAccelerationLimit;
+        this.LAND_y_acceleration_limit=yAccelerationLimit;
+        this.UNDERWATER_x_acceleration_limit=underwaterXAccelerationLimit;
+        this.UNDERWATER_y_acceleration_limit=underwaterYAccelerationLimit;
     }
 
     @Override
-    public void setGroundFriction(double x) {
-        this.horizontal_friction=x;
+    public void setMaxJumpCount(byte jumps,byte underwaterJumps) {
+        this.LAND_maxJumpCount=jumps;
+        this.UNDERWATER_maxJumpCount=underwaterJumps;
     }
 
     @Override
-    public void setAirFriction(double x) {
-        this.horizontal_air_friction=x;
+    public void setGroundFriction(double groundFriction,double underwaterGroundFriction) {
+        this.LAND_horizontal_friction=groundFriction;
+        this.UNDERWATER_horizontal_friction=underwaterGroundFriction;
     }
 
     @Override
-    public void setGroundDrag(double x) {
-        this.horizontal_drag=x;
+    public void setAirFriction(double airFriction,double underwaterAirFriction) {
+        this.LAND_horizontal_air_friction=airFriction;
+        this.UNDERWATER_horizontal_air_friction=underwaterAirFriction;
     }
 
     @Override
-    public void setAirDrag(double x) {
-        this.horizontal_air_drag=x;
+    public void setGroundDrag(double groundDrag,double underwaterGroundDrag) {
+        this.LAND_horizontal_drag=groundDrag;
+        this.UNDERWATER_horizontal_drag=underwaterGroundDrag;
     }
 
     @Override
-    public void setSlidingVelocity(double x) {
-        this.sliding_velocity=x;
+    public void setAirDrag(double airDrag,double underwaterAirDrag) {
+        this.LAND_horizontal_air_drag=airDrag;
+        this.UNDERWATER_horizontal_air_drag=underwaterAirDrag;
     }
 
     @Override
-    public void setSlidingAcceleration(double x) {
-        this.sliding_acceleration=x;
+    public void setSlidingVelocity(double slidingVelocity,double underwaterSlidingVelocity) {
+        this.LAND_sliding_velocity=slidingVelocity;
+        this.UNDERWATER_sliding_velocity=underwaterSlidingVelocity;
     }
 
     @Override
-    public void setJumpVelocity(double x) {
-        this.jump_velocity=x;
+    public void setSlidingAcceleration(double slidingAcceleration,double underwaterSlidingAcceleration) {
+        this.LAND_sliding_acceleration=slidingAcceleration;
+        this.UNDERWATER_sliding_acceleration=underwaterSlidingAcceleration;
     }
 
     @Override
-    public void setGravity(double gravity) {
-        this.gravity = gravity;
+    public void setJumpVelocity(double jumpVelocity,double underwaterJumpVelocity) {
+        this.LAND_jump_velocity=jumpVelocity;
+        this.UNDERWATER_jump_velocity=underwaterJumpVelocity;
+    }
+
+    @Override
+    public void setGravity(double gravity, double underwaterGravity) {
+        this.LAND_gravity=gravity;
+        this.UNDERWATER_gravity=underwaterGravity;
     }
 
     public double getGravity() {
