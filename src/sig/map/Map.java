@@ -37,7 +37,7 @@ public class Map {
     byte[] types = new byte[MAP_SCREENS_X*MAP_SCREENS_Y];
     char[] data = new char[MAP_WIDTH*MAP_HEIGHT]; //While it's stored in a char, the map format only reads 14 bits for this value!! Value is between 0-16384!
 
-    char waterLevel = 144;
+    char waterLevel = (MAP_HEIGHT/2) * Tile.TILE_HEIGHT;
 
     int eventTileCount=0;
 
