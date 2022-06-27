@@ -174,9 +174,10 @@ public class LevelRenderer extends Object{
                 for (int x=0;x<RabiClone.BASE_WIDTH;x++) {
                     //Draw the water background at double size because it's half the screen's width and height.
                     int index = y*RabiClone.BASE_WIDTH+x;
-                    p[index] = Sprite.WATER_OVERLAY.getBi_array()[
-                        (y/2)*Sprite.WATER_OVERLAY.getCanvasWidth()+(x/2)
-                    ];
+                    byte col = Sprite.WATER_OVERLAY.getBi_array()[(y/2)*Sprite.WATER_OVERLAY.getCanvasWidth()+(x/2)];
+                    if (col!=(byte)32) {
+                        p[index] = col;
+                    }
                 }
             }
         }

@@ -40,7 +40,6 @@ public class Player extends PhysicsObject{
     final double viewBoundaryX = RabiClone.BASE_WIDTH / 3;
     final double viewBoundaryY = RabiClone.BASE_HEIGHT / 3;
     View lastCameraView = View.FIXED;
-    boolean spacebarReleased = true;
     boolean facing_direction = RIGHT;
     boolean landedBellySlide=false;
 
@@ -68,6 +67,7 @@ public class Player extends PhysicsObject{
         setSlidingVelocity_UseDefaultStrategy();
         setSlidingAcceleration_UseDefaultStrategy();
         setJumpVelocity_UseDefaultStrategy();
+        setMaxJumpCount_UseDefaultStrategy();
         setGravity_UseDefaultStrategy();
     }
 
@@ -212,7 +212,6 @@ public class Player extends PhysicsObject{
         && state!=State.ATTACK2&&state!=State.ATTACK3&&state!=State.BELLYSLIDE) {
             y_velocity = jump_velocity;
         }
-        System.out.println(spacebarReleased);
     }
 
     private void handleEventCollisions() {
@@ -235,16 +234,16 @@ public class Player extends PhysicsObject{
                 if (state!=State.UNCONTROLLABLE) {
                     setUncontrollable(0.2);
                 }
-                pobj.setStagger(0.3);
-                pobj.setInvulnerability(0.4);
+                pobj.setStagger(0.5);
+                pobj.setInvulnerability(0.6);
                 pobj.x_velocity = -300;
                 pobj.y_velocity = -120;
             }else{
                 if (state!=State.UNCONTROLLABLE) {
                     setUncontrollable(0.2);
                 }
-                pobj.setStagger(0.3);
-                pobj.setInvulnerability(0.4);
+                pobj.setStagger(0.5);
+                pobj.setInvulnerability(0.6);
                 pobj.x_velocity = 300;
                 pobj.y_velocity = -120;
             }
@@ -256,7 +255,6 @@ public class Player extends PhysicsObject{
     public void KeyReleased(Action a) {
         if (a == Action.JUMP) {
             spacebarPressed = 0;
-            spacebarReleased=true;
         }
         if (state != State.SLIDE&&state!=State.BELLYSLIDE) {
             if ((a == Action.MOVE_LEFT) && (KeyHeld(Action.MOVE_RIGHT))) {
@@ -331,13 +329,12 @@ public class Player extends PhysicsObject{
             weaponSwingTime=RabiClone.TIME;
         }
         if (groundCollision||isUnderwater()) {
-            if (spacebarReleased&&jumpCount>0&&a==Action.JUMP&&state!=State.ATTACK2&&state!=State.ATTACK3) {
+            if (jumpCount>0&&a==Action.JUMP&&state!=State.ATTACK2&&state!=State.ATTACK3) {
                 state = State.JUMP;
                 jumpCount--;
                 y_velocity = jump_velocity;
                 spacebarPressed = RabiClone.TIME;
-                spacebarReleased=false;
-                System.out.println("Jump");
+                //System.out.println("Jump");
             }
         }
         if (state != State.SLIDE&&state!=State.BELLYSLIDE) {

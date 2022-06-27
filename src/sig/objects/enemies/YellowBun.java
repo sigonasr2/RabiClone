@@ -19,6 +19,7 @@ public class YellowBun extends BunnyGirls{
         setSlidingVelocity_UseDefaultStrategy();
         setSlidingAcceleration_UseDefaultStrategy();
         setJumpVelocity_UseDefaultStrategy();
+        setMaxJumpCount_UseDefaultStrategy();
         setGravity_UseHalfStrategy(150);
     }
     

@@ -50,8 +50,8 @@ public abstract class PhysicsObject extends AnimatedObject implements PhysicsObj
     protected double gravity = GRAVITY;
     protected double x_acceleration,y_acceleration;
     protected boolean groundCollision;
-    protected byte jumpCount=0;
     protected byte maxJumpCount=2;
+    protected byte jumpCount=maxJumpCount;
     protected double x_velocity_limit,y_velocity_limit;
     protected double x_acceleration_limit,y_acceleration_limit;
     protected double jump_velocity;
