@@ -24,14 +24,16 @@ import sig.objects.actor.State;
 
 public class LevelRenderer extends Object{
 
-    final static double staggerJitterWaitTime=0.05;
+    final static double staggerJitterWaitTime=0.03;
 
     double staggerTimer=0;
     int staggerOffsetX=2;
 
     public final static byte MAX_RIPPLE_SIZE = (byte)4;
     public final static byte RIPPLE_CHANCE = (byte)3;
-    //Ripples will store bit 8 for the direction the ripple is moving. Bits 1-7 are used as the actual value for ripples up to 64 in size (Half used for movement in each direction).
+    /**
+    *Ripples will store bit 8 for the direction the ripple is moving. Bits 1-7 are used as the actual value for ripples up to 64 in size (Half used for movement in each direction).
+    */
     byte[] ripples = new byte[RabiClone.BASE_HEIGHT/MAX_RIPPLE_SIZE];
     long nextRipple = 0;
 
