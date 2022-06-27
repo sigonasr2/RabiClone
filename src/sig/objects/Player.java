@@ -319,7 +319,7 @@ public class Player extends PhysicsObject{
             default:
                 break;
         }
-        if (a==Action.FALL&&(state==State.JUMP||state==State.FALLING)) {
+        if (a==Action.FALL&&(state==State.JUMP||state==State.FALLING)&&!isUnderwater()) {
             state=State.BELLYSLIDE;
             y_velocity=y_velocity_limit;
             x_velocity=60*(facing_direction?1:-1);
