@@ -89,7 +89,7 @@ public abstract class PhysicsObject extends AnimatedObject implements PhysicsObj
     protected PhysicsObject(AnimatedSprite spr, double animationSpd, Panel panel) {
         super(spr, animationSpd, panel);
         setCollisionBox(setCollisionBounds());
-        setPhysicsBasedOnLandOrUnderwaterStatus();
+        underwaterState=!isUnderwater(); //Slight hack that forces an update to physics at the start.
     }
 
     @Override
