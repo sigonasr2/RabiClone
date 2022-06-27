@@ -14,12 +14,12 @@ public class YellowBun extends BunnyGirls{
         setAccelerationLimits(100, 100);
         setVelocityLimits(500, 500);
         setGroundDrag(2000);
-        setGroundFriction(PhysicsObject.NORMAL_FRICTION);
+        setGroundFriction(PhysicsObject.GROUND_FRICTION);
         setAirDrag(800);
         setAirFriction(180);
         setSlidingVelocity(164);
         setSlidingAcceleration(120);
-        setJumpVelocity(PhysicsObject.NORMAL_JUMP_VELOCITY);
+        setJumpVelocity(PhysicsObject.JUMP_VELOCITY);
         setGravity(150);
     }
     

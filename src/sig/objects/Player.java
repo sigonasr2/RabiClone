@@ -60,16 +60,16 @@ public class Player extends PhysicsObject{
         super(Sprite.ERINA, 5, panel);
         setX(RabiClone.BASE_WIDTH / 2 - getAnimatedSpr().getWidth() / 2);
         setY(RabiClone.BASE_HEIGHT * (2 / 3d) - getAnimatedSpr().getHeight() / 2);
-        setAccelerationLimits(100, 100);
-        setVelocityLimits(246, 500);
-        setGroundDrag(2000);
-        setGroundFriction(PhysicsObject.NORMAL_FRICTION);
-        setAirDrag(900);
-        setAirFriction(180);
-        setSlidingVelocity(164);
-        setSlidingAcceleration(120);
-        setJumpVelocity(PhysicsObject.NORMAL_JUMP_VELOCITY);
-        setGravity(1300);
+        setAccelerationLimits_UseDefaultStrategy();
+        setVelocityLimits_UseDefaultStrategy();
+        setGroundDrag_UseDefaultStrategy();
+        setGroundFriction_UseDefaultStrategy();
+        setAirDrag_UseDefaultStrategy();
+        setAirFriction_UseDefaultStrategy();
+        setSlidingVelocity_UseDefaultStrategy();
+        setSlidingAcceleration_UseDefaultStrategy();
+        setJumpVelocity_UseDefaultStrategy();
+        setGravity_UseDefaultStrategy();
     }
 
     @Override
@@ -117,8 +117,8 @@ public class Player extends PhysicsObject{
                     break;
                 }
 
-                jump_velocity = PhysicsObject.NORMAL_JUMP_VELOCITY;
-                horizontal_friction = PhysicsObject.NORMAL_FRICTION;
+                jump_velocity = PhysicsObject.JUMP_VELOCITY;
+                horizontal_friction = PhysicsObject.GROUND_FRICTION;
                 jump_slide_fall_StartAnimationTimer = -1;
 
                 if (x_velocity != 0) {
