@@ -1,6 +1,7 @@
 package sig.objects;
 
 import java.awt.event.KeyEvent;
+import java.util.Arrays;
 
 import sig.RabiClone;
 import sig.engine.Action;
@@ -36,7 +37,8 @@ public class LevelRenderer extends Object{
     *Ripples will store bit 8 for the direction the ripple is moving. Bits 1-7 are used as the actual value for ripples up to 64 in size (Half used for movement in each direction).
     */
     byte[] ripples = new byte[RabiClone.BASE_HEIGHT/MAX_RIPPLE_SIZE];
-    long nextRipple = 0;
+    byte[] extraStorage = new byte[RabiClone.BASE_WIDTH];
+    double nextRipple = 0;
 
     public LevelRenderer(Panel panel) {
         super(panel);
@@ -66,46 +68,41 @@ public class LevelRenderer extends Object{
         }
         if ((nextRipple-=updateMult)<0) {
             if (Math.random()*RIPPLE_CHANCE<1) {
-                int selectedIndex=((int)Math.random()*ripples.length);
+                int selectedIndex=(int)(Math.random()*ripples.length);
                 if (ripples[selectedIndex]==0) {
                     if (Math.random()<0.5) {
                         ripples[selectedIndex]=(byte)(MAX_RIPPLE_SIZE|0b10000000);
                     } else {
                         ripples[selectedIndex]=(byte)(MAX_RIPPLE_SIZE|0b00000000);
                     }
-                    System.out.println("Ripple "+selectedIndex+" started. Dir:"+(((ripples[selectedIndex]&0b10000000)==0b10000000)?"left":"right"));
                 }
             }
             for (int i=0;i<ripples.length;i++) {
                 if (ripples[i]!=0) {
-                    if (ripples[i]>>>7==1) {
+                    if ((byte)(ripples[i]>>>7)==-1) {
                         //We are moving left.
-                        ripples[i]=(byte)((ripples[i]&0b10000000)+((ripples[i]&0b1111111)-1));
+                        ripples[i]=(byte)(0b10000000|((ripples[i]&0b1111111)-1));
                         if ((ripples[i]&0b1111111)==0) //Flip the sign. 
                         {
                             ripples[i]=(byte)(((ripples[i]&0b1111111)+1));
-                            System.out.println("  Ripple "+i+" is now at value "+(ripples[i]&0b1111111));
                         } else 
                         if ((ripples[i]&0b1111111)==MAX_RIPPLE_SIZE&&Math.random()*RIPPLE_DROP_CHANCE<1) {
                             ripples[i]=0;
-                            System.out.println(" Reset ripple "+i);
                         }
                     } else {
                         //We are moving right.
-                        ripples[i]=(byte)((ripples[i]&0b10000000)+((ripples[i]&0b1111111)+1));
+                        ripples[i]=(byte)((ripples[i]&0b1111111)+1);
                         if ((ripples[i]&0b1111111)==MAX_RIPPLE_SIZE*2) //Flip the sign. 
                         {
-                            ripples[i]=(byte)((ripples[i]&0b10000000)+((ripples[i]&0b1111111)-1));
-                            System.out.println("  Ripple "+i+" is now at value "+(ripples[i]&0b1111111));
+                            ripples[i]=(byte)(0b10000000|((ripples[i]&0b1111111)-1));
                         } else 
                         if ((ripples[i]&0b1111111)==MAX_RIPPLE_SIZE&&Math.random()*RIPPLE_DROP_CHANCE<1) {
                             ripples[i]=0;
-                            System.out.println(" Reset ripple "+i);
                         }
                     }
                 }
             }
-            nextRipple=1;
+            nextRipple=0.2;
         }
     }
 
@@ -177,6 +174,43 @@ public class LevelRenderer extends Object{
                     byte col = Sprite.WATER_OVERLAY.getBi_array()[(y/2)*Sprite.WATER_OVERLAY.getCanvasWidth()+(x/2)];
                     if (col!=(byte)32) {
                         p[index] = col;
+                    }
+                }
+            }
+        }
+
+        for (int i=0;i<ripples.length;i++) {
+            if (ripples[i]!=0) {
+                for (int y=-MAX_RIPPLE_SIZE/2;y<MAX_RIPPLE_SIZE/2;y++) {
+                    if (((i*MAX_RIPPLE_SIZE)+y)>=0&&((i*MAX_RIPPLE_SIZE)+y)<RabiClone.BASE_HEIGHT) {
+                        byte displacement = (byte)((ripples[i]&0b1111111) - MAX_RIPPLE_SIZE);
+                        int index = ((i*MAX_RIPPLE_SIZE)+y)*RabiClone.BASE_WIDTH;
+                        if (displacement>=0) {
+                            displacement-=y;
+                        } else {
+                            displacement+=y;
+                        }
+                        if (displacement>=0) {
+                            for (int x=0;x<displacement;x++) {
+                                extraStorage[x]=p[index+x];
+                            }
+                            for (int x=0;x<RabiClone.BASE_WIDTH-displacement;x++) {
+                                p[index+x]=p[index+x+displacement];
+                            }
+                            for (int x=RabiClone.BASE_WIDTH-displacement;x<RabiClone.BASE_WIDTH;x++) {
+                                p[index+x]=extraStorage[x-(RabiClone.BASE_WIDTH-displacement)];
+                            }
+                        } else {
+                            for (int x=0;x<-displacement;x++) {
+                                extraStorage[x]=p[index+(RabiClone.BASE_WIDTH-x)];
+                            }
+                            for (int x=RabiClone.BASE_WIDTH-1;x>=-displacement;x--) {
+                                p[index+x]=p[index+x+displacement];
+                            }
+                            for (int x=0;x<-displacement;x++) {
+                                p[index+x]=extraStorage[x];
+                            }
+                        }
                     }
                 }
             }
