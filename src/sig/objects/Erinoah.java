@@ -17,16 +17,16 @@ public class Erinoah extends PhysicsObject{
         super(Sprite.ERINOAH,6.5,RabiClone.p);
         setX(x);
         setY(y);
-        setAccelerationLimits(100, 100);
-        setVelocityLimits(500, 500);
-        setGroundDrag(2000);
-        setGroundFriction(PhysicsObject.GROUND_FRICTION);
-        setAirDrag(800);
-        setAirFriction(180);
-        setSlidingVelocity(164);
-        setSlidingAcceleration(120);
-        setJumpVelocity(PhysicsObject.JUMP_VELOCITY);
-        setGravity(450);
+        setAccelerationLimits_UseDefaultStrategy();
+        setVelocityLimits_UseHalfStrategy(500, 500);
+        setGroundDrag_UseDefaultStrategy();
+        setGroundFriction_UseDefaultStrategy();
+        setAirDrag_UseCopyStrategy(800);
+        setAirFriction_UseDefaultStrategy();
+        setSlidingVelocity_UseDefaultStrategy();
+        setSlidingAcceleration_UseDefaultStrategy();
+        setJumpVelocity_UseDefaultStrategy();
+        setGravity_UseHalfStrategy(450);
     }
 
     @Override
