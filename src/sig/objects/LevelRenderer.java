@@ -31,6 +31,7 @@ public class LevelRenderer extends Object{
 
     public final static byte MAX_RIPPLE_SIZE = (byte)4;
     public final static byte RIPPLE_CHANCE = (byte)3;
+    public final static byte RIPPLE_DROP_CHANCE = (byte)6;
     /**
     *Ripples will store bit 8 for the direction the ripple is moving. Bits 1-7 are used as the actual value for ripples up to 64 in size (Half used for movement in each direction).
     */
@@ -72,6 +73,7 @@ public class LevelRenderer extends Object{
                     } else {
                         ripples[selectedIndex]=(byte)(MAX_RIPPLE_SIZE|0b00000000);
                     }
+                    System.out.println("Ripple "+selectedIndex+" started. Dir:"+(((ripples[selectedIndex]&0b10000000)==0b10000000)?"left":"right"));
                 }
             }
             for (int i=0;i<ripples.length;i++) {
@@ -82,6 +84,11 @@ public class LevelRenderer extends Object{
                         if ((ripples[i]&0b1111111)==0) //Flip the sign. 
                         {
                             ripples[i]=(byte)(((ripples[i]&0b1111111)+1));
+                            System.out.println("  Ripple "+i+" is now at value "+(ripples[i]&0b1111111));
+                        } else 
+                        if ((ripples[i]&0b1111111)==MAX_RIPPLE_SIZE&&Math.random()*RIPPLE_DROP_CHANCE<1) {
+                            ripples[i]=0;
+                            System.out.println(" Reset ripple "+i);
                         }
                     } else {
                         //We are moving right.
@@ -89,6 +96,11 @@ public class LevelRenderer extends Object{
                         if ((ripples[i]&0b1111111)==MAX_RIPPLE_SIZE*2) //Flip the sign. 
                         {
                             ripples[i]=(byte)((ripples[i]&0b10000000)+((ripples[i]&0b1111111)-1));
+                            System.out.println("  Ripple "+i+" is now at value "+(ripples[i]&0b1111111));
+                        } else 
+                        if ((ripples[i]&0b1111111)==MAX_RIPPLE_SIZE&&Math.random()*RIPPLE_DROP_CHANCE<1) {
+                            ripples[i]=0;
+                            System.out.println(" Reset ripple "+i);
                         }
                     }
                 }
