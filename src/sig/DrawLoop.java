@@ -148,41 +148,16 @@ public class DrawLoop {
 	}
 
 	public static void Draw_Sprite_Partial(double x, double y, double xOffset, double yOffset, double w, double h, Sprite sprite, double frame_index, Transform transform){
-		boolean horizontal = transform==Transform.HORIZONTAL||transform==Transform.HORIZ_VERTIC;
-		boolean vertical = transform==Transform.VERTICAL||transform==Transform.HORIZ_VERTIC;
-		byte[] p = panel.pixel;
-		for(int X=(int)xOffset;X<(int)(w+xOffset);X++){
-			for(int Y=(int)yOffset;Y<(int)(h+yOffset);Y++){
-				if (X+x-xOffset<0||Y+y-yOffset<0||X-xOffset+x>=RabiClone.BASE_WIDTH||Y-yOffset+y>=RabiClone.BASE_HEIGHT) {
-					continue;
-				} else {
-					int index = 
-						((vertical?
-						sprite.getHeight()-(Y-(int)yOffset):
-						(Y-(int)yOffset))
-					+(int)y)*RabiClone.BASE_WIDTH+
-						(horizontal?
-						sprite.getWidth()-(X-(int)xOffset):
-						(X-(int)xOffset))
-					+(int)x;
-					
-					if (index<0||index>=p.length||sprite.getBi_array()[Y*sprite.getCanvasWidth()+X]==32||p[index]==sprite.getBi_array()[Y*sprite.getCanvasWidth()+X]) {
-						continue;
-					} else {
-						Draw(p,index,sprite.getBi_array()[Y*sprite.getCanvasWidth()+X],Alpha.ALPHA0);		
-					}
-				}
-			}	
-		}
+		Draw_Sprite_Partial_Ext(x,y,xOffset,yOffset,w,h,sprite,frame_index,Alpha.ALPHA0,PaletteColor.NORMAL,transform);
 	}
 
 	public static void Draw_Sprite_Partial_Ext(double x, double y, double xOffset, double yOffset, double w, double h, Sprite sprite, Alpha alpha, Transform transform){
-		Draw_Sprite_Partial_Ext(x, y, xOffset, yOffset, w, h, sprite, 0, alpha, PaletteColor.NORMAL, Transform.NONE);
+		Draw_Sprite_Partial_Ext(x, y, xOffset, yOffset, w, h, sprite, 0, alpha, PaletteColor.NORMAL, transform);
 	}
 
 	public static void Draw_Animated_Sprite_Partial_Ext(double x, double y, double xOffset, double yOffset, double w, double h, AnimatedSprite sprite, double frameIndex, Alpha alpha, Transform transform){
 		Rectangle frameRectangle=sprite.getFrame((int)frameIndex);
-		Draw_Sprite_Partial_Ext(x, y, frameRectangle.getX(), frameRectangle.getY(), frameRectangle.getWidth(), frameRectangle.getHeight(), sprite, 0, alpha, PaletteColor.NORMAL, Transform.NONE);
+		Draw_Sprite_Partial_Ext(x, y, frameRectangle.getX(), frameRectangle.getY(), frameRectangle.getWidth(), frameRectangle.getHeight(), sprite, 0, alpha, PaletteColor.NORMAL, transform);
 	}
 
 	public static void Draw_Sprite_Partial_Ext(double x, double y, double xOffset, double yOffset, double w, double h, Sprite sprite, double frame_index, Alpha alpha, PaletteColor col, Transform transform){
