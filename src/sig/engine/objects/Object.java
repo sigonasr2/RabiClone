@@ -18,7 +18,7 @@ import sig.engine.Transform;
 
 public abstract class Object implements GameEntity{
     double x,y;
-    Alpha transparency;
+    Alpha transparency = Alpha.ALPHA0;
     Sprite spr;
     Panel panel;
     protected Rectangle collisionBox;

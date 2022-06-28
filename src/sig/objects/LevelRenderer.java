@@ -7,7 +7,6 @@ import sig.engine.Action;
 import sig.engine.Alpha;
 import sig.engine.Font;
 import sig.engine.Key;
-import sig.engine.MouseScrollValue;
 import sig.engine.PaletteColor;
 import sig.engine.Panel;
 import sig.engine.Sprite;
