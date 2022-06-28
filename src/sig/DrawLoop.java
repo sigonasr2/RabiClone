@@ -164,27 +164,68 @@ public class DrawLoop {
 		boolean horizontal = transform==Transform.HORIZONTAL||transform==Transform.HORIZ_VERTIC;
 		boolean vertical = transform==Transform.VERTICAL||transform==Transform.HORIZ_VERTIC;
 		byte[] p = panel.pixel;
-		for(int X=(int)xOffset;X<(int)(w+xOffset);X++){
-			for(int Y=(int)yOffset;Y<(int)(h+yOffset);Y++){
-				if (X+x-xOffset<0||Y+y-yOffset<0||X-xOffset+x>=RabiClone.BASE_WIDTH||Y-yOffset+y>=RabiClone.BASE_HEIGHT) {
-					continue;
-				} else {
-					int index = 
-						((vertical?
-						sprite.getHeight()-(Y-(int)yOffset):
-						(Y-(int)yOffset))
-					+(int)y)*RabiClone.BASE_WIDTH+
-						(horizontal?
-						sprite.getWidth()-(X-(int)xOffset):
-						(X-(int)xOffset))
-					+(int)x;
-					if (index<0||index>=p.length||sprite.getBi_array()[Y*sprite.getCanvasWidth()+X]==32||p[index]==sprite.getBi_array()[Y*sprite.getCanvasWidth()+X]) {
+		if (transform==Transform.NONE&&col==PaletteColor.NORMAL) {
+			for(int X=(int)xOffset;X<(int)(w+xOffset);X++){
+				for(int Y=(int)yOffset;Y<(int)(h+yOffset);Y++){
+					if (X+x-xOffset<0||Y+y-yOffset<0||X-xOffset+x>=RabiClone.BASE_WIDTH||Y-yOffset+y>=RabiClone.BASE_HEIGHT) {
 						continue;
 					} else {
-						Draw(p,index,col==PaletteColor.NORMAL?sprite.getBi_array()[Y*sprite.getCanvasWidth()+X]:(byte)col.ordinal(),alpha);	
+						int index = ((int)y)*RabiClone.BASE_WIDTH+(int)x;
+						if (sprite.getBi_array()[Y*sprite.getCanvasWidth()+X]==32||index<0||index>=p.length) {
+							continue;
+						} else {
+							Draw(p,index,sprite.getBi_array()[Y*sprite.getCanvasWidth()+X],alpha);	
+						}
 					}
-				}
-			}	
+				}	
+			}
+		} else
+		if (col==PaletteColor.NORMAL) {
+			for(int X=(int)xOffset;X<(int)(w+xOffset);X++){
+				for(int Y=(int)yOffset;Y<(int)(h+yOffset);Y++){
+					if (X+x-xOffset<0||Y+y-yOffset<0||X-xOffset+x>=RabiClone.BASE_WIDTH||Y-yOffset+y>=RabiClone.BASE_HEIGHT) {
+						continue;
+					} else {
+						int index = 
+							((vertical?
+							sprite.getHeight()-(Y-(int)yOffset):
+							(Y-(int)yOffset))
+						+(int)y)*RabiClone.BASE_WIDTH+
+							(horizontal?
+							sprite.getWidth()-(X-(int)xOffset):
+							(X-(int)xOffset))
+						+(int)x;
+						if (sprite.getBi_array()[Y*sprite.getCanvasWidth()+X]==32||index<0||index>=p.length) {
+							continue;
+						} else {
+							Draw(p,index,sprite.getBi_array()[Y*sprite.getCanvasWidth()+X],alpha);	
+						}
+					}
+				}	
+			}
+		} else {
+			for(int X=(int)xOffset;X<(int)(w+xOffset);X++){
+				for(int Y=(int)yOffset;Y<(int)(h+yOffset);Y++){
+					if (X+x-xOffset<0||Y+y-yOffset<0||X-xOffset+x>=RabiClone.BASE_WIDTH||Y-yOffset+y>=RabiClone.BASE_HEIGHT) {
+						continue;
+					} else {
+						int index = 
+							((vertical?
+							sprite.getHeight()-(Y-(int)yOffset):
+							(Y-(int)yOffset))
+						+(int)y)*RabiClone.BASE_WIDTH+
+							(horizontal?
+							sprite.getWidth()-(X-(int)xOffset):
+							(X-(int)xOffset))
+						+(int)x;
+						if (sprite.getBi_array()[Y*sprite.getCanvasWidth()+X]==32||index<0||index>=p.length) {
+							continue;
+						} else {
+							Draw(p,index,(byte)col.ordinal(),alpha);
+						}
+					}
+				}	
+			}
 		}
 	}
 
