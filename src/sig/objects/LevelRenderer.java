@@ -1,7 +1,6 @@
 package sig.objects;
 
 import java.awt.event.KeyEvent;
-import java.util.Arrays;
 
 import sig.RabiClone;
 import sig.engine.Action;
