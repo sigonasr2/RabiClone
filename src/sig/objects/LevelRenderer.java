@@ -7,6 +7,7 @@ import sig.engine.Action;
 import sig.engine.Alpha;
 import sig.engine.Font;
 import sig.engine.Key;
+import sig.engine.MouseScrollValue;
 import sig.engine.PaletteColor;
 import sig.engine.Panel;
 import sig.engine.Sprite;
@@ -70,46 +71,46 @@ public class LevelRenderer extends Object{
         }
     }
 
-private void updateRipples(double updateMult) {
-    if ((nextRipple-=updateMult)<0) {
-        if (Math.random()*RIPPLE_CHANCE<1) {
-            int selectedIndex=(int)(Math.random()*ripples.length);
-            if (ripples[selectedIndex]==0) {
-                if (Math.random()<0.5) {
-                    ripples[selectedIndex]=(byte)(MAX_RIPPLE_SIZE|0b10000000);
-                } else {
-                    ripples[selectedIndex]=(byte)(MAX_RIPPLE_SIZE|0b00000000);
+    private void updateRipples(double updateMult) {
+        if ((nextRipple-=updateMult)<0) {
+            if (Math.random()*RIPPLE_CHANCE<1) {
+                int selectedIndex=(int)(Math.random()*ripples.length);
+                if (ripples[selectedIndex]==0) {
+                    if (Math.random()<0.5) {
+                        ripples[selectedIndex]=(byte)(MAX_RIPPLE_SIZE|0b10000000);
+                    } else {
+                        ripples[selectedIndex]=(byte)(MAX_RIPPLE_SIZE|0b00000000);
+                    }
                 }
             }
-        }
-        for (int i=0;i<ripples.length;i++) {
-            if (ripples[i]!=0) {
-                if ((byte)(ripples[i]>>>7)==-1) {
-                    //We are moving left.
-                    ripples[i]=(byte)(0b10000000|((ripples[i]&0b1111111)-1));
-                    if ((ripples[i]&0b1111111)==0) //Flip the sign. 
-                    {
-                        ripples[i]=(byte)(((ripples[i]&0b1111111)+1));
-                    } else 
-                    if ((ripples[i]&0b1111111)==MAX_RIPPLE_SIZE&&Math.random()*RIPPLE_DROP_CHANCE<1) {
-                        ripples[i]=0;
-                    }
-                } else {
-                    //We are moving right.
-                    ripples[i]=(byte)((ripples[i]&0b1111111)+1);
-                    if ((ripples[i]&0b1111111)==MAX_RIPPLE_SIZE*2) //Flip the sign. 
-                    {
+            for (int i=0;i<ripples.length;i++) {
+                if (ripples[i]!=0) {
+                    if ((byte)(ripples[i]>>>7)==-1) {
+                        //We are moving left.
                         ripples[i]=(byte)(0b10000000|((ripples[i]&0b1111111)-1));
-                    } else 
-                    if ((ripples[i]&0b1111111)==MAX_RIPPLE_SIZE&&Math.random()*RIPPLE_DROP_CHANCE<1) {
-                        ripples[i]=0;
+                        if ((ripples[i]&0b1111111)==0) //Flip the sign. 
+                        {
+                            ripples[i]=(byte)(((ripples[i]&0b1111111)+1));
+                        } else 
+                        if ((ripples[i]&0b1111111)==MAX_RIPPLE_SIZE&&Math.random()*RIPPLE_DROP_CHANCE<1) {
+                            ripples[i]=0;
+                        }
+                    } else {
+                        //We are moving right.
+                        ripples[i]=(byte)((ripples[i]&0b1111111)+1);
+                        if ((ripples[i]&0b1111111)==MAX_RIPPLE_SIZE*2) //Flip the sign. 
+                        {
+                            ripples[i]=(byte)(0b10000000|((ripples[i]&0b1111111)-1));
+                        } else 
+                        if ((ripples[i]&0b1111111)==MAX_RIPPLE_SIZE&&Math.random()*RIPPLE_DROP_CHANCE<1) {
+                            ripples[i]=0;
+                        }
                     }
                 }
             }
+            nextRipple=0.2;
         }
-        nextRipple=0.2;
     }
-}
 
     @Override
     public void draw(byte[] p) {
@@ -260,14 +261,14 @@ private void updateRipples(double updateMult) {
     protected void Draw_Animated_Object(AnimatedObject object, Transform transform){
         if (object instanceof PhysicsObject) {
             PhysicsObject po = (PhysicsObject)object;
-            super.Draw_Animated_Sprite(object.getX()-this.getX()-object.getAnimatedSpr().getWidth()/2+(po.state==State.STAGGER?staggerOffsetX:0), Math.round(object.getY()-this.getY()-object.getAnimatedSpr().getHeight()/2), object.getAnimatedSpr(), object.getCurrentFrame(), transform);
+            super.Draw_Animated_Sprite(object.getX()-this.getX()-object.getAnimatedSpr().getWidth()/2+(po.state==State.STAGGER?staggerOffsetX:0), Math.round(object.getY()-this.getY()-object.getAnimatedSpr().getHeight()/2), object.getAnimatedSpr(), object.getCurrentFrame(), object.getTransparency(), transform);
         } else {
-            super.Draw_Animated_Sprite(object.getX()-this.getX()-object.getAnimatedSpr().getWidth()/2, Math.round(object.getY()-this.getY()-object.getAnimatedSpr().getHeight()/2), object.getAnimatedSpr(), object.getCurrentFrame(), transform);
+            super.Draw_Animated_Sprite(object.getX()-this.getX()-object.getAnimatedSpr().getWidth()/2, Math.round(object.getY()-this.getY()-object.getAnimatedSpr().getHeight()/2), object.getAnimatedSpr(), object.getCurrentFrame(), object.getTransparency(), transform);
         }
     }
 
     private void DrawTile(double x, double y, Tile tile) {
-        Draw_Sprite_Partial(x,y, tile.getSpriteSheetX()*tile.getTileWidth(), tile.getSpriteSheetY()*tile.getTileHeight(), tile.getTileWidth(), tile.getTileHeight(), getSprite(), 0, Transform.NONE);
+        Draw_Sprite_Partial(x,y, tile.getSpriteSheetX()*tile.getTileWidth(), tile.getSpriteSheetY()*tile.getTileHeight(), tile.getTileWidth(), tile.getTileHeight(), getSprite(), 0, Alpha.ALPHA0, Transform.NONE);
     }
 
     protected void DrawTransparentTile(double x, double y, Tile tile, Alpha alpha) {

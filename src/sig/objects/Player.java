@@ -5,6 +5,7 @@ import java.util.List;
 
 import sig.RabiClone;
 import sig.engine.Action;
+import sig.engine.Alpha;
 import sig.engine.Panel;
 import sig.engine.Rectangle;
 import sig.engine.Sprite;
@@ -69,6 +70,7 @@ public class Player extends PhysicsObject{
         setJumpVelocity_UseDefaultStrategy();
         setMaxJumpCount_UseDefaultStrategy();
         setGravity_UseDefaultStrategy();
+        setTransparency(Alpha.ALPHA128);
     }
 
     @Override

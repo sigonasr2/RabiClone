@@ -18,6 +18,7 @@ import sig.engine.Transform;
 
 public abstract class Object implements GameEntity{
     double x,y;
+    Alpha transparency;
     Sprite spr;
     Panel panel;
     protected Rectangle collisionBox;
@@ -62,7 +63,12 @@ public abstract class Object implements GameEntity{
     public void setSprite(Sprite spr) {
         this.spr = spr;
     }
-
+    public Alpha getTransparency() {
+        return getTransparency();
+    }
+    public void setTransparency(Alpha alpha) {
+        this.transparency=alpha;
+    }
     public void drawBackground(byte[] p) {
     }
 
@@ -93,8 +99,8 @@ public abstract class Object implements GameEntity{
         DrawLoop.Draw_Animated_Sprite(x,y,sprite,frameIndex);
     }
 
-    protected void Draw_Animated_Sprite(double x, double y, AnimatedSprite sprite, double frameIndex, Transform transform){
-        DrawLoop.Draw_Animated_Sprite(x,y,sprite,frameIndex,transform);
+    protected void Draw_Animated_Sprite(double x, double y, AnimatedSprite sprite, double frameIndex, Alpha alpha, Transform transform){
+        DrawLoop.Draw_Animated_Sprite(x,y,sprite,frameIndex,alpha,transform);
     }
 
 	protected void Draw_Text(double x, double y, String string, Font font){
@@ -105,8 +111,8 @@ public abstract class Object implements GameEntity{
         DrawLoop.Draw_Text_Ext(x,y,string,font,alpha,col);
     }
 
-	protected void Draw_Sprite_Partial(double x, double y, double xOffset, double yOffset, double w, double h, Sprite sprite, double frame_index, Transform transform){
-        DrawLoop.Draw_Sprite_Partial(x,y,xOffset,yOffset,w,h,sprite,frame_index,transform);
+	protected void Draw_Sprite_Partial(double x, double y, double xOffset, double yOffset, double w, double h, Sprite sprite, double frame_index,Alpha alpha, Transform transform){
+        DrawLoop.Draw_Sprite_Partial(x,y,xOffset,yOffset,w,h,sprite,frame_index,alpha,transform);
     }
 
 	protected void Draw_Sprite_Partial_Ext(double x, double y, double xOffset, double yOffset, double w, double h, Sprite sprite, Alpha alpha,Transform transform){

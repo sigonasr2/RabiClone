@@ -131,24 +131,24 @@ public class DrawLoop {
     }
 
 	public static void Draw_Sprite(double x, double y, Sprite sprite){
-		Draw_Sprite_Partial(x,y,0,0,sprite.getWidth(),sprite.getHeight(),sprite,0,Transform.NONE );
+		Draw_Sprite_Partial(x,y,0,0,sprite.getWidth(),sprite.getHeight(),sprite,0,Alpha.ALPHA0,Transform.NONE );
 	}
 
 	public static void Draw_Animated_Sprite(double x, double y, AnimatedSprite sprite, double frameIndex){
 		Rectangle frameRectangle=sprite.getFrame((int)frameIndex);
-		Draw_Sprite_Partial(x,y,frameRectangle.getX(),frameRectangle.getY(),frameRectangle.getWidth(),frameRectangle.getHeight(),sprite,frameIndex,Transform.NONE);
+		Draw_Sprite_Partial(x,y,frameRectangle.getX(),frameRectangle.getY(),frameRectangle.getWidth(),frameRectangle.getHeight(),sprite,frameIndex,Alpha.ALPHA0,Transform.NONE);
 	}
 
 	public static void Draw_Sprite(double x, double y, Sprite sprite, Transform transform){
-		Draw_Sprite_Partial(x,y,0,0,sprite.getWidth(),sprite.getHeight(),sprite,0,transform);
+		Draw_Sprite_Partial(x,y,0,0,sprite.getWidth(),sprite.getHeight(),sprite,0,Alpha.ALPHA0,transform);
 	}
-	public static void Draw_Animated_Sprite(double x, double y, AnimatedSprite sprite, double frameIndex,Transform transform){
+	public static void Draw_Animated_Sprite(double x, double y, AnimatedSprite sprite, double frameIndex,Alpha alpha,Transform transform){
 		Rectangle frameRectangle=sprite.getFrame((int)frameIndex);
-		Draw_Sprite_Partial(x,y,frameRectangle.getX(),frameRectangle.getY(),frameRectangle.getWidth(),frameRectangle.getHeight(),sprite,frameIndex, transform);
+		Draw_Sprite_Partial(x,y,frameRectangle.getX(),frameRectangle.getY(),frameRectangle.getWidth(),frameRectangle.getHeight(),sprite,frameIndex, alpha, transform);
 	}
 
-	public static void Draw_Sprite_Partial(double x, double y, double xOffset, double yOffset, double w, double h, Sprite sprite, double frame_index, Transform transform){
-		Draw_Sprite_Partial_Ext(x,y,xOffset,yOffset,w,h,sprite,frame_index,Alpha.ALPHA128,PaletteColor.NORMAL,transform);
+	public static void Draw_Sprite_Partial(double x, double y, double xOffset, double yOffset, double w, double h, Sprite sprite, double frame_index, Alpha alpha, Transform transform){
+		Draw_Sprite_Partial_Ext(x,y,xOffset,yOffset,w,h,sprite,frame_index,alpha,PaletteColor.NORMAL,transform);
 	}
 
 	public static void Draw_Sprite_Partial_Ext(double x, double y, double xOffset, double yOffset, double w, double h, Sprite sprite, Alpha alpha, Transform transform){
@@ -171,6 +171,9 @@ public class DrawLoop {
 				if (alpha!=Alpha.ALPHA0) {
 					if (transparentRunCount++==transparentTotalCount) {
 						transparentRunCount=0;
+						continue;
+					} else 
+					if (transparentRunCount>alpha.getA()) {
 						continue;
 					}
 				}
