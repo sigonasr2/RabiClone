@@ -80,7 +80,7 @@ public class DrawLoop {
             } else {
                 x=x2-1;y=y2-1;xe=x1;
             }
-            Draw(canvas,y*RabiClone.BASE_WIDTH+x,col,alpha);
+            Draw(canvas,y*RabiClone.BASE_WIDTH+x,col);
             while (x<xe) {
                 x=x+1;
                 if (px<0) {
@@ -93,7 +93,7 @@ public class DrawLoop {
                     }
                     px=px+2*(dy1-dx1);
                 }
-				Draw(canvas,y*RabiClone.BASE_WIDTH+x,col,alpha);
+				Draw(canvas,y*RabiClone.BASE_WIDTH+x,col);
             }
         } else {
             if (dy>=0) {
@@ -101,7 +101,7 @@ public class DrawLoop {
             } else {
                 x=x2-1;y=y2-1;ye=y1;
             }
-            Draw(canvas,y*RabiClone.BASE_WIDTH+x,col,alpha);
+            Draw(canvas,y*RabiClone.BASE_WIDTH+x,col);
             while (y<ye) {
                 y=y+1;
                 if (py<=0) {
@@ -114,7 +114,7 @@ public class DrawLoop {
                     }
                     py=py+2*(dx1-dy1);
                 }
-				Draw(canvas,y*RabiClone.BASE_WIDTH+x,col,alpha);
+				Draw(canvas,y*RabiClone.BASE_WIDTH+x,col);
             }
         }
     }
@@ -124,7 +124,7 @@ public class DrawLoop {
         	for (int yy=0;yy<h;yy++) {
 				if (x+xx>=0&&y+yy>=0&&x+xx<RabiClone.BASE_WIDTH&&y+yy<RabiClone.BASE_HEIGHT) {
 					int index = ((int)y+yy)*RabiClone.BASE_WIDTH+(int)x+xx;
-					Draw(p,index,col, Alpha.ALPHA0);
+					Draw(p,index,col);
 				}
         	}	
     	}
@@ -193,7 +193,7 @@ public class DrawLoop {
 					if (sprite.getBi_array()[Y*sprite.getCanvasWidth()+X]==32||index<0||index>=p.length) {
 						continue;
 					} else {
-						Draw(p,index,(col==PaletteColor.NORMAL)?sprite.getBi_array()[Y*sprite.getCanvasWidth()+X]:(byte)col.ordinal(),alpha);	
+						Draw(p,index,(col==PaletteColor.NORMAL)?sprite.getBi_array()[Y*sprite.getCanvasWidth()+X]:(byte)col.ordinal());	
 					}
 				}
 			}	
@@ -201,7 +201,7 @@ public class DrawLoop {
 		}
 	}
 
-	public static void Draw(byte[] canvas,int index, byte col, Alpha alpha) {
-		canvas[index]=(byte)(((int)(col)&0xff)+(alpha.ordinal()*(32)));
+	public static void Draw(byte[] canvas,int index, byte col) {
+		canvas[index]=(byte)((int)(col)&0xff);
 	}
 }
