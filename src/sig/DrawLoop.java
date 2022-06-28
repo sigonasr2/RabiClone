@@ -148,7 +148,7 @@ public class DrawLoop {
 	}
 
 	public static void Draw_Sprite_Partial(double x, double y, double xOffset, double yOffset, double w, double h, Sprite sprite, double frame_index, Transform transform){
-		Draw_Sprite_Partial_Ext(x,y,xOffset,yOffset,w,h,sprite,frame_index,Alpha.ALPHA0,PaletteColor.NORMAL,transform);
+		Draw_Sprite_Partial_Ext(x,y,xOffset,yOffset,w,h,sprite,frame_index,Alpha.ALPHA128,PaletteColor.NORMAL,transform);
 	}
 
 	public static void Draw_Sprite_Partial_Ext(double x, double y, double xOffset, double yOffset, double w, double h, Sprite sprite, Alpha alpha, Transform transform){
@@ -194,6 +194,7 @@ public class DrawLoop {
 					}
 				}
 			}	
+			transparentRunCount--;
 		}
 	}
 
