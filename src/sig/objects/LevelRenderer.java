@@ -66,45 +66,51 @@ public class LevelRenderer extends Object{
             staggerOffsetX*=-1;
             staggerTimer=staggerJitterWaitTime;
         }
-        if ((nextRipple-=updateMult)<0) {
-            if (Math.random()*RIPPLE_CHANCE<1) {
-                int selectedIndex=(int)(Math.random()*ripples.length);
-                if (ripples[selectedIndex]==0) {
-                    if (Math.random()<0.5) {
-                        ripples[selectedIndex]=(byte)(MAX_RIPPLE_SIZE|0b10000000);
-                    } else {
-                        ripples[selectedIndex]=(byte)(MAX_RIPPLE_SIZE|0b00000000);
-                    }
-                }
-            }
-            for (int i=0;i<ripples.length;i++) {
-                if (ripples[i]!=0) {
-                    if ((byte)(ripples[i]>>>7)==-1) {
-                        //We are moving left.
-                        ripples[i]=(byte)(0b10000000|((ripples[i]&0b1111111)-1));
-                        if ((ripples[i]&0b1111111)==0) //Flip the sign. 
-                        {
-                            ripples[i]=(byte)(((ripples[i]&0b1111111)+1));
-                        } else 
-                        if ((ripples[i]&0b1111111)==MAX_RIPPLE_SIZE&&Math.random()*RIPPLE_DROP_CHANCE<1) {
-                            ripples[i]=0;
-                        }
-                    } else {
-                        //We are moving right.
-                        ripples[i]=(byte)((ripples[i]&0b1111111)+1);
-                        if ((ripples[i]&0b1111111)==MAX_RIPPLE_SIZE*2) //Flip the sign. 
-                        {
-                            ripples[i]=(byte)(0b10000000|((ripples[i]&0b1111111)-1));
-                        } else 
-                        if ((ripples[i]&0b1111111)==MAX_RIPPLE_SIZE&&Math.random()*RIPPLE_DROP_CHANCE<1) {
-                            ripples[i]=0;
-                        }
-                    }
-                }
-            }
-            nextRipple=0.2;
+        if (RabiClone.player!=null&&RabiClone.player.isUnderwater()) {
+            updateRipples(updateMult);
         }
     }
+
+private void updateRipples(double updateMult) {
+    if ((nextRipple-=updateMult)<0) {
+        if (Math.random()*RIPPLE_CHANCE<1) {
+            int selectedIndex=(int)(Math.random()*ripples.length);
+            if (ripples[selectedIndex]==0) {
+                if (Math.random()<0.5) {
+                    ripples[selectedIndex]=(byte)(MAX_RIPPLE_SIZE|0b10000000);
+                } else {
+                    ripples[selectedIndex]=(byte)(MAX_RIPPLE_SIZE|0b00000000);
+                }
+            }
+        }
+        for (int i=0;i<ripples.length;i++) {
+            if (ripples[i]!=0) {
+                if ((byte)(ripples[i]>>>7)==-1) {
+                    //We are moving left.
+                    ripples[i]=(byte)(0b10000000|((ripples[i]&0b1111111)-1));
+                    if ((ripples[i]&0b1111111)==0) //Flip the sign. 
+                    {
+                        ripples[i]=(byte)(((ripples[i]&0b1111111)+1));
+                    } else 
+                    if ((ripples[i]&0b1111111)==MAX_RIPPLE_SIZE&&Math.random()*RIPPLE_DROP_CHANCE<1) {
+                        ripples[i]=0;
+                    }
+                } else {
+                    //We are moving right.
+                    ripples[i]=(byte)((ripples[i]&0b1111111)+1);
+                    if ((ripples[i]&0b1111111)==MAX_RIPPLE_SIZE*2) //Flip the sign. 
+                    {
+                        ripples[i]=(byte)(0b10000000|((ripples[i]&0b1111111)-1));
+                    } else 
+                    if ((ripples[i]&0b1111111)==MAX_RIPPLE_SIZE&&Math.random()*RIPPLE_DROP_CHANCE<1) {
+                        ripples[i]=0;
+                    }
+                }
+            }
+        }
+        nextRipple=0.2;
+    }
+}
 
     @Override
     public void draw(byte[] p) {
@@ -132,7 +138,13 @@ public class LevelRenderer extends Object{
                 }
             }
         }
+
         if (RabiClone.player!=null) {
+
+            if (RabiClone.player.isUnderwater()) {
+                drawRipples(p);
+            }
+
             Draw_Text(4,4,new String(RabiClone.player.getYVelocity()),Font.PROFONT_12);
             Draw_Text(4,4+Font.PROFONT_12.getGlyphHeight(),new String(RabiClone.scaleTime),Font.PROFONT_12);
         }
@@ -178,7 +190,9 @@ public class LevelRenderer extends Object{
                 }
             }
         }
+    }
 
+    private void drawRipples(byte[] p) {
         for (int i=0;i<ripples.length;i++) {
             if (ripples[i]!=0) {
                 for (int y=-MAX_RIPPLE_SIZE/2;y<MAX_RIPPLE_SIZE/2;y++) {
