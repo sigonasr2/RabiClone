@@ -45,7 +45,6 @@ public class Panel extends JPanel implements Runnable,KeyListener {
 	final long TARGET_FRAMETIME = 8333333l;
 	public double nanaX = 0;
 	public double nanaY = 0;
-	public Point mousePos=new Point(0,0);
 	public int button = 0;
 	public HashMap<Integer,Boolean> MOUSE = new HashMap<>();
 	public static byte[] generalPalette = new byte[]{
@@ -129,7 +128,7 @@ public class Panel extends JPanel implements Runnable,KeyListener {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				MOUSE.put(e.getButton(),true);
-				mousePos.set(e.getX()/RabiClone.SIZE_MULTIPLIER,e.getY()/RabiClone.SIZE_MULTIPLIER);
+				RabiClone.MOUSE_POS.set(e.getX()/RabiClone.SIZE_MULTIPLIER,e.getY()/RabiClone.SIZE_MULTIPLIER);
 				//System.out.println("Mouse List: "+MOUSE);
 
 				for(int i=0; i<RabiClone.OBJ.size();i++){
@@ -140,7 +139,7 @@ public class Panel extends JPanel implements Runnable,KeyListener {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				MOUSE.put(e.getButton(),false);
-				mousePos.set(e.getX()/RabiClone.SIZE_MULTIPLIER,e.getY()/RabiClone.SIZE_MULTIPLIER);
+				RabiClone.MOUSE_POS.set(e.getX()/RabiClone.SIZE_MULTIPLIER,e.getY()/RabiClone.SIZE_MULTIPLIER);
 
 				for(int i=0; i<RabiClone.OBJ.size();i++){
 					RabiClone.OBJ.get(i).MouseReleased(e);
@@ -166,12 +165,12 @@ public class Panel extends JPanel implements Runnable,KeyListener {
 		this.addMouseMotionListener(new MouseMotionListener(){
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				mousePos.set(e.getX()/RabiClone.SIZE_MULTIPLIER,e.getY()/RabiClone.SIZE_MULTIPLIER);
+				RabiClone.MOUSE_POS.set(e.getX()/RabiClone.SIZE_MULTIPLIER,e.getY()/RabiClone.SIZE_MULTIPLIER);
 			}
 
 			@Override
 			public void mouseMoved(MouseEvent e) {
-				mousePos.set(e.getX()/RabiClone.SIZE_MULTIPLIER,e.getY()/RabiClone.SIZE_MULTIPLIER);
+				RabiClone.MOUSE_POS.set(e.getX()/RabiClone.SIZE_MULTIPLIER,e.getY()/RabiClone.SIZE_MULTIPLIER);
 			}
 		});
 		this.addMouseWheelListener(new MouseWheelListener(){

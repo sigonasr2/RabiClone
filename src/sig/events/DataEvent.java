@@ -11,5 +11,11 @@ public class DataEvent implements Event{
     public boolean performCollision(int x, int y) {
         return true;
     }
+
+    @Override
+    public boolean performScreenLoad(int x, int y) {
+        // TODO Auto-generated method stub
+        return false;
+    }
     
 }

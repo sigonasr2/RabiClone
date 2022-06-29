@@ -59,6 +59,14 @@ public class LevelRenderer extends Object{
                         RabiClone.CURRENT_MAP.ModifyDataTile(x, y, DataTile.NULL);
                     }
                 }
+                if (RabiClone.CURRENT_MAP.getDataTileRawValue(x,y)<8192&&RabiClone.CURRENT_MAP.getDataTile(x,y)!=DataTile.NULL&&
+                    x<((int)(this.getX()/RabiClone.BASE_WIDTH+1)*RabiClone.BASE_WIDTH)/Tile.TILE_WIDTH && x>=((int)(this.getX()/RabiClone.BASE_WIDTH)*RabiClone.BASE_WIDTH)/Tile.TILE_WIDTH &&
+                    y<((int)(this.getY()/RabiClone.BASE_HEIGHT+1)*RabiClone.BASE_HEIGHT)/Tile.TILE_HEIGHT && y>=((int)(this.getY()/RabiClone.BASE_HEIGHT)*RabiClone.BASE_HEIGHT)/Tile.TILE_HEIGHT
+                    ) {
+                    if (!RabiClone.CURRENT_MAP.getDataTile(x,y).getEvent().performScreenLoad(x*Tile.TILE_WIDTH,y*Tile.TILE_HEIGHT)) {
+                        RabiClone.CURRENT_MAP.ModifyDataTile(x, y, DataTile.NULL);
+                    }
+                }
             }
         }
         if ((staggerTimer-=updateMult)<=0) {

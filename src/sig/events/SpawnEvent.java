@@ -29,5 +29,11 @@ public class SpawnEvent implements Event{
     public boolean performCollision(int x, int y) {
         return false;
     }
+
+    @Override
+    public boolean performScreenLoad(int x, int y) {
+        // TODO Auto-generated method stub
+        return false;
+    }
     
 }

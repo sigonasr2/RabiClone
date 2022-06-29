@@ -49,9 +49,9 @@ public class RabiClone{
 
 	public static int BASE_WIDTH = 512;
 	public static int BASE_HEIGHT = 288;
-	public static int EVENT_BOUNDARY_RANGE = 8;
+	public static final int EVENT_BOUNDARY_RANGE = 8;
 	public static int SIZE_MULTIPLIER = 1;
-	public static Point MOUSE_POS;
+	public static final Point MOUSE_POS = new Point(0,0);
 
 	public static boolean PLAYER_COLLISION[] = new boolean[RabiClone.BASE_WIDTH*RabiClone.BASE_HEIGHT];
 	public static boolean ENEMY_COLLISION[] = new boolean[RabiClone.BASE_WIDTH*RabiClone.BASE_HEIGHT];
@@ -104,8 +104,6 @@ public class RabiClone{
 		setupDefaultControls();
 
 		p = new Panel(f);
-
-		MOUSE_POS = p.mousePos;
 
 		p.init();
 
