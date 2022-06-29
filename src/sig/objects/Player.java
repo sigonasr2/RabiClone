@@ -5,7 +5,6 @@ import java.util.List;
 
 import sig.RabiClone;
 import sig.engine.Action;
-import sig.engine.Alpha;
 import sig.engine.Panel;
 import sig.engine.Rectangle;
 import sig.engine.Sprite;
@@ -441,6 +440,8 @@ public class Player extends PhysicsObject{
                     }
                     break;
                 case FIXED:
+                        newX = (tileX/Tile.TILE_SCREEN_COUNT_X)*RabiClone.BASE_WIDTH;
+                        newY = (tileY/Tile.TILE_SCREEN_COUNT_Y)*RabiClone.BASE_HEIGHT;
                     break;
                 default:
                     break;
