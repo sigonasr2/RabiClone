@@ -18,7 +18,6 @@ public class WaterEvent implements Event{
     @Override
     public boolean performScreenLoad(int x, int y) {
         RabiClone.CURRENT_MAP.getMap().setWaterLevel((char)(y/Tile.TILE_HEIGHT*Tile.TILE_HEIGHT));
-        System.out.println("Set Water level "+System.currentTimeMillis());
         return true;
     }
     
