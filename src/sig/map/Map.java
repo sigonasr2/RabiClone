@@ -251,8 +251,8 @@ public class Map {
         if (prevTile==0) {
             eventTileCount++;
         }
-        if (value>8192) {
-            value=8192;
+        if (value>8191) {
+            value=8191;
         }
         data[y*Map.MAP_WIDTH+x]=(char)(value+8192);
         System.out.println("Tile "+(y*MAP_WIDTH+x)+" is now "+data[y*MAP_WIDTH+x]+".");
