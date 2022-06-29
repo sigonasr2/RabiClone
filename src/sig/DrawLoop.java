@@ -201,7 +201,14 @@ public class DrawLoop {
 		}
 	}
 
+
+
 	public static void Draw(byte[] canvas,int index, byte col) {
-		canvas[index]=(byte)((int)(col)&0xff);
+		if(RabiClone.player!=null && RabiClone.player.isUnderwater()){
+			canvas[index]=(byte)((int)(col+33)&0xff);
+		}
+		else{
+			canvas[index]=(byte)((int)(col)&0xff);
+		}
 	}
 }
