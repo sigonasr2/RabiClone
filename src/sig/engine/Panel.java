@@ -81,6 +81,39 @@ public class Panel extends JPanel implements Runnable,KeyListener {
 		(byte)0x83,(byte)0x4d,(byte)0xc4,
 		(byte)0x7d,(byte)0x2d,(byte)0xa0,
 		(byte)0x4e,(byte)0x18,(byte)0x7c,
+		(byte)255,(byte)  0,(byte)255,
+		(byte) 87,(byte)157,(byte)147,
+		(byte)101,(byte)188,(byte)141,
+		(byte)158,(byte)206,(byte)137,
+		(byte)232,(byte)222,(byte)162,
+		(byte)234,(byte)173,(byte)149,
+		(byte)215,(byte) 99,(byte)136,
+		(byte)188,(byte) 74,(byte)134,
+		(byte)151,(byte) 58,(byte)131,
+		(byte)109,(byte) 50,(byte)130,
+		(byte) 58,(byte) 45,(byte)123,
+		(byte) 92,(byte) 50,(byte)127,
+		(byte)125,(byte) 65,(byte)129,
+		(byte)153,(byte) 88,(byte)134,
+		(byte)185,(byte)113,(byte)146,
+		(byte)222,(byte)164,(byte)171,
+		(byte)234,(byte)182,(byte)240,
+		(byte)219,(byte)137,(byte)208,
+		(byte)195,(byte)109,(byte)190,
+		(byte)125,(byte) 71,(byte)156,
+		(byte) 39,(byte) 47,(byte)113,
+		(byte) 72,(byte) 62,(byte)128,
+		(byte)115,(byte) 88,(byte)154,
+		(byte)153,(byte)128,(byte)175,
+		(byte)200,(byte)177,(byte)206,
+		(byte)234,(byte)236,(byte)251,
+		(byte)161,(byte)210,(byte)251,
+		(byte)131,(byte)172,(byte)251,
+		(byte)102,(byte)124,(byte)246,
+		(byte)123,(byte)101,(byte)235,
+		(byte)122,(byte) 82,(byte)203,
+		(byte)116,(byte) 60,(byte)176,
+		(byte) 75,(byte) 50,(byte)151,
 	};
 
     public Panel(JFrame f) {
@@ -159,21 +192,7 @@ public class Panel extends JPanel implements Runnable,KeyListener {
      * @return color model
      */
     protected static ColorModel getCustomPalette(){   
-		byte[] finalPalette = new byte[32*4*8];
-		for (int i=0;i<8;i++) {
-			int k=0;
-			for (int j=0;j<generalPalette.length;j+=3) {
-				finalPalette[(32*4*i)+k+0]=(byte)generalPalette[j+0];
-				finalPalette[(32*4*i)+k+1]=(byte)generalPalette[j+1];
-				finalPalette[(32*4*i)+k+2]=(byte)generalPalette[j+2];
-				finalPalette[(32*4*i)+k+3]=(byte)(255-(i*(256/8)));
-				//System.out.println("Color "+(k/4)+": "+finalPalette[(32*4*i)+k+0]+"/"+finalPalette[(32*4*i)+k+1]+"/"+finalPalette[(32*4*i)+k+2]+"/"+finalPalette[(32*4*i)+k+3]);
-				k+=4;
-			}
-		}
-		
-        IndexColorModel model = new IndexColorModel(8,256,finalPalette,0,true,32);
-        return model;
+        return new IndexColorModel(8,65,generalPalette,0,false,32);
     }
 
     /**

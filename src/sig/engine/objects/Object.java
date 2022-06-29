@@ -64,7 +64,7 @@ public abstract class Object implements GameEntity{
         this.spr = spr;
     }
     public Alpha getTransparency() {
-        return getTransparency();
+        return transparency;
     }
     public void setTransparency(Alpha alpha) {
         this.transparency=alpha;
@@ -75,8 +75,8 @@ public abstract class Object implements GameEntity{
     public void drawOverlay(byte[] p) {
     }
 
-    protected void Draw(byte[] canvas, int index, PaletteColor col, Alpha alpha) {
-        DrawLoop.Draw(canvas, index, (byte)col.ordinal(), alpha);
+    protected void Draw(byte[] canvas, int index, PaletteColor col) {
+        DrawLoop.Draw(canvas, index, (byte)col.ordinal());
     }
 
     protected void Draw_Rect(byte[] p,PaletteColor col,double x,double y,double w,double h) {

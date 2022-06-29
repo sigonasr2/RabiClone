@@ -70,7 +70,6 @@ public class Player extends PhysicsObject{
         setJumpVelocity_UseDefaultStrategy();
         setMaxJumpCount_UseDefaultStrategy();
         setGravity_UseDefaultStrategy();
-        setTransparency(Alpha.ALPHA128);
     }
 
     @Override

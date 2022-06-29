@@ -194,7 +194,7 @@ public class EditorRenderer extends LevelRenderer{
                 if (index<0||index>=p.length) {
                     continue;
                 }
-                Draw(p,index,PaletteColor.BLACK,Alpha.ALPHA0);
+                Draw(p,index,PaletteColor.BLACK);
             }
         }
         if (y%Tile.TILE_SCREEN_COUNT_Y==0) {
@@ -205,7 +205,7 @@ public class EditorRenderer extends LevelRenderer{
                 if (xpos<0||xpos>=Map.MAP_WIDTH||ypos<0||ypos>=Map.MAP_HEIGHT||index<0||index>=p.length) {
                     continue;
                 }
-                Draw(p,index,PaletteColor.BLACK,Alpha.ALPHA0);
+                Draw(p,index,PaletteColor.BLACK);
             }
         }
     }

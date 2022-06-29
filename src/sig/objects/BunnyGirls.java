@@ -1,5 +1,6 @@
 package sig.objects;
 
+import sig.engine.Alpha;
 import sig.engine.AnimatedSprite;
 import sig.engine.Panel;
 import sig.engine.Rectangle;
