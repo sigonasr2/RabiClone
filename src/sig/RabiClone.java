@@ -12,6 +12,7 @@ import java.util.List;
 
 import sig.engine.Panel;
 import sig.engine.Point;
+import sig.engine.Sound;
 import sig.engine.Transform;
 import sig.engine.objects.AnimatedObject;
 import sig.engine.objects.Object;
@@ -82,101 +83,102 @@ public class RabiClone{
 	public static RenderingHints RENDERHINTS = new RenderingHints(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_OFF);
 
 	public static void main(String[] args) {
-		System.setProperty("sun.java2d.transaccel", "True");
-		System.setProperty("sun.java2d.d3d", "True");
-		System.setProperty("sun.java2d.ddforcevram", "True");
-		System.setProperty("sun.java2d.xrender", "True");
+		Sound s = new Sound();
+		// System.setProperty("sun.java2d.transaccel", "True");
+		// System.setProperty("sun.java2d.d3d", "True");
+		// System.setProperty("sun.java2d.ddforcevram", "True");
+		// System.setProperty("sun.java2d.xrender", "True");
 
-		RENDERHINTS.put(RenderingHints.KEY_COLOR_RENDERING,RenderingHints.VALUE_COLOR_RENDER_SPEED);
-		RENDERHINTS.put(RenderingHints.KEY_DITHERING,RenderingHints.VALUE_DITHER_DISABLE);
-		RENDERHINTS.put(RenderingHints.KEY_FRACTIONALMETRICS,RenderingHints.VALUE_FRACTIONALMETRICS_OFF);
-		RENDERHINTS.put(RenderingHints.KEY_RENDERING,RenderingHints.VALUE_RENDER_SPEED);
+		// RENDERHINTS.put(RenderingHints.KEY_COLOR_RENDERING,RenderingHints.VALUE_COLOR_RENDER_SPEED);
+		// RENDERHINTS.put(RenderingHints.KEY_DITHERING,RenderingHints.VALUE_DITHER_DISABLE);
+		// RENDERHINTS.put(RenderingHints.KEY_FRACTIONALMETRICS,RenderingHints.VALUE_FRACTIONALMETRICS_OFF);
+		// RENDERHINTS.put(RenderingHints.KEY_RENDERING,RenderingHints.VALUE_RENDER_SPEED);
 
-		Key.InitializeKeyConversionMap();
+		// Key.InitializeKeyConversionMap();
 
-		f = new JFrame(PROGRAM_NAME);
-		f.setResizable(false);
-		f.setUndecorated(true);
-		f.setSize(BASE_WIDTH, BASE_HEIGHT); // 1024x576 (64x64)
-		ChooseBestRatio();
+		// f = new JFrame(PROGRAM_NAME);
+		// f.setResizable(false);
+		// f.setUndecorated(true);
+		// f.setSize(BASE_WIDTH, BASE_HEIGHT); // 1024x576 (64x64)
+		// ChooseBestRatio();
 		
-		Map.LoadMap(Maps.WORLD1);
-		setupDefaultControls();
+		// Map.LoadMap(Maps.WORLD1);
+		// setupDefaultControls();
 
-		p = new Panel(f);
+		// p = new Panel(f);
 
-		p.init();
+		// p.init();
 
-		f.add(p);
-		f.addKeyListener(p);
-		f.setLocation((int) ((Toolkit.getDefaultToolkit().getScreenSize().getWidth() - f.getWidth()) / 2),
-				(int) ((Toolkit.getDefaultToolkit().getScreenSize().getHeight() - f.getHeight()) / 2));
-		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		f.setVisible(true);
-		f.createBufferStrategy(2);
+		// f.add(p);
+		// f.addKeyListener(p);
+		// f.setLocation((int) ((Toolkit.getDefaultToolkit().getScreenSize().getWidth() - f.getWidth()) / 2),
+		// 		(int) ((Toolkit.getDefaultToolkit().getScreenSize().getHeight() - f.getHeight()) / 2));
+		// f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		// f.setVisible(true);
+		// f.createBufferStrategy(2);
 
-		OBJ.add(level_renderer = new LevelRenderer(p));
-		StartGame();
+		// OBJ.add(level_renderer = new LevelRenderer(p));
+		// StartGame();
 
-		p.render();
+		// p.render();
 
-		long lastGameTime = System.nanoTime();
-		long dt = 0;
+		// long lastGameTime = System.nanoTime();
+		// long dt = 0;
 
-		CONTROLLERS = ControllerEnvironment.getDefaultEnvironment().getControllers();
-		ConfigureControls.LoadControls();
+		// CONTROLLERS = ControllerEnvironment.getDefaultEnvironment().getControllers();
+		// ConfigureControls.LoadControls();
 		
-		while (true) {
-			dt += System.nanoTime() - lastGameTime;
-			lastGameTime = System.nanoTime();
+		// while (true) {
+		// 	dt += System.nanoTime() - lastGameTime;
+		// 	lastGameTime = System.nanoTime();
 
-			while (dt >= UPDATE_LOOP_NANOTIME) {
-				handleGameControllers();
+		// 	while (dt >= UPDATE_LOOP_NANOTIME) {
+		// 		handleGameControllers();
 
-				KeyBind.poll();
+		// 		KeyBind.poll();
 
-				if ((Key.isKeyHeld(KeyEvent.VK_F5)||reloadControllerList) && System.currentTimeMillis() - lastControllerScan > 5000) {
-					CONTROLLERS = ControllerEnvironment.getDefaultEnvironment().rescanControllers();
-					System.out.println(Arrays.toString(CONTROLLERS));
-					lastControllerScan = System.currentTimeMillis();
-					if (reloadControllerList) {
-						ConfigureControls.LoadControls();
-					}
-					reloadControllerList=false;
-				}
+		// 		if ((Key.isKeyHeld(KeyEvent.VK_F5)||reloadControllerList) && System.currentTimeMillis() - lastControllerScan > 5000) {
+		// 			CONTROLLERS = ControllerEnvironment.getDefaultEnvironment().rescanControllers();
+		// 			System.out.println(Arrays.toString(CONTROLLERS));
+		// 			lastControllerScan = System.currentTimeMillis();
+		// 			if (reloadControllerList) {
+		// 				ConfigureControls.LoadControls();
+		// 			}
+		// 			reloadControllerList=false;
+		// 		}
 
-				FRIENDLY_OBJ.clear();
-				ENEMY_OBJ.clear();
-				for (int i = 0; i < OBJ.size(); i++) {
-					if (OBJ.get(i) instanceof RenderedObject) {
-						RenderedObject r = (RenderedObject)OBJ.get(i);
-						if (r.isFriendlyObject()) {
-							FRIENDLY_OBJ.add((AnimatedObject)r);
-						} else {
-							ENEMY_OBJ.add((AnimatedObject)r);
-						}
-					}
-					OBJ.get(i).update(UPDATE_MULT);
-					if (OBJ.get(i).isMarkedForDeletion()) {
-						OBJ.remove(i--);
-					}
-				}
-				for (int i = 0; i < FRIENDLY_OBJ.size(); i++) {
-					AnimatedObject f = FRIENDLY_OBJ.get(i);
-					for (int j=0;j<ENEMY_OBJ.size();j++) {
-						AnimatedObject e = ENEMY_OBJ.get(j);
-						if (detectCollision(e,f)) {
-							e.collisionEvent(f);
-							f.collisionEvent(e);
-						}
-					}
-				}
-				dt -= UPDATE_LOOP_NANOTIME;
-				TIME += UPDATE_LOOP_NANOTIME;
-				// System.out.println(TIME);
-			}
-			gameUpdateLoopStabilizer(dt); //This is hackish. Removing this slows down the game by about 30%. The timer runs slower. ??? 
-		}
+		// 		FRIENDLY_OBJ.clear();
+		// 		ENEMY_OBJ.clear();
+		// 		for (int i = 0; i < OBJ.size(); i++) {
+		// 			if (OBJ.get(i) instanceof RenderedObject) {
+		// 				RenderedObject r = (RenderedObject)OBJ.get(i);
+		// 				if (r.isFriendlyObject()) {
+		// 					FRIENDLY_OBJ.add((AnimatedObject)r);
+		// 				} else {
+		// 					ENEMY_OBJ.add((AnimatedObject)r);
+		// 				}
+		// 			}
+		// 			OBJ.get(i).update(UPDATE_MULT);
+		// 			if (OBJ.get(i).isMarkedForDeletion()) {
+		// 				OBJ.remove(i--);
+		// 			}
+		// 		}
+		// 		for (int i = 0; i < FRIENDLY_OBJ.size(); i++) {
+		// 			AnimatedObject f = FRIENDLY_OBJ.get(i);
+		// 			for (int j=0;j<ENEMY_OBJ.size();j++) {
+		// 				AnimatedObject e = ENEMY_OBJ.get(j);
+		// 				if (detectCollision(e,f)) {
+		// 					e.collisionEvent(f);
+		// 					f.collisionEvent(e);
+		// 				}
+		// 			}
+		// 		}
+		// 		dt -= UPDATE_LOOP_NANOTIME;
+		// 		TIME += UPDATE_LOOP_NANOTIME;
+		// 		// System.out.println(TIME);
+		// 	}
+		// 	gameUpdateLoopStabilizer(dt); //This is hackish. Removing this slows down the game by about 30%. The timer runs slower. ??? 
+		// }
 	}
 
 	public static void setupDefaultControls() {
