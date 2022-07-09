@@ -73,9 +73,8 @@ public class LevelRenderer extends Object{
             staggerOffsetX*=-1;
             staggerTimer=staggerJitterWaitTime;
         }
-        if (RabiClone.player!=null&&RabiClone.player.isUnderwater()) {
-            updateRipples(updateMult);
-        }
+
+        updateRipples(updateMult);
     }
 
     private void updateRipples(double updateMult) {
@@ -148,9 +147,7 @@ public class LevelRenderer extends Object{
 
         if (RabiClone.player!=null) {
 
-            if (RabiClone.player.isUnderwater()) {
-                drawRipples(p);
-            }
+            drawRipples(p);
 
             Draw_Text(4,4,new String(RabiClone.player.getYVelocity()),Font.PROFONT_12);
             Draw_Text(4,4+Font.PROFONT_12.getGlyphHeight(),new String(RabiClone.scaleTime),Font.PROFONT_12);
@@ -224,21 +221,25 @@ public class LevelRenderer extends Object{
                             for (int x=0;x<displacement;x++) {
                                 extraStorage[x]=p[index+x];
                             }
-                            for (int x=0;x<RabiClone.BASE_WIDTH-displacement;x++) {
-                                p[index+x]=p[index+x+displacement];
-                            }
-                            for (int x=RabiClone.BASE_WIDTH-displacement;x<RabiClone.BASE_WIDTH;x++) {
-                                p[index+x]=extraStorage[x-(RabiClone.BASE_WIDTH-displacement)];
+                            if(RabiClone.CURRENT_MAP.getMap().getWaterLevel()-getY()<=i*MAX_RIPPLE_SIZE+y){
+                                for (int x=0;x<RabiClone.BASE_WIDTH-displacement;x++) {
+                                    p[index+x]=p[index+x+displacement];
+                                }
+                                for (int x=RabiClone.BASE_WIDTH-displacement;x<RabiClone.BASE_WIDTH;x++) {
+                                    p[index+x]=extraStorage[x-(RabiClone.BASE_WIDTH-displacement)];
+                                }
                             }
                         } else {
                             for (int x=0;x<-displacement;x++) {
                                 extraStorage[x]=p[index+(RabiClone.BASE_WIDTH-x)];
                             }
-                            for (int x=RabiClone.BASE_WIDTH-1;x>=-displacement;x--) {
-                                p[index+x]=p[index+x+displacement];
-                            }
-                            for (int x=0;x<-displacement;x++) {
-                                p[index+x]=extraStorage[x];
+                            if(RabiClone.CURRENT_MAP.getMap().getWaterLevel()-getY()<=i*MAX_RIPPLE_SIZE+y){
+                                for (int x=RabiClone.BASE_WIDTH-1;x>=-displacement;x--) {
+                                    p[index+x]=p[index+x+displacement];
+                                }
+                                for (int x=0;x<-displacement;x++) {
+                                    p[index+x]=extraStorage[x];
+                                }
                             }
                         }
                     }
