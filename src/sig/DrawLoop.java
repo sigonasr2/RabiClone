@@ -11,6 +11,8 @@ import sig.engine.Rectangle;
 import sig.engine.Sprite;
 import sig.engine.String;
 import sig.engine.Transform;
+import sig.map.Map;
+import sig.objects.LevelRenderer;
 
 public class DrawLoop {
     public static Panel panel;
@@ -204,11 +206,13 @@ public class DrawLoop {
 
 
 	public static void Draw(byte[] canvas,int index, byte col) {
-		if(RabiClone.player!=null && RabiClone.player.isUnderwater()){
-			canvas[index]=(byte)((int)(col+33)&0xff);
+		int camera_y = (int)RabiClone.level_renderer.getY();
+		int y = index/RabiClone.BASE_WIDTH;
+		if(RabiClone.level_renderer!=null&&y<=RabiClone.CURRENT_MAP.getMap().getWaterLevel()-camera_y){
+			canvas[index]=(byte)((int)(col)&0xff);
 		}
 		else{
-			canvas[index]=(byte)((int)(col)&0xff);
+			canvas[index]=(byte)((int)(col+33)&0xff);
 		}
 	}
 }
