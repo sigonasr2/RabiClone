@@ -14,7 +14,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 public class Sound{
     public Sound() {
         try {
-            File audioFile = new File("testFile.wav");
+            File audioFile = new File("..","Woolookologie.wav");
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
             AudioFormat format = audioStream.getFormat();
             DataLine.Info info = new DataLine.Info(SourceDataLine.class,format);

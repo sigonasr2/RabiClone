@@ -132,6 +132,13 @@ public class Player extends PhysicsObject{
                 }
                 break;
             case JUMP:
+                if(KeyHeld(Action.MOVE_LEFT)){
+                    facing_direction=LEFT;
+                }
+                
+                if(KeyHeld(Action.MOVE_RIGHT)){
+                    facing_direction=RIGHT;
+                }
                 if (jump_slide_fall_StartAnimationTimer == -1) {
                     jump_slide_fall_StartAnimationTimer = RabiClone.TIME;
                     setAnimatedSpr(Sprite.ERINA_JUMP_RISE1);
@@ -172,7 +179,7 @@ public class Player extends PhysicsObject{
                 break;
             case BELLYSLIDE:{
                 horizontal_friction = 0;
-                if (y_velocity>0) {
+                if (!groundCollision) {
                    bellySlideTime=RabiClone.TIME; 
                 }
                 if (groundCollision&&!landedBellySlide){
@@ -212,6 +219,7 @@ public class Player extends PhysicsObject{
         && state!=State.ATTACK2&&state!=State.ATTACK3&&state!=State.BELLYSLIDE) {
             y_velocity = jump_velocity;
         }
+        System.out.println(state);
     }
 
     private void handleEventCollisions() {
