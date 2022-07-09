@@ -221,7 +221,7 @@ public class LevelRenderer extends Object{
                             for (int x=0;x<displacement;x++) {
                                 extraStorage[x]=p[index+x];
                             }
-                            if(RabiClone.CURRENT_MAP.getMap().getWaterLevel()-getY()<=i*MAX_RIPPLE_SIZE+y){
+                            if((RabiClone.player!=null&&RabiClone.player.isUnderwater())||RabiClone.CURRENT_MAP.getMap().getWaterLevel()-getY()<=i*MAX_RIPPLE_SIZE+y){
                                 for (int x=0;x<RabiClone.BASE_WIDTH-displacement;x++) {
                                     p[index+x]=p[index+x+displacement];
                                 }
@@ -233,7 +233,7 @@ public class LevelRenderer extends Object{
                             for (int x=0;x<-displacement;x++) {
                                 extraStorage[x]=p[index+(RabiClone.BASE_WIDTH-x)];
                             }
-                            if(RabiClone.CURRENT_MAP.getMap().getWaterLevel()-getY()<=i*MAX_RIPPLE_SIZE+y){
+                            if((RabiClone.player!=null&&RabiClone.player.isUnderwater())||RabiClone.CURRENT_MAP.getMap().getWaterLevel()-getY()<=i*MAX_RIPPLE_SIZE+y){
                                 for (int x=RabiClone.BASE_WIDTH-1;x>=-displacement;x--) {
                                     p[index+x]=p[index+x+displacement];
                                 }
