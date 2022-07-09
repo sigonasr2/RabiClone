@@ -173,7 +173,7 @@ public class LevelRenderer extends Object{
         for (int y=0;y<RabiClone.BASE_HEIGHT;y++) {
             for (int x=0;x<RabiClone.BASE_WIDTH;x++) {
                 int index = y*RabiClone.BASE_WIDTH+x;
-                int camera_y = (int)RabiClone.level_renderer.getY();
+                int camera_y = (int)getY();
                 int Y = index/RabiClone.BASE_WIDTH;
                 if(!(Y<=RabiClone.CURRENT_MAP.getMap().getWaterLevel()-camera_y)){
                     p[index] = (byte)(targetBackground.getPixels()[
