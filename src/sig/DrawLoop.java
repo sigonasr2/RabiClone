@@ -11,8 +11,6 @@ import sig.engine.Rectangle;
 import sig.engine.Sprite;
 import sig.engine.String;
 import sig.engine.Transform;
-import sig.map.Map;
-import sig.objects.LevelRenderer;
 
 public class DrawLoop {
     public static Panel panel;

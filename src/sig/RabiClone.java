@@ -12,7 +12,6 @@ import java.util.List;
 
 import sig.engine.Panel;
 import sig.engine.Point;
-import sig.engine.Sound;
 import sig.engine.Transform;
 import sig.engine.objects.AnimatedObject;
 import sig.engine.objects.Object;
@@ -26,6 +25,7 @@ import sig.objects.actor.RenderedObject;
 import sig.engine.Action;
 import sig.engine.Key;
 import sig.engine.KeyBind;
+import sig.engine.MusicPlayer;
 import sig.engine.PaletteColor;
 
 import java.awt.Toolkit;
@@ -81,6 +81,8 @@ public class RabiClone{
     public static HashMap<Action,List<KeyBind>> DEFAULT_KEYBINDS = new HashMap<>();
 
 	public static RenderingHints RENDERHINTS = new RenderingHints(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_OFF);
+
+	public static MusicPlayer MUSICPLAYER;
 
 	public static void main(String[] args) {
 		//Sound s = new Sound();
